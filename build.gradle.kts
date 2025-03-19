@@ -40,9 +40,9 @@ repositories {
 }
 
 dependencies {
-  testImplementation(platform("org.junit:junit-bom:5.12.0"))
-  testImplementation("org.junit.jupiter:junit-jupiter:5.12.0")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.0")
+  testImplementation(platform("org.junit:junit-bom:5.12.1"))
+  testImplementation("org.junit.jupiter:junit-jupiter:5.12.1")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.1")
 
   implementation("com.google.inject:guice:7.0.0")
 
