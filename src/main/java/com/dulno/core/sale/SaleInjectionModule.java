@@ -1,0 +1,32 @@
+package com.dulno.core.sale;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.dulno.core.database.DatabaseConnection;
+import com.dulno.core.database.DatabaseKeyspace;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(staticName = "create")
+public final class SaleInjectionModule extends AbstractModule {
+  @Provides
+  @Singleton
+  SaleDatabaseTable provideSaleDatabaseTable(
+    DatabaseConnection databaseConnection, DatabaseKeyspace databaseKeyspace
+  ) {
+    return SaleDatabaseTable.create(databaseConnection, databaseKeyspace);
+  }
+
+  @Provides
+  @Singleton
+  SaleMessageDatabaseTable provideSaleMessageDatabaseTable(
+    DatabaseConnection databaseConnection, DatabaseKeyspace databaseKeyspace
+  ) {
+    var saleMessageDatabaseTable = SaleMessageDatabaseTable.create(
+      databaseConnection, databaseKeyspace);
+    saleMessageDatabaseTable.createIfNotExists();
+    saleMessageDatabaseTable.createIndexIfNotExists("publicId");
+    saleMessageDatabaseTable.createIndexIfNotExists("saleId");
+    return saleMessageDatabaseTable;
+  }
+}
