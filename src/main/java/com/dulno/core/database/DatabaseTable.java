@@ -1,9 +1,9 @@
 package com.dulno.core.database;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.skeleton.*;
 import com.dulno.core.database.transformation.DatabaseTransformation;
 import com.dulno.core.database.transformation.DatabaseTransformationState;
+import com.google.common.collect.Lists;
 import lombok.experimental.Accessors;
 
 import java.util.List;

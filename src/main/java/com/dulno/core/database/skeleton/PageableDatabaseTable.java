@@ -4,13 +4,13 @@ import com.datastax.oss.driver.api.core.cql.AsyncResultSet;
 import com.datastax.oss.driver.api.core.cql.PagingState;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import com.google.common.collect.Lists;
 import com.dulno.core.database.DatabaseRow;
 import com.dulno.core.database.condition.DatabaseCondition;
 import com.dulno.core.database.paging.DatabaseDirection;
 import com.dulno.core.database.paging.DatabaseOrder;
 import com.dulno.core.database.paging.DatabasePage;
 import com.dulno.core.iterator.AsyncIterator;
+import com.google.common.collect.Lists;
 
 import java.util.Collections;
 import java.util.List;

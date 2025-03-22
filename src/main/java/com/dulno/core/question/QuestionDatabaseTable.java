@@ -1,10 +1,10 @@
 package com.dulno.core.question;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseComparison;
 import com.dulno.core.database.condition.DatabaseCondition;
 import com.dulno.core.ticket.Ticket;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.UUID;

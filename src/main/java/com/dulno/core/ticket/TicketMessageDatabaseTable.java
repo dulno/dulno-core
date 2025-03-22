@@ -1,7 +1,7 @@
 package com.dulno.core.ticket;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +11,7 @@ public final class TicketMessageDatabaseTable extends DatabaseTable {
   private static final String TABLE_NAME = "ticket_message";
 
   public static TicketMessageDatabaseTable create(
-          DatabaseConnection connection, DatabaseKeyspace keyspace
+    DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,

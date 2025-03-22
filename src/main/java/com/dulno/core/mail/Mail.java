@@ -1,9 +1,9 @@
 package com.dulno.core.mail;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.error.ErrorRepository;
 import com.dulno.core.locale.Translation;
-import com.dulno.core.user.User;
+import com.dulno.core.member.Member;
+import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -87,7 +87,7 @@ public class Mail {
     }
   }
 
-  public CompletableFuture<String> send(User user, String title, String body) {
+  public CompletableFuture<String> send(Member user, String title, String body) {
     return send(user.email(), user.language(), title, body);
   }
 
@@ -98,7 +98,7 @@ public class Mail {
   }
 
   public CompletableFuture<String> send(
-    User user, String title, String body, List<MailAttachment> attachments
+    Member user, String title, String body, List<MailAttachment> attachments
   ) {
     return send(user.email(), user.language(), title, body, attachments);
   }

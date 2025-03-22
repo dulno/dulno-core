@@ -1,9 +1,9 @@
 package com.dulno.core.mail;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.dulno.core.error.ErrorRepository;
 import com.dulno.core.locale.Translation;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
