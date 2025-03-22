@@ -50,7 +50,7 @@ public final class MultiFactorAuthDatabaseTable extends DatabaseTable {
     return delete(memberId);
   }
 
-  public CompletableFuture<MultiFactorAuthMember> findAuth(UUID memberId) {
-    return selectRow(memberId).thenApply(MultiFactorAuthMember::of);
+  public CompletableFuture<MultiFactorAuthEntry> findAuth(UUID memberId) {
+    return selectRow(memberId).thenApply(MultiFactorAuthEntry::of);
   }
 }
