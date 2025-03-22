@@ -1,8 +1,8 @@
 package com.dulno.core.stripe;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +15,7 @@ public final class StripeCompletionDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
-    columns.add(DatabaseColumn.create("user", DatabaseDataType.UUID,
+    columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PARTITION_KEY));
     columns.add(DatabaseColumn.create("completionToken", DatabaseDataType.TEXT,
       DatabaseColumn.Type.CLUSTERING_KEY));
@@ -31,37 +31,37 @@ public final class StripeCompletionDatabaseTable extends DatabaseTable {
   }
 
   public void insertStripeCompletion(
-    UUID userId, String completionToken
+    UUID memberId, String completionToken
   ) {
-    insert(DatabaseRow.of(userId, completionToken, false),
+    insert(DatabaseRow.of(memberId, completionToken, false),
       "USING TTL " + (60 * 60));
   }
 
   public CompletableFuture<Void> confirmStripeCompletion(
-    UUID userId, String completionToken
+    UUID memberId, String completionToken
   ) {
-    var condition = DatabaseCondition.of("user", userId,
+    var condition = DatabaseCondition.of("member", memberId,
       "completionToken", completionToken);
-    return update(condition, DatabaseRow.of(userId, completionToken, true),
+    return update(condition, DatabaseRow.of(memberId, completionToken, true),
       "USING TTL " + (60 * 60));
   }
 
-  public void deleteStripeCompletion(UUID userId, String completionToken) {
-    delete(DatabaseCondition.of("user", userId,
+  public void deleteStripeCompletion(UUID memberId, String completionToken) {
+    delete(DatabaseCondition.of("member", memberId,
       "completionToken", completionToken));
   }
 
   public CompletableFuture<Boolean> stripeCompletionExists(
-    UUID userId, String completionToken
+    UUID memberId, String completionToken
   ) {
-    return exists(DatabaseCondition.of("user", userId,
+    return exists(DatabaseCondition.of("member", memberId,
       "completionToken", completionToken));
   }
 
   public CompletableFuture<Boolean> isStripeCompletionConfirmed(
-    UUID userId, String completionToken
+    UUID memberId, String completionToken
   ) {
-    return selectRow(DatabaseCondition.of("user", userId,
+    return selectRow(DatabaseCondition.of("member", memberId,
       "completionToken", completionToken))
       .thenApply(row -> row.findCell(2).booleanValue());
   }

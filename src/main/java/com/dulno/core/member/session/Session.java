@@ -1,4 +1,4 @@
-package com.dulno.core.session;
+package com.dulno.core.member.session;
 
 import com.dulno.core.database.DatabaseColumn;
 import com.dulno.core.database.DatabaseRow;
@@ -20,7 +20,7 @@ public final class Session {
 
   public static Session of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
-      row.findCell(columns.indexOf("user")).uuidValue(),
+      row.findCell(columns.indexOf("member")).uuidValue(),
       SessionStatus.valueOf(row.findCell(columns.indexOf("status")).stringValue()),
       row.findCell(columns.indexOf("devicePlatform")).stringValue(),
       row.findCell(columns.indexOf("ipAddress")).stringValue(),
@@ -32,7 +32,7 @@ public final class Session {
   }
 
   private final UUID id;
-  private final UUID userId;
+  private final UUID memberId;
   private SessionStatus status;
   private final String devicePlatform;
   private final String ipAddress;
