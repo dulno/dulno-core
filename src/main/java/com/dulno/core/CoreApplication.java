@@ -1,15 +1,8 @@
 package com.dulno.core;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.dulno.core.application.ApplicationLaunchEvent;
 import com.dulno.core.application.ApplicationPostRunEvent;
 import com.dulno.core.application.ApplicationPreRunEvent;
-import com.dulno.core.command.CommandRegistry;
-import com.dulno.core.command.CommandTask;
-import com.dulno.core.command.implementation.ClearCommand;
-import com.dulno.core.command.implementation.ExitCommand;
-import com.dulno.core.command.implementation.HelpCommand;
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.transformation.DatabaseDiscrepancyHook;
 import com.dulno.core.error.ErrorRepository;
@@ -23,6 +16,8 @@ import com.dulno.core.worker.WorkerConfiguration;
 import com.dulno.core.worker.WorkerDistribution;
 import com.dulno.core.worker.client.WorkerOperatorClient;
 import com.dulno.core.worker.packet.outgoing.node.PacketOutgoingDisconnect;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -52,16 +47,12 @@ public class CoreApplication {
       var distribution = injector.getInstance(WorkerDistribution.class);
       distribution.initialize();
       injector.getInstance(ModuleLoader.class).loadModules();
-      var commandRegistry = injector.getInstance(CommandRegistry.class);
-      registerCommands(commandRegistry, injector);
       var application = injector.getInstance(SpringApplication.class);
       application.setDefaultProperties(Collections.singletonMap("server.port",
         distributionConfiguration.restPort()));
       eventExecutor.execute(ApplicationPreRunEvent.create());
       log.info("Booting Spring...");
       application.run(args);
-      new Thread(() -> CommandTask.create(log, errorRepository, commandRegistry)
-        .start()).start();
       injector.getInstance(MaintenanceSchedule.class).start();
       log.info("Successfully booted Dulno - Core");
       Runtime.getRuntime().addShutdownHook(new Thread(() ->
@@ -75,13 +66,5 @@ public class CoreApplication {
 
   private static void registerHooks(HookRegistry registry, Injector injector) {
     registry.register(injector.getInstance(DatabaseDiscrepancyHook.class));
-  }
-
-  private static void registerCommands(
-    CommandRegistry registry, Injector injector
-  ) {
-    registry.register(injector.getInstance(ClearCommand.class));
-    registry.register(injector.getInstance(HelpCommand.class));
-    registry.register(injector.getInstance(ExitCommand.class));
   }
 }
