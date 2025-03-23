@@ -1,11 +1,11 @@
 package com.dulno.core.worker.server.node;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.dulno.core.event.EventHook;
 import com.dulno.core.event.Hook;
 import com.dulno.core.worker.event.node.NodePingEvent;
 import com.dulno.core.worker.packet.outgoing.node.PacketOutgoingPong;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.dulno.core.ticket;
+package com.dulno.core.partner;
 
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
@@ -8,23 +8,20 @@ import com.google.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "create")
-public final class TicketInjectionModule extends AbstractModule {
+public final class PartnerInjectionModule extends AbstractModule {
   @Provides
   @Singleton
-  TicketDatabaseTable provideTicketDatabaseTable(
+  PartnerDatabaseTable providePartnerDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    return TicketDatabaseTable.create(connection, keyspace);
+    return PartnerDatabaseTable.create(connection, keyspace);
   }
 
   @Provides
   @Singleton
-  TicketMessageDatabaseTable provideTicketMessageDatabaseTable(
+  PartnerMemberDatabaseTable providePartnerMemberDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    var ticketMessageDatabaseTable = TicketMessageDatabaseTable.create(
-      connection, keyspace);
-    ticketMessageDatabaseTable.createIfNotExists();
-    return ticketMessageDatabaseTable;
+    return PartnerMemberDatabaseTable.create(connection, keyspace);
   }
 }

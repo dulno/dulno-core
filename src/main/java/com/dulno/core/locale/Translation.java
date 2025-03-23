@@ -1,49 +1,45 @@
 package com.dulno.core.locale;
 
+import com.dulno.core.member.Member;
+import com.dulno.core.member.MemberDatabaseTable;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
-import com.dulno.core.user.User;
-import com.dulno.core.user.UserDatabaseTable;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Singleton
 public final class Translation {
-  private final UserDatabaseTable userDatabaseTable;
-  private final Locale englishLocale;
-  private final Locale germanLocale;
+  private final MemberDatabaseTable memberDatabaseTable;
+  private final Locales locales;
 
   @Inject
   private Translation(
-    UserDatabaseTable userDatabaseTable,
-    @Named("englishLocale") Locale englishLocale,
-    @Named("germanLocale") Locale germanLocale
+    MemberDatabaseTable memberDatabaseTable, Locales locales
   ) {
-    this.userDatabaseTable = userDatabaseTable;
-    this.englishLocale = englishLocale;
-    this.germanLocale = germanLocale;
+    this.memberDatabaseTable = memberDatabaseTable;
+    this.locales = locales;
   }
 
   /**
-   * Translates a locale for a user
-   * @param userId The id of the user
+   * Translates a locale for a member
+   * @param memberId The id of the member
    * @param key The key of the locale
    * @return A future that contains the translated locale
    */
-  public CompletableFuture<String> translate(UUID userId, String key) {
-    return userDatabaseTable.findUser(userId).thenApply(user -> translate(user, key));
+  public CompletableFuture<String> translate(UUID memberId, String key) {
+    return memberDatabaseTable.findMember(memberId)
+      .thenApply(member -> translate(member, key));
   }
 
   /**
-   * Translates a locale for a user
-   * @param user The user
+   * Translates a locale for a member
+   * @param member The member
    * @param key The key of the locale
    * @return A future that contains the translated locale
    */
-  public String translate(User user, String key) {
-    return translate(user.language(), key);
+  public String translate(Member member, String key) {
+    return translate(member.language(), key);
   }
 
   /**
@@ -53,10 +49,9 @@ public final class Translation {
    * @return A future that contains the translated locale
    */
   public String translate(String language, String key) {
-    return switch(language.toLowerCase()) {
-      case "en" -> englishLocale.findText(key);
-      case "de" -> germanLocale.findText(key);
-      default -> "LANGUAGE NOT FOUND";
-    };
+    if (!locales.hasLanguage(language)) {
+      return key;
+    }
+    return locales.findLocale(language).get().findText(key);
   }
 }

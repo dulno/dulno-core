@@ -1,6 +1,5 @@
 package com.dulno.core.ticket;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseComparison;
 import com.dulno.core.database.condition.DatabaseCondition;
@@ -8,6 +7,7 @@ import com.dulno.core.database.paging.DatabaseDirection;
 import com.dulno.core.database.paging.DatabaseOrder;
 import com.dulno.core.database.paging.DatabasePage;
 import com.dulno.core.question.Question;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.UUID;

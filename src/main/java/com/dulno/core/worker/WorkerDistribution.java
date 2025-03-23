@@ -1,8 +1,5 @@
 package com.dulno.core.worker;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Singleton;
 import com.dulno.core.event.HookRegistry;
 import com.dulno.core.packet.PacketEventRepository;
 import com.dulno.core.packet.PacketRegistry;
@@ -25,6 +22,9 @@ import com.dulno.core.worker.server.database.TableTransformHook;
 import com.dulno.core.worker.server.node.NodeDisconnectHook;
 import com.dulno.core.worker.server.node.NodeHandshakeResponseHook;
 import com.dulno.core.worker.server.node.NodePingHook;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

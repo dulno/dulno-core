@@ -1,8 +1,8 @@
-package com.dulno.core.session;
+package com.dulno.core.member.session;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;
+import com.google.common.collect.Lists;
 
 import java.util.Comparator;
 import java.util.List;
@@ -18,7 +18,7 @@ public final class SessionDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PARTITION_KEY));
-    columns.add(DatabaseColumn.create("user", DatabaseDataType.UUID,
+    columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("devicePlatform", DatabaseDataType.TEXT));
@@ -30,13 +30,13 @@ public final class SessionDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("lastRefresh", DatabaseDataType.BIGINT));
     var table = new SessionDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
-    table.createIndexIfNotExists("user");
+    table.createIndexIfNotExists("member");
     table.createIndexIfNotExists("status");
     table.initializeViews();
     return table;
   }
 
-  private DatabaseTable userStatusView;
+  private DatabaseTable memberStatusView;
 
   private SessionDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
@@ -47,28 +47,28 @@ public final class SessionDatabaseTable extends DatabaseTable {
 
   private void initializeViews() {
     var columns = Lists.<DatabaseColumn>newArrayList();
-    columns.add(DatabaseColumn.create("user", DatabaseDataType.UUID,
+    columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PARTITION_KEY));
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
-    userStatusView = createMaterializedViewIfNotExists("user_status_view", columns);
+    memberStatusView = createMaterializedViewIfNotExists("member_status_view", columns);
   }
 
   public CompletableFuture<Void> insertSession(Session session) {
-    return insertSession(session.id(), session.userId(), session.status(),
+    return insertSession(session.id(), session.memberId(), session.status(),
       session.devicePlatform(), session.ipAddress(), session.country(),
       session.city(), session.openTime(), session.lastRefreshToken(),
       session.lastRefresh());
   }
 
   public CompletableFuture<Void> insertSession(
-    UUID id, UUID userId, SessionStatus status, String devicePlatform,
+    UUID id, UUID memberId, SessionStatus status, String devicePlatform,
     String ipAddress, String country, String city, long openTime,
     String refreshToken, long lastRefresh
   ) {
-    return insert(DatabaseRow.of(id, userId, status.toString(), devicePlatform,
+    return insert(DatabaseRow.of(id, memberId, status.toString(), devicePlatform,
       ipAddress, country, city, openTime, refreshToken, lastRefresh));
   }
 
@@ -102,8 +102,8 @@ public final class SessionDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> updateSession(Session session) {
-    return update(DatabaseCondition.of("id", session.id(), "user", session.userId()),
-      DatabaseRow.of(session.id(), session.userId(), session.status().toString(),
+    return update(DatabaseCondition.of("id", session.id(), "member", session.memberId()),
+      DatabaseRow.of(session.id(), session.memberId(), session.status().toString(),
         session.devicePlatform(), session.ipAddress(), session.country(),
         session.city(), session.openTime(), session.lastRefreshToken(),
         session.lastRefresh()));
@@ -131,17 +131,17 @@ public final class SessionDatabaseTable extends DatabaseTable {
       .thenApply(row -> Session.of(row, this));
   }
 
-  public CompletableFuture<List<Session>> findSessionsOfUser(UUID userId) {
-    return selectRows(DatabaseCondition.of("user", userId))
+  public CompletableFuture<List<Session>> findSessionsOfMember(UUID memberId) {
+    return selectRows(DatabaseCondition.of("member", memberId))
       .thenApply(rows -> rows.stream().map(row -> Session.of(row, this)).toList());
   }
 
-  public CompletableFuture<List<Session>> findSessionsOfUserByStatus(
-    UUID userId, SessionStatus status
+  public CompletableFuture<List<Session>> findSessionsOfMemberByStatus(
+    UUID memberId, SessionStatus status
   ) {
-    var condition = DatabaseCondition.of("user", userId, "status", status.toString());
-    return userStatusView.selectRows(condition)
-      .thenApply(rows -> rows.stream().map(row -> Session.of(row, userStatusView))
+    var condition = DatabaseCondition.of("member", memberId, "status", status.toString());
+    return memberStatusView.selectRows(condition)
+      .thenApply(rows -> rows.stream().map(row -> Session.of(row, memberStatusView))
         .sorted(Comparator.comparingLong(Session::openTime).reversed()).toList());
   }
 

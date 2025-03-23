@@ -6,13 +6,13 @@ plugins {
   id("java")
   id("maven-publish")
   id("org.springframework.boot") version "3.4.3"
-  id("io.freefair.lombok") version "8.12.2.1"
+  id("io.freefair.lombok") version "8.13"
 }
 
 group = "com.dulno"
 version = "1.0.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_23
-java.targetCompatibility = JavaVersion.VERSION_23
+java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_21
 
 publishing {
   publications {
@@ -40,9 +40,9 @@ repositories {
 }
 
 dependencies {
-  testImplementation(platform("org.junit:junit-bom:5.12.0"))
-  testImplementation("org.junit.jupiter:junit-jupiter:5.12.0")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.0")
+  testImplementation(platform("org.junit:junit-bom:5.12.1"))
+  testImplementation("org.junit.jupiter:junit-jupiter:5.12.1")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.1")
 
   implementation("com.google.inject:guice:7.0.0")
 

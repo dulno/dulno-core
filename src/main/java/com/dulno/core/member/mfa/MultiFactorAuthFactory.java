@@ -1,8 +1,8 @@
-package com.dulno.core.user.mfa;
+package com.dulno.core.member.mfa;
 
+import com.dulno.core.member.MemberDatabaseTable;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.dulno.core.user.UserDatabaseTable;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +12,10 @@ import java.util.UUID;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__({@Inject}))
 public final class MultiFactorAuthFactory {
   private final MultiFactorAuthDatabaseTable multiFactorAuthDatabaseTable;
-  private final UserDatabaseTable userDatabaseTable;
+  private final MemberDatabaseTable memberDatabaseTable;
 
-  public MultiFactorAuth createAuth(UUID userId) {
-    return MultiFactorAuth.create(multiFactorAuthDatabaseTable, userDatabaseTable,
-      userId);
+  public MultiFactorAuth createAuth(UUID memberId) {
+    return MultiFactorAuth.create(multiFactorAuthDatabaseTable, memberDatabaseTable,
+      memberId);
   }
 }

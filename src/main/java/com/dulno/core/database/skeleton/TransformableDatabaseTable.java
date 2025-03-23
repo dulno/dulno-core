@@ -2,13 +2,13 @@ package com.dulno.core.database.skeleton;
 
 import com.datastax.oss.driver.api.core.cql.AsyncResultSet;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import com.google.common.collect.Lists;
 import com.dulno.core.database.DatabaseColumn;
 import com.dulno.core.database.DatabaseRow;
 import com.dulno.core.database.DatabaseTable;
 import com.dulno.core.database.transformation.DatabaseTransformation;
 import com.dulno.core.database.transformation.DatabaseTransformationState;
 import com.dulno.core.iterator.AsyncIterator;
+import com.google.common.collect.Lists;
 
 import java.util.Comparator;
 import java.util.List;

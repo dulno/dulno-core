@@ -1,11 +1,11 @@
-package com.dulno.core.session;
+package com.dulno.core.member.session;
 
+import com.dulno.core.database.DatabaseConnection;
+import com.dulno.core.database.DatabaseKeyspace;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.maxmind.geoip2.DatabaseReader;
-import com.dulno.core.database.DatabaseConnection;
-import com.dulno.core.database.DatabaseKeyspace;
 import lombok.RequiredArgsConstructor;
 
 import java.io.File;

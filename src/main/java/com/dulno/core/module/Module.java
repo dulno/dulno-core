@@ -1,10 +1,8 @@
 package com.dulno.core.module;
 
-import com.google.inject.Injector;
-import com.dulno.core.command.Command;
-import com.dulno.core.command.CommandRegistry;
 import com.dulno.core.event.Hook;
 import com.dulno.core.event.HookRegistry;
+import com.google.inject.Injector;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -56,23 +54,6 @@ public abstract class Module {
    * @throws Exception
    */
   public void postDisable() throws Exception {
-  }
-
-  /**
-   * Can be called to register a new command line command
-   * @param command The command that is to be registered
-   */
-  public void registerCommand(Command command) {
-    injector.getInstance(CommandRegistry.class).register(command);
-  }
-
-
-  /**
-   * Is used to unregister a command from command line
-   * @param command The command that is to be unregistered
-   */
-  public void unregisterCommand(Command command) {
-    injector.getInstance(CommandRegistry.class).unregister(command);
   }
 
   /**

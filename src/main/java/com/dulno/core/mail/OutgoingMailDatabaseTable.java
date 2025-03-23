@@ -1,8 +1,8 @@
 package com.dulno.core.mail;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;
+import com.google.common.collect.Lists;
 
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -13,7 +13,7 @@ public final class OutgoingMailDatabaseTable extends DatabaseTable {
   private static final String TABLE_NAME = "outgoing_mail";
 
   public static OutgoingMailDatabaseTable create(
-          DatabaseConnection connection, DatabaseKeyspace keyspace
+    DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
