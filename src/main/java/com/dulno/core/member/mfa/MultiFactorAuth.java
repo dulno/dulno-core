@@ -1,8 +1,8 @@
-package com.dulno.core.user.mfa;
+package com.dulno.core.member.mfa;
 
+import com.dulno.core.member.Member;
+import com.dulno.core.member.MemberDatabaseTable;
 import com.google.common.collect.Lists;
-import com.dulno.core.user.User;
-import com.dulno.core.user.UserDatabaseTable;
 import dev.samstevens.totp.code.DefaultCodeGenerator;
 import dev.samstevens.totp.code.DefaultCodeVerifier;
 import dev.samstevens.totp.code.HashingAlgorithm;
@@ -20,11 +20,11 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor(staticName = "create")
 public final class MultiFactorAuth {
   private final MultiFactorAuthDatabaseTable multiFactorAuthDatabaseTable;
-  private final UserDatabaseTable userDatabaseTable;
-  private final UUID userId;
+  private final MemberDatabaseTable memberDatabaseTable;
+  private final UUID memberId;
 
   public CompletableFuture<Void> setup() {
-    return multiFactorAuthDatabaseTable.insertAuth(userId, generateSecret(),
+    return multiFactorAuthDatabaseTable.insertAuth(memberId, generateSecret(),
       generateRecoveryCodes());
   }
 
@@ -39,14 +39,14 @@ public final class MultiFactorAuth {
   }
 
   public CompletableFuture<byte[]> generateQRCode() {
-    return userDatabaseTable.findUser(userId)
-      .thenCompose(user -> multiFactorAuthDatabaseTable.findAuth(userId)
-        .thenApplyAsync(auth -> buildQRCode(user, auth.secret())));
+    return memberDatabaseTable.findMember(memberId)
+      .thenCompose(member -> multiFactorAuthDatabaseTable.findAuth(memberId)
+        .thenApplyAsync(auth -> buildQRCode(member, auth.secret())));
   }
 
-  private byte[] buildQRCode(User user, String secret) {
+  private byte[] buildQRCode(Member member, String secret) {
     var data = new QrData.Builder()
-      .label(user.email())
+      .label(member.email())
       .secret(secret)
       .issuer("Dulno")
       .algorithm(HashingAlgorithm.SHA256)
@@ -62,7 +62,7 @@ public final class MultiFactorAuth {
   }
 
   public CompletableFuture<Boolean> verifyCode(String code) {
-    return multiFactorAuthDatabaseTable.authExists(userId)
+    return multiFactorAuthDatabaseTable.authExists(memberId)
       .thenCompose(exists -> verifyCode(code, exists));
   }
 
@@ -78,12 +78,12 @@ public final class MultiFactorAuth {
     var timeProvider = new SystemTimeProvider();
     var codeGenerator = new DefaultCodeGenerator(HashingAlgorithm.SHA256);
     var verifier = new DefaultCodeVerifier(codeGenerator, timeProvider);
-    return multiFactorAuthDatabaseTable.findAuth(userId)
+    return multiFactorAuthDatabaseTable.findAuth(memberId)
       .thenApplyAsync(auth -> verifier.isValidCode(auth.secret(), code));
   }
 
   public CompletableFuture<Boolean> verifyRecoveryCode(String recoveryCode) {
-    return multiFactorAuthDatabaseTable.findAuth(userId)
+    return multiFactorAuthDatabaseTable.findAuth(memberId)
       .thenApply(auth -> auth.recoveryCodes().contains(recoveryCode));
   }
 }

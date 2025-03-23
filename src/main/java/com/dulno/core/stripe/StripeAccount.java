@@ -17,7 +17,7 @@ public final class StripeAccount {
   }
 
   private final String accountId;
-  private final UUID targetId;
-  private final UUID userId;
+  private final UUID partnerId;
+  private final UUID memberId;
   private final String subscriptionId;
 }

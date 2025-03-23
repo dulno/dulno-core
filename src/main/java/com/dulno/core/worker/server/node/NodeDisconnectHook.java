@@ -1,7 +1,5 @@
 package com.dulno.core.worker.server.node;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.dulno.core.event.EventHook;
 import com.dulno.core.event.Hook;
 import com.dulno.core.log.Log;
@@ -9,6 +7,8 @@ import com.dulno.core.worker.WorkerConfiguration;
 import com.dulno.core.worker.client.WorkerOperatorClient;
 import com.dulno.core.worker.event.node.NodeDisconnectEvent;
 import com.dulno.core.worker.packet.outgoing.node.PacketOutgoingHandshakeRequest;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

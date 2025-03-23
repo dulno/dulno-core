@@ -1,8 +1,8 @@
 package com.dulno.core.event;
 
+import com.dulno.core.error.ErrorRepository;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.dulno.core.error.ErrorRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

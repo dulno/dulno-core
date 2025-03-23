@@ -1,7 +1,5 @@
 package com.dulno.core.database.transformation;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.dulno.core.application.ApplicationPostRunEvent;
 import com.dulno.core.application.ApplicationPreRunEvent;
 import com.dulno.core.database.DatabaseKeyspace;
@@ -11,6 +9,8 @@ import com.dulno.core.event.Hook;
 import com.dulno.core.log.Log;
 import com.dulno.core.worker.client.WorkerOperatorClient;
 import com.dulno.core.worker.packet.outgoing.database.PacketOutgoingTableDiscrepancy;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

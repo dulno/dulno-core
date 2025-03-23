@@ -1,7 +1,7 @@
-package com.dulno.core.user.mfa;
+package com.dulno.core.member.mfa;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +14,7 @@ public final class MultiFactorAuthDatabaseTable extends DatabaseTable {
           DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
-    columns.add(DatabaseColumn.create("user", DatabaseDataType.UUID,
+    columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("secret", DatabaseDataType.TEXT));
     columns.add(DatabaseListColumn.create("recoveryCodes", DatabaseDataType.TEXT));
@@ -30,27 +30,27 @@ public final class MultiFactorAuthDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertAuth(
-    UUID userId, String secret, List<String> recoveryCodes
+    UUID memberId, String secret, List<String> recoveryCodes
   ) {
-    return insert(DatabaseRow.of(userId, secret, recoveryCodes, false),
+    return insert(DatabaseRow.of(memberId, secret, recoveryCodes, false),
       "USING TTL " + (60 * 60));
   }
 
-  public CompletableFuture<Void> confirmAuth(UUID userId) {
-    return findAuth(userId).thenCompose(auth ->
-      deleteAuth(userId).thenCompose(value ->
-        insert(DatabaseRow.of(userId, auth.secret(), auth.recoveryCodes(), true))));
+  public CompletableFuture<Void> confirmAuth(UUID memberId) {
+    return findAuth(memberId).thenCompose(auth ->
+      deleteAuth(memberId).thenCompose(value ->
+        insert(DatabaseRow.of(memberId, auth.secret(), auth.recoveryCodes(), true))));
   }
 
-  public CompletableFuture<Boolean> authExists(UUID userId) {
-    return exists(userId);
+  public CompletableFuture<Boolean> authExists(UUID memberId) {
+    return exists(memberId);
   }
 
-  public CompletableFuture<Void> deleteAuth(UUID userId) {
-    return delete(userId);
+  public CompletableFuture<Void> deleteAuth(UUID memberId) {
+    return delete(memberId);
   }
 
-  public CompletableFuture<MultiFactorAuthUser> findAuth(UUID userId) {
-    return selectRow(userId).thenApply(MultiFactorAuthUser::of);
+  public CompletableFuture<MultiFactorAuthEntry> findAuth(UUID memberId) {
+    return selectRow(memberId).thenApply(MultiFactorAuthEntry::of);
   }
 }

@@ -1,8 +1,8 @@
 package com.dulno.core.stripe;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,8 +17,8 @@ public final class StripeDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("account", DatabaseDataType.TEXT,
       DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("target", DatabaseDataType.UUID));
-    columns.add(DatabaseColumn.create("user", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("subscription", DatabaseDataType.TEXT));
     return new StripeDatabaseTable(connection, keyspace, TABLE_NAME, columns);
   }
@@ -31,15 +31,15 @@ public final class StripeDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertStripeAccount(
-    String accountId, UUID targetId, UUID userId, String subscriptionId
+    String accountId, UUID partnerId, UUID memberId, String subscriptionId
   ) {
-    return insert(DatabaseRow.of(accountId, targetId, userId, subscriptionId));
+    return insert(DatabaseRow.of(accountId, partnerId, memberId, subscriptionId));
   }
 
   public CompletableFuture<Void> updateStripeAccount(
-    String accountId, UUID targetId, UUID userId, String subscriptionId
+    String accountId, UUID partnerId, UUID memberId, String subscriptionId
   ) {
-    return update(accountId, DatabaseRow.of(accountId, targetId, userId,
+    return update(accountId, DatabaseRow.of(accountId, partnerId, memberId,
       subscriptionId));
   }
 
@@ -51,16 +51,16 @@ public final class StripeDatabaseTable extends DatabaseTable {
     return exists(accountId);
   }
 
-  public CompletableFuture<Boolean> stripeAccountExistsByTarget(UUID targetId) {
-    return exists(DatabaseCondition.of("target", targetId));
+  public CompletableFuture<Boolean> stripeAccountExistsByPartner(UUID partnerId) {
+    return exists(DatabaseCondition.of("partner", partnerId));
   }
 
   public CompletableFuture<StripeAccount> findStripeAccount(String accountId) {
     return selectRow(accountId).thenApply(StripeAccount::of);
   }
 
-  public CompletableFuture<StripeAccount> findStripeAccountByTarget(UUID targetId) {
-    return selectRow(DatabaseCondition.of("target", targetId))
+  public CompletableFuture<StripeAccount> findStripeAccountByPartner(UUID partnerId) {
+    return selectRow(DatabaseCondition.of("partner", partnerId))
       .thenApply(StripeAccount::of);
   }
 }

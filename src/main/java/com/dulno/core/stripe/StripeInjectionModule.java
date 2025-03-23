@@ -1,10 +1,10 @@
 package com.dulno.core.stripe;
 
+import com.dulno.core.database.DatabaseConnection;
+import com.dulno.core.database.DatabaseKeyspace;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.dulno.core.database.DatabaseConnection;
-import com.dulno.core.database.DatabaseKeyspace;
 import com.stripe.StripeClient;
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +24,7 @@ public final class StripeInjectionModule extends AbstractModule {
     var stripeDatabaseTable = StripeDatabaseTable.create(connection,
       keyspace);
     stripeDatabaseTable.createIfNotExists();
-    stripeDatabaseTable.createIndexIfNotExists("target");
+    stripeDatabaseTable.createIndexIfNotExists("partner");
     return stripeDatabaseTable;
   }
 

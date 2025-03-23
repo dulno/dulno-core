@@ -1,7 +1,7 @@
 package com.dulno.core.access;
 
-import com.dulno.core.user.User;
-import com.dulno.core.user.UserDatabaseTable;
+import com.dulno.core.member.Member;
+import com.dulno.core.member.MemberDatabaseTable;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
@@ -16,25 +16,25 @@ import java.util.concurrent.CompletableFuture;
 @Getter(AccessLevel.PROTECTED)
 @Accessors(fluent = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class DulnoRestController {
+public class PortalRestController {
   private final Key secretKey;
-  private final UserDatabaseTable userDatabaseTable;
+  private final MemberDatabaseTable memberDatabaseTable;
 
   /**
-   * Is used to find the id of the user that send the request
+   * Is used to find the id of the member that send the request
    * @param request The request
-   * @return The id of the user
+   * @return The id of the member
    */
-  protected UUID findUserId(HttpServletRequest request) {
-    return findUserId(findApiKey(request));
+  protected UUID findMemberId(HttpServletRequest request) {
+    return findMemberId(findApiKey(request));
   }
 
   /**
-   * Is used to find the id of a user inside an api key
+   * Is used to find the id of a member inside an api key
    * @param apiKey The api key
-   * @return The id of the user
+   * @return The id of the member
    */
-  protected UUID findUserId(String apiKey) {
+  protected UUID findMemberId(String apiKey) {
     return UUID.fromString(Jwts.parser().setSigningKey(secretKey).build()
       .parseClaimsJws(apiKey).getPayload().get("id", String.class));
   }
@@ -59,13 +59,13 @@ public class DulnoRestController {
   }
 
   /**
-   * Is used to find the user that send the request
+   * Is used to find the member that send the request
    * @param request The request
-   * @return A future that contains the user
+   * @return A future that contains the member
    */
-  protected CompletableFuture<User> findUser(HttpServletRequest request) {
+  protected CompletableFuture<Member> findMember(HttpServletRequest request) {
     var apiKey = request.getHeader("Authorization").replace("Bearer ", "");
-    return userDatabaseTable.findUser(findUserId(apiKey));
+    return memberDatabaseTable.findMember(findMemberId(apiKey));
   }
 
   /**

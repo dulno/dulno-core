@@ -1,8 +1,8 @@
 package com.dulno.core.error;
 
+import com.dulno.core.log.Log;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.dulno.core.log.Log;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

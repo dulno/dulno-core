@@ -1,4 +1,4 @@
-package com.dulno.core.session;
+package com.dulno.core.member.session;
 
 public enum SessionStatus {
   ACTIVE,

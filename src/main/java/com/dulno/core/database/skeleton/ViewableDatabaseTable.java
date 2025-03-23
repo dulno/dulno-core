@@ -1,10 +1,10 @@
 package com.dulno.core.database.skeleton;
 
 import com.datastax.oss.driver.api.core.metadata.schema.ViewMetadata;
-import com.google.common.collect.Lists;
 import com.dulno.core.database.DatabaseColumn;
 import com.dulno.core.database.DatabaseTable;
 import com.dulno.core.iterator.AsyncIterator;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

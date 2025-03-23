@@ -1,7 +1,7 @@
 package com.dulno.core.stripe;
 
-import com.google.common.collect.Lists;
 import com.dulno.core.database.*;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +14,7 @@ public final class TerminationDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
-    columns.add(DatabaseColumn.create("target", DatabaseDataType.UUID,
+    columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     return new TerminationDatabaseTable(connection, keyspace, TABLE_NAME, columns);
   }
@@ -26,15 +26,15 @@ public final class TerminationDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
-  public CompletableFuture<Void> insertTermination(UUID target) {
-    return insert(DatabaseRow.of(target));
+  public CompletableFuture<Void> insertTermination(UUID partnerId) {
+    return insert(DatabaseRow.of(partnerId));
   }
 
-  public CompletableFuture<Void> deleteTermination(UUID target) {
-    return delete(target);
+  public CompletableFuture<Void> deleteTermination(UUID partnerId) {
+    return delete(partnerId);
   }
 
-  public CompletableFuture<Boolean> terminationExists(UUID target) {
-    return exists(target);
+  public CompletableFuture<Boolean> terminationExists(UUID partnerId) {
+    return exists(partnerId);
   }
 }

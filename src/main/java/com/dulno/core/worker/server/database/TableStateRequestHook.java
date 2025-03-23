@@ -1,7 +1,5 @@
 package com.dulno.core.worker.server.database;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.dulno.core.database.DatabaseKeyspace;
 import com.dulno.core.event.EventHook;
 import com.dulno.core.event.Hook;
@@ -9,6 +7,8 @@ import com.dulno.core.log.Log;
 import com.dulno.core.worker.client.WorkerOperatorClient;
 import com.dulno.core.worker.event.database.TableStateRequestEvent;
 import com.dulno.core.worker.packet.outgoing.database.PacketOutgoingTableStateResponse;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

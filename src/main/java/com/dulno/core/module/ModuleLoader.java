@@ -1,10 +1,11 @@
 package com.dulno.core.module;
 
+import com.dulno.core.locale.Locale;
+import com.dulno.core.locale.Locales;
+import com.dulno.core.log.Log;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
-import com.dulno.core.locale.Locale;
-import com.dulno.core.log.Log;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,14 +26,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ModuleLoader {
   public static ModuleLoader create(
-    Log log, String directory, Locale englishLocale, Locale germanLocale,
-    Injector injector
+    Log log, String directory, Locales locales, Injector injector
   ) {
     var jars = findJarsInDirectory(directory);
     var urls = jars.stream().map(ModuleLoader::findFileUrl).toArray(URL[]::new);
     var classLoader = new URLClassLoader(urls, ModuleLoader.class.getClassLoader());
-    return new ModuleLoader(log, jars, classLoader, englishLocale, germanLocale,
-      injector);
+    return new ModuleLoader(log, jars, classLoader, locales, injector);
   }
 
   private static List<File> findJarsInDirectory(String directory) {
@@ -55,8 +54,7 @@ public final class ModuleLoader {
   @Getter
   private final ClassLoader classLoader;
   private final List<RegisteredModule> modules = Lists.newArrayList();
-  private final Locale englishLocale;
-  private final Locale germanLocale;
+  private final Locales locales;
   private Injector injector;
 
   /**
@@ -189,18 +187,21 @@ public final class ModuleLoader {
   }
 
   private void applyModuleLocales(String module) throws Exception {
-    var englishModuleLocale = Locale.create(module, "en");
-    if (englishModuleLocale.exists()) {
-      englishModuleLocale.load();
-      englishLocale.addLocale(englishModuleLocale.locale());
+    var complete = true;
+    for (var language : locales.languages()) {
+      var locale = Locale.create(module, language);
+      if (!locale.exists()) {
+        complete = false;
+        continue;
+      }
+      locale.load();
+      locales.addLocale(locale);
     }
-    var germanModuleLocale = Locale.create(module, "de");
-    if (germanModuleLocale.exists()) {
-      germanModuleLocale.load();
-      germanLocale.addLocale(germanModuleLocale.locale());
-    }
-    if (englishModuleLocale.exists() && germanModuleLocale.exists()) {
+    if (complete) {
       log.info("Successfully loaded locales of module " + module);
+    } else {
+      log.warning("While loading the module " + module +
+        " the locales of one or more languages could not be found");
     }
   }
 

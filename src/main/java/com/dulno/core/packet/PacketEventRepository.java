@@ -1,10 +1,10 @@
 package com.dulno.core.packet;
 
+import com.dulno.core.event.Event;
+import com.dulno.core.worker.packet.incoming.PacketIncoming;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.dulno.core.event.Event;
-import com.dulno.core.worker.packet.incoming.PacketIncoming;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
