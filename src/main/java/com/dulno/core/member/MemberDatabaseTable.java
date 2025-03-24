@@ -24,14 +24,23 @@ public final class MemberDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("legalAccepted", DatabaseDataType.BOOLEAN));
     columns.add(DatabaseColumn.create("newsletter", DatabaseDataType.BOOLEAN));
     columns.add(DatabaseColumn.create("joinDate", DatabaseDataType.BIGINT));
-    return new MemberDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    var table = new MemberDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    table.createIfNotExists();
+    table.initializeViews();
+    return table;
   }
+
+  private DatabaseTable emailView;
 
   private MemberDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
     super(connection, keyspace, name, columns);
+  }
+
+  private void initializeViews() {
+    emailView = createMaterializedViewIfNotExists("email_view", "email");
   }
 
   public CompletableFuture<Void> insertMember(Member member) {
@@ -109,7 +118,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Boolean> memberExists(String email) {
-    return exists(DatabaseCondition.of("email", email.toLowerCase()));
+    return emailView.exists(DatabaseCondition.of("email", email.toLowerCase()));
   }
 
   public CompletableFuture<Void> deleteMember(UUID memberId) {
@@ -137,7 +146,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Member> findMember(String email) {
-    return selectRow(DatabaseCondition.of("email", email.toLowerCase()))
+    return emailView.selectRow(DatabaseCondition.of("email", email.toLowerCase()))
       .thenApply(Member::of);
   }
 }

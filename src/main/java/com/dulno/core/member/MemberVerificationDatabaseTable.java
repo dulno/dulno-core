@@ -17,7 +17,10 @@ public final class MemberVerificationDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("verificationToken", DatabaseDataType.TEXT));
-    return new MemberVerificationDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    var table = new MemberVerificationDatabaseTable(connection, keyspace,
+      TABLE_NAME, columns);
+    table.createIfNotExists();
+    return table;
   }
 
   private MemberVerificationDatabaseTable(

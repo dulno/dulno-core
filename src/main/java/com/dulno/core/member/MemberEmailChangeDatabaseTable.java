@@ -20,7 +20,10 @@ public final class MemberEmailChangeDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("newEmail", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("changeToken", DatabaseDataType.TEXT));
-    return new MemberEmailChangeDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    var table = new MemberEmailChangeDatabaseTable(connection, keyspace,
+      TABLE_NAME, columns);
+    table.createIfNotExists();
+    return table;
   }
 
   private MemberEmailChangeDatabaseTable(
