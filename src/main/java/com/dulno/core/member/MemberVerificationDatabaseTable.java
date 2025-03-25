@@ -46,5 +46,10 @@ public final class MemberVerificationDatabaseTable extends DatabaseTable {
     return selectRow(memberId).thenApply(row ->
       row.findCell(1).stringValue());
   }
+
+  public CompletableFuture<List<UUID>> findAllVerifications() {
+    return selectAllRows().thenApply(rows ->
+      rows.stream().map(row -> row.findCell(0).uuidValue()).toList());
+  }
 }
 

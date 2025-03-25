@@ -38,7 +38,8 @@ public final class StampDatabaseTable extends DatabaseTable {
   }
 
   private void initializeViews() {
-    uidView = createMaterializedViewIfNotExists("uid_view", "uid");
+    uidView = createMaterializedViewIfNotExists("uid_view", "uid",
+      DatabaseColumn.Type.PARTITION_KEY);
   }
 
   public CompletableFuture<Void> insertStamp(Stamp stamp) {
@@ -103,11 +104,11 @@ public final class StampDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Stamp> findStamp(UUID stampId) {
-    return selectRow(stampId).thenApply(Stamp::of);
+    return selectRow(stampId).thenApply(row -> Stamp.of(row, this));
   }
 
   public CompletableFuture<Stamp> findStamp(String stampUid) {
     return uidView.selectRow(DatabaseCondition.of("uid", stampUid))
-      .thenApply(Stamp::of);
+      .thenApply(row -> Stamp.of(row, uidView));
   }
 }

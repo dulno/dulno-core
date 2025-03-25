@@ -61,12 +61,12 @@ public final class PartnerMemberDatabaseTable extends DatabaseTable {
   public CompletableFuture<List<UUID>> findMemberPartners(UUID memberId) {
     return memberView.selectRows(DatabaseCondition.of("member", memberId))
       .thenApply(rows -> rows.stream().map(row ->
-        row.findCell(0).uuidValue()).toList());
+        row.findCell(1).uuidValue()).toList());
   }
 
   public CompletableFuture<UUID> findMemberPartner(UUID memberId) {
     return memberView.selectRow(DatabaseCondition.of("member", memberId))
-      .thenApply(row -> row.findCell(0).uuidValue());
+      .thenApply(row -> row.findCell(1).uuidValue());
   }
 }
 

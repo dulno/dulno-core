@@ -1,20 +1,30 @@
 package com.dulno.core.user;
 
+import com.dulno.core.database.DatabaseColumn;
 import com.dulno.core.database.DatabaseRow;
+import com.dulno.core.database.DatabaseTable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Accessors(fluent = true)
 @AllArgsConstructor(staticName = "create")
 public final class User {
-  public static User of(DatabaseRow row) {
-    return create(row.findCell(0).uuidValue(), row.findCell(1).stringValue(),
-      row.findCell(2).stringValue(), row.findCell(3).booleanValue(),
-      row.findCell(4).booleanValue(), row.findCell(5).longValue());
+  public static User of(DatabaseRow row, DatabaseTable table) {
+    return of(row, table.columns().stream().map(DatabaseColumn::name).toList());
+  }
+
+  public static User of(DatabaseRow row, List<String> columns) {
+    return create(row.findCell(columns.indexOf("id")).uuidValue(),
+      row.findCell(columns.indexOf("email")).stringValue(),
+      row.findCell(columns.indexOf("language")).stringValue(),
+      row.findCell(columns.indexOf("compliant")).booleanValue(),
+      row.findCell(columns.indexOf("newsletter")).booleanValue(),
+      row.findCell(columns.indexOf("accession")).longValue());
   }
 
   private final UUID id;

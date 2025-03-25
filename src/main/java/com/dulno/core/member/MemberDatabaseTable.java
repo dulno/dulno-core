@@ -40,7 +40,8 @@ public final class MemberDatabaseTable extends DatabaseTable {
   }
 
   private void initializeViews() {
-    emailView = createMaterializedViewIfNotExists("email_view", "email");
+    emailView = createMaterializedViewIfNotExists("email_view", "email",
+      DatabaseColumn.Type.PARTITION_KEY);
   }
 
   public CompletableFuture<Void> insertMember(Member member) {
@@ -126,7 +127,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Member> findMember(UUID memberId) {
-    return selectRow(memberId).thenApply(Member::of);
+    return selectRow(memberId).thenApply(row -> Member.of(row, this));
   }
 
   public CompletableFuture<Member> findMemberIfExists(UUID memberId) {
@@ -147,6 +148,6 @@ public final class MemberDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Member> findMember(String email) {
     return emailView.selectRow(DatabaseCondition.of("email", email.toLowerCase()))
-      .thenApply(Member::of);
+      .thenApply(row -> Member.of(row, emailView));
   }
 }

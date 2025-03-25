@@ -17,11 +17,7 @@ public final class PartnerDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("name", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("email", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("password", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("language", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("compliant", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("newsletter", DatabaseDataType.BOOLEAN));
+    columns.add(DatabaseColumn.create("description", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("accession", DatabaseDataType.BIGINT));
     var table = new PartnerDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
@@ -46,30 +42,7 @@ public final class PartnerDatabaseTable extends DatabaseTable {
     return insert(DatabaseRow.of(id, name, description, accession));
   }
 
-  public CompletableFuture<Void> changePartnerName(UUID partnerId, String newName) {
-    return findPartner(partnerId).thenCompose(partner -> changePartnerName(partner, newName));
-  }
-
-  private CompletableFuture<Void> changePartnerName(Partner partner, String newName) {
-    partner.changeName(newName);
-    return updatePartner(partner);
-  }
-
-  public CompletableFuture<Void> changePartnerDescription(
-    UUID partnerId, String newDescription
-  ) {
-    return findPartner(partnerId).thenCompose(partner ->
-      changePartnerDescription(partner, newDescription));
-  }
-
-  private CompletableFuture<Void> changePartnerDescription(
-    Partner partner, String newDescription
-  ) {
-    partner.changeDescription(newDescription);
-    return updatePartner(partner);
-  }
-
-  private CompletableFuture<Void> updatePartner(Partner partner) {
+  public CompletableFuture<Void> updatePartner(Partner partner) {
     return update(partner.id(), DatabaseRow.of(partner.id(), partner.name(),
       partner.description(), partner.accession()));
   }

@@ -1,20 +1,30 @@
 package com.dulno.core.stamp;
 
+import com.dulno.core.database.DatabaseColumn;
 import com.dulno.core.database.DatabaseRow;
+import com.dulno.core.database.DatabaseTable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Accessors(fluent = true)
 @AllArgsConstructor(staticName = "create")
 public final class Stamp {
-  public static Stamp of(DatabaseRow row) {
-    return create(row.findCell(0).uuidValue(), row.findCell(1).stringValue(),
-      row.findCell(2).stringValue(), row.findCell(3).stringValue(),
-      row.findCell(4).uuidValue(), row.findCell(5).longValue());
+  public static Stamp of(DatabaseRow row, DatabaseTable table) {
+    return of(row, table.columns().stream().map(DatabaseColumn::name).toList());
+  }
+
+  public static Stamp of(DatabaseRow row, List<String> columns) {
+    return create(row.findCell(columns.indexOf("id")).uuidValue(),
+      row.findCell(columns.indexOf("uid")).stringValue(),
+      row.findCell(columns.indexOf("master_key")).stringValue(),
+      row.findCell(columns.indexOf("name")).stringValue(),
+      row.findCell(columns.indexOf("assigned_card")).uuidValue(),
+      row.findCell(columns.indexOf("creation")).longValue());
   }
 
   private final UUID id;

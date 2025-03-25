@@ -11,6 +11,12 @@ import lombok.RequiredArgsConstructor;
 public final class PartnerInjectionModule extends AbstractModule {
   @Provides
   @Singleton
+  PartnerConfiguration providePartnerConfiguration() throws Exception {
+    return PartnerConfiguration.createAndLoad();
+  }
+
+  @Provides
+  @Singleton
   PartnerDatabaseTable providePartnerDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
@@ -23,5 +29,29 @@ public final class PartnerInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return PartnerMemberDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerLogoDatabaseTable providePartnerLogoDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerLogoDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerLocationDatabaseTable providePartnerLocationDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerLocationDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerLinkDatabaseTable providePartnerLinkDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerLinkDatabaseTable.create(connection, keyspace);
   }
 }

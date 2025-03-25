@@ -38,7 +38,8 @@ public final class UserDatabaseTable extends DatabaseTable {
   }
 
   private void initializeViews() {
-    emailView = createMaterializedViewIfNotExists("email_view", "email");
+    emailView = createMaterializedViewIfNotExists("email_view", "email",
+      DatabaseColumn.Type.PARTITION_KEY);
   }
 
   public CompletableFuture<Void> insertUser(User user) {
@@ -99,12 +100,12 @@ public final class UserDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<User> findUser(UUID userId) {
-    return selectRow(userId).thenApply(User::of);
+    return selectRow(userId).thenApply(row -> User.of(row, this));
   }
 
   public CompletableFuture<User> findUser(String email) {
     return emailView.selectRow(DatabaseCondition.of("email", email.toLowerCase()))
-      .thenApply(User::of);
+      .thenApply(row -> User.of(row, emailView));
   }
 }
 

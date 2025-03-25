@@ -18,8 +18,6 @@ public final class CardDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
-    columns.add(DatabaseColumn.create("name", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("description", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("color", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
@@ -40,26 +38,24 @@ public final class CardDatabaseTable extends DatabaseTable {
   }
 
   private void initializeViews() {
-    partnerView = createMaterializedViewIfNotExists("partner_view", "partner");
+    partnerView = createMaterializedViewIfNotExists("partner_view", "partner",
+      DatabaseColumn.Type.PARTITION_KEY);
   }
 
   public CompletableFuture<Void> insertCard(Card card) {
-    return insertCard(card.id(), card.partner(), card.name(), card.description(),
-      card.color(), card.type().toString(), card.content(), card.creation());
+    return insertCard(card.id(), card.partner(), card.color(),
+      card.type().toString(), card.content(), card.creation());
   }
 
   public CompletableFuture<Void> insertCard(
-    UUID id, UUID partner, String name, String description, String color,
-    String type, String content, long creation
+    UUID id, UUID partner, String color, String type, String content, long creation
   ) {
-    return insert(DatabaseRow.of(id, partner, name, description, color,
-      type, content, creation));
+    return insert(DatabaseRow.of(id, partner, color, type, content, creation));
   }
 
   public CompletableFuture<Void> updateCard(Card card) {
     return update(card.id(), DatabaseRow.of(card.id(), card.partner(),
-      card.name(), card.description(), card.color(), card.type().toString(),
-      card.content(), card.creation()));
+      card.color(), card.type().toString(), card.content(), card.creation()));
   }
 
   public CompletableFuture<UUID> generateAvailableCardId() {
@@ -80,11 +76,11 @@ public final class CardDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Card> findCard(UUID cardId) {
-    return selectRow(cardId).thenApply(Card::of);
+    return selectRow(cardId).thenApply(row -> Card.of(row, this));
   }
 
   public CompletableFuture<List<Card>> findCardsOfPartner(UUID partnerId) {
     return partnerView.selectRows(DatabaseCondition.of("partner", partnerId))
-      .thenApply(rows -> rows.stream().map(Card::of).toList());
+      .thenApply(rows -> rows.stream().map(row -> Card.of(row, partnerView)).toList());
   }
 }
