@@ -18,7 +18,8 @@ public final class CardDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
-    columns.add(DatabaseColumn.create("color", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("background_color", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("foreground_color", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("creation", DatabaseDataType.BIGINT));
@@ -43,19 +44,23 @@ public final class CardDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertCard(Card card) {
-    return insertCard(card.id(), card.partner(), card.color(),
-      card.type().toString(), card.content(), card.creation());
+    return insertCard(card.id(), card.partner(), card.backgroundColor(),
+      card.foregroundColor(), card.type().toString(), card.content(),
+      card.creation());
   }
 
   public CompletableFuture<Void> insertCard(
-    UUID id, UUID partner, String color, String type, String content, long creation
+    UUID id, UUID partner, String backgroundColor, String foregroundColor,
+    String type, String content, long creation
   ) {
-    return insert(DatabaseRow.of(id, partner, color, type, content, creation));
+    return insert(DatabaseRow.of(id, partner, backgroundColor, foregroundColor,
+      type, content, creation));
   }
 
   public CompletableFuture<Void> updateCard(Card card) {
     return update(card.id(), DatabaseRow.of(card.id(), card.partner(),
-      card.color(), card.type().toString(), card.content(), card.creation()));
+      card.backgroundColor(), card.foregroundColor(), card.type().toString(),
+      card.content(), card.creation()));
   }
 
   public CompletableFuture<UUID> generateAvailableCardId() {

@@ -22,7 +22,8 @@ public final class Card {
   public static Card of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
       row.findCell(columns.indexOf("partner")).uuidValue(),
-      row.findCell(columns.indexOf("color")).stringValue(),
+      row.findCell(columns.indexOf("background_color")).stringValue(),
+      row.findCell(columns.indexOf("foreground_color")).stringValue(),
       CardType.valueOf(row.findCell(columns.indexOf("type")).stringValue()),
       row.findCell(columns.indexOf("content")).stringValue(),
       row.findCell(columns.indexOf("creation")).longValue());
@@ -30,13 +31,18 @@ public final class Card {
 
   private final UUID id;
   private final UUID partner;
-  private String color;
+  private String backgroundColor;
+  private String foregroundColor;
   private CardType type;
   private String content;
   private final long creation;
 
-  public void changeColor(String newColor) {
-    color = newColor;
+  public void changeBackgroundColor(String newBackgroundColor) {
+    backgroundColor = newBackgroundColor;
+  }
+
+  public void changeForegroundColor(String newForegroundColor) {
+    foregroundColor = newForegroundColor;
   }
 
   public void changeType(CardType newType) {
