@@ -21,9 +21,9 @@ public final class MemberDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("email", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("password", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("language", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("legalAccepted", DatabaseDataType.BOOLEAN));
+    columns.add(DatabaseColumn.create("compliant", DatabaseDataType.BOOLEAN));
     columns.add(DatabaseColumn.create("newsletter", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("joinDate", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("accession", DatabaseDataType.BIGINT));
     var table = new MemberDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     table.initializeViews();
@@ -45,16 +45,16 @@ public final class MemberDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertMember(Member member) {
     return insertMember(member.id(), member.name(), member.email(),
-      member.passwordHash(), member.language(), member.legalAccepted(),
-      member.newsletter(), member.joinDate());
+      member.passwordHash(), member.language(), member.compliant(),
+      member.newsletter(), member.accession());
   }
 
   public CompletableFuture<Void> insertMember(
     UUID id, String name, String email, String passwordHash, String language,
-    boolean legalAccepted, boolean newsletter, long joinDate
+    boolean compliant, boolean newsletter, long accession
   ) {
     return insert(DatabaseRow.of(id, name, email.toLowerCase(), passwordHash,
-      language, legalAccepted, newsletter, joinDate));
+      language, compliant, newsletter, accession));
   }
 
   public CompletableFuture<Void> changeMemberName(UUID memberId, String newName) {
@@ -89,7 +89,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
     return updateMember(member);
   }
 
-  public CompletableFuture<Void>  changeMemberLanguage(UUID memberId, String newLanguage) {
+  public CompletableFuture<Void> changeMemberLanguage(UUID memberId, String newLanguage) {
     return findMember(memberId).thenCompose(member -> changeMemberLanguage(member, newLanguage));
   }
 
@@ -101,7 +101,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
   private CompletableFuture<Void> updateMember(Member member) {
     return update(member.id(), DatabaseRow.of(member.id(), member.name(),
       member.email().toLowerCase(), member.passwordHash(), member.language(),
-      member.legalAccepted(), member.newsletter(), member.joinDate()));
+      member.compliant(), member.newsletter(), member.accession()));
   }
 
   public CompletableFuture<UUID> generateAvailableMemberId() {

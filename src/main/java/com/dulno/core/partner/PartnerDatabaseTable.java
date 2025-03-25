@@ -20,9 +20,9 @@ public final class PartnerDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("email", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("password", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("language", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("legalAccepted", DatabaseDataType.BOOLEAN));
+    columns.add(DatabaseColumn.create("compliant", DatabaseDataType.BOOLEAN));
     columns.add(DatabaseColumn.create("newsletter", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("joinDate", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("accession", DatabaseDataType.BIGINT));
     var table = new PartnerDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     return table;
@@ -37,13 +37,13 @@ public final class PartnerDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertPartner(Partner partner) {
     return insertPartner(partner.id(), partner.name(), partner.description(),
-      partner.joinDate());
+      partner.accession());
   }
 
   public CompletableFuture<Void> insertPartner(
-    UUID id, String name, String description, long joinDate
+    UUID id, String name, String description, long accession
   ) {
-    return insert(DatabaseRow.of(id, name, description, joinDate));
+    return insert(DatabaseRow.of(id, name, description, accession));
   }
 
   public CompletableFuture<Void> changePartnerName(UUID partnerId, String newName) {
@@ -54,7 +54,6 @@ public final class PartnerDatabaseTable extends DatabaseTable {
     partner.changeName(newName);
     return updatePartner(partner);
   }
-
 
   public CompletableFuture<Void> changePartnerDescription(
     UUID partnerId, String newDescription
@@ -72,7 +71,7 @@ public final class PartnerDatabaseTable extends DatabaseTable {
 
   private CompletableFuture<Void> updatePartner(Partner partner) {
     return update(partner.id(), DatabaseRow.of(partner.id(), partner.name(),
-      partner.description(), partner.joinDate()));
+      partner.description(), partner.accession()));
   }
 
   public CompletableFuture<UUID> generateAvailablePartnerId() {

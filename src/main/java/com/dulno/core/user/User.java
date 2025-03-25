@@ -1,4 +1,4 @@
-package com.dulno.core.member;
+package com.dulno.core.user;
 
 import com.dulno.core.database.DatabaseRow;
 import lombok.AllArgsConstructor;
@@ -10,37 +10,22 @@ import java.util.UUID;
 @Getter
 @Accessors(fluent = true)
 @AllArgsConstructor(staticName = "create")
-public final class Member {
-  public static Member of(DatabaseRow row) {
+public final class User {
+  public static User of(DatabaseRow row) {
     return create(row.findCell(0).uuidValue(), row.findCell(1).stringValue(),
-      row.findCell(2).stringValue(), row.findCell(3).stringValue(),
-      row.findCell(4).stringValue(), row.findCell(5).booleanValue(),
-      row.findCell(6).booleanValue(), row.findCell(7).longValue());
-  }
-
-  public static Member unknown(UUID id) {
-    return create(id, "Unknown", "Unknown", "", "", true, true, -1);
+      row.findCell(2).stringValue(), row.findCell(3).booleanValue(),
+      row.findCell(4).booleanValue(), row.findCell(5).longValue());
   }
 
   private final UUID id;
-  private String name;
   private String email;
-  private String passwordHash;
   private String language;
   private final boolean compliant;
   private final boolean newsletter;
   private final long accession;
 
-  public void changeName(String newName) {
-    name = newName;
-  }
-
   public void changeEmail(String newEmail) {
     email = newEmail;
-  }
-
-  public void changePassword(String newPasswordHash) {
-    passwordHash = newPasswordHash;
   }
 
   public void changeLanguage(String newLanguage) {
