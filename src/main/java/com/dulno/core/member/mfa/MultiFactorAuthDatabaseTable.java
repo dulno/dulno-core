@@ -19,7 +19,10 @@ public final class MultiFactorAuthDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("secret", DatabaseDataType.TEXT));
     columns.add(DatabaseListColumn.create("recovery_codes", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("confirmed", DatabaseDataType.BOOLEAN));
-    return new MultiFactorAuthDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    var table = new MultiFactorAuthDatabaseTable(connection, keyspace,
+      TABLE_NAME, columns);
+    table.createIfNotExists();
+    return table;
   }
 
   private MultiFactorAuthDatabaseTable(
