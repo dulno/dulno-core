@@ -17,10 +17,10 @@ public final class QuestionMessageDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("publicId", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("questionId", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("public_id", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("question_id", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("sender", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("senderType", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("sender_type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("time", DatabaseDataType.BIGINT));
     return new QuestionMessageDatabaseTable(connection, keyspace, TABLE_NAME, columns);
@@ -68,7 +68,7 @@ public final class QuestionMessageDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Boolean> questionMessageExists(String publicId) {
-    return exists(DatabaseCondition.of("publicId", publicId));
+    return exists(DatabaseCondition.of("public_id", publicId));
   }
 
   public CompletableFuture<QuestionMessage> findQuestionMessage(UUID id) {
@@ -76,14 +76,14 @@ public final class QuestionMessageDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<QuestionMessage> findQuestionMessage(String publicId) {
-    return selectRow(DatabaseCondition.of("publicId", publicId))
+    return selectRow(DatabaseCondition.of("public_id", publicId))
       .thenApply(QuestionMessage::of);
   }
 
   public CompletableFuture<List<QuestionMessage>> findMessagesOfQuestion(
     UUID questionId
   ) {
-    return selectRows(DatabaseCondition.of("questionId", questionId))
+    return selectRows(DatabaseCondition.of("question_id", questionId))
       .thenApply(rows -> rows.stream().map(QuestionMessage::of).toList());
   }
 }

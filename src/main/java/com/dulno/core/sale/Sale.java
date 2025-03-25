@@ -21,16 +21,16 @@ public final class Sale {
   public static Sale of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
       row.findCell(columns.indexOf("sender")).stringValue(),
-      row.findCell(columns.indexOf("firstName")).stringValue(),
-      row.findCell(columns.indexOf("lastName")).stringValue(),
-      row.findCell(columns.indexOf("phoneNumber")).stringValue(),
+      row.findCell(columns.indexOf("first_name")).stringValue(),
+      row.findCell(columns.indexOf("last_name")).stringValue(),
+      row.findCell(columns.indexOf("phone_number")).stringValue(),
       row.findCell(columns.indexOf("country")).stringValue(),
-      row.findCell(columns.indexOf("companyName")).stringValue(),
-      row.findCell(columns.indexOf("companySize")).stringValue(),
-      row.findCell(columns.indexOf("companyRole")).stringValue(),
+      row.findCell(columns.indexOf("company_name")).stringValue(),
+      row.findCell(columns.indexOf("company_size")).stringValue(),
+      row.findCell(columns.indexOf("company_role")).stringValue(),
       row.findCell(columns.indexOf("title")).stringValue(),
       Status.valueOf(row.findCell(columns.indexOf("status")).stringValue()),
-      row.findCell(columns.indexOf("expirationTime")).longValue());
+      row.findCell(columns.indexOf("expiration")).longValue());
   }
 
   public enum Status {
@@ -49,7 +49,7 @@ public final class Sale {
   private final String companyRole;
   private final String title;
   private Status status;
-  private long expirationTime;
+  private long expiration;
 
   public void updateStatus(Status newStatus) {
     status = newStatus;
@@ -57,11 +57,11 @@ public final class Sale {
 
   private static final long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 14;
 
-  public void resetExpirationTime() {
-    expirationTime = System.currentTimeMillis() + EXPIRATION_TIME;
+  public void resetExpiration() {
+    expiration = System.currentTimeMillis() + EXPIRATION_TIME;
   }
 
-  public void disableExpirationTime() {
-    expirationTime = -1;
+  public void disableExpiration() {
+    expiration = -1;
   }
 }

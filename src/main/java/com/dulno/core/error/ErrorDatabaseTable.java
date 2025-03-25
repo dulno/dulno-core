@@ -21,8 +21,8 @@ public final class ErrorDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("trace", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("origin", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("pod", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("controllerName", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("controllerType", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("controller_name", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("controller_type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("node", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("time", DatabaseDataType.BIGINT));
     columns.add(DatabaseColumn.create("state", DatabaseDataType.TEXT));

@@ -13,13 +13,13 @@ public final class MaintenanceDatabaseTable extends DatabaseTable {
   private static final String TABLE_NAME = "maintenance";
 
   public static MaintenanceDatabaseTable create(
-          DatabaseConnection connection, DatabaseKeyspace keyspace
+    DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("description", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("startTime", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("start_time", DatabaseDataType.BIGINT));
     columns.add(DatabaseColumn.create("duration", DatabaseDataType.BIGINT));
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT));
     var maintenanceDatabaseTable =  new MaintenanceDatabaseTable(connection,

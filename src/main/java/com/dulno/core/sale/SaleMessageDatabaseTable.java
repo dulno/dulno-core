@@ -17,10 +17,10 @@ public final class SaleMessageDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("publicId", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("saleId", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("public_id", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("sale_id", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("sender", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("senderType", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("sender_type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("time", DatabaseDataType.BIGINT));
     return new SaleMessageDatabaseTable(connection, keyspace, TABLE_NAME, columns);
@@ -67,7 +67,7 @@ public final class SaleMessageDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Boolean> saleMessageExists(String publicId) {
-    return exists(DatabaseCondition.of("publicId", publicId));
+    return exists(DatabaseCondition.of("public_id", publicId));
   }
 
   public CompletableFuture<SaleMessage> findSaleMessage(UUID id) {
@@ -75,14 +75,14 @@ public final class SaleMessageDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<SaleMessage> findSaleMessage(String publicId) {
-    return selectRow(DatabaseCondition.of("publicId", publicId))
+    return selectRow(DatabaseCondition.of("public_id", publicId))
       .thenApply(SaleMessage::of);
   }
 
   public CompletableFuture<List<SaleMessage>> findMessagesOfSale(
     UUID saleId
   ) {
-    return selectRows(DatabaseCondition.of("saleId", saleId))
+    return selectRows(DatabaseCondition.of("sale_id", saleId))
       .thenApply(rows -> rows.stream().map(SaleMessage::of).toList());
   }
 }

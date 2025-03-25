@@ -22,13 +22,13 @@ public final class Session {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
       row.findCell(columns.indexOf("member")).uuidValue(),
       SessionStatus.valueOf(row.findCell(columns.indexOf("status")).stringValue()),
-      row.findCell(columns.indexOf("devicePlatform")).stringValue(),
-      row.findCell(columns.indexOf("ipAddress")).stringValue(),
+      row.findCell(columns.indexOf("device_platform")).stringValue(),
+      row.findCell(columns.indexOf("ip_address")).stringValue(),
       row.findCell(columns.indexOf("country")).stringValue(),
       row.findCell(columns.indexOf("city")).stringValue(),
-      row.findCell(columns.indexOf("openTime")).longValue(),
-      row.findCell(columns.indexOf("refreshToken")).stringValue(),
-      row.findCell(columns.indexOf("lastRefresh")).longValue());
+      row.findCell(columns.indexOf("open_time")).longValue(),
+      row.findCell(columns.indexOf("refresh_token")).stringValue(),
+      row.findCell(columns.indexOf("last_refresh")).longValue());
   }
 
   private final UUID id;

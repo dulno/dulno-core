@@ -11,13 +11,13 @@ public final class MultiFactorAuthDatabaseTable extends DatabaseTable {
   private static final String TABLE_NAME = "multi_factor_auth";
 
   public static MultiFactorAuthDatabaseTable create(
-          DatabaseConnection connection, DatabaseKeyspace keyspace
+    DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("secret", DatabaseDataType.TEXT));
-    columns.add(DatabaseListColumn.create("recoveryCodes", DatabaseDataType.TEXT));
+    columns.add(DatabaseListColumn.create("recovery_codes", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("confirmed", DatabaseDataType.BOOLEAN));
     return new MultiFactorAuthDatabaseTable(connection, keyspace, TABLE_NAME, columns);
   }
