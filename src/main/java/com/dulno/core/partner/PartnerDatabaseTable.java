@@ -67,4 +67,9 @@ public final class PartnerDatabaseTable extends DatabaseTable {
   public CompletableFuture<Partner> findPartner(UUID partnerId) {
     return selectRow(partnerId).thenApply(Partner::of);
   }
+
+  public CompletableFuture<List<Partner>> findAllPartners() {
+    return selectAllRows().thenApply(rows ->
+      rows.stream().map(Partner::of).toList());
+  }
 }
