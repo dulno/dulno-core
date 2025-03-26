@@ -1,21 +1,21 @@
 package com.dulno.core.bundle;
 
 public enum BundleType {
-  TRIAL,
-  INDIVIDUAL,
-  TEAM,
+  BASIC,
+  PROFESSIONAL,
+  PREMIUM,
   ENTERPRISE;
 
-  public boolean isTrial() {
-    return this == TRIAL;
+  public boolean isBasic() {
+    return this == BASIC;
   }
 
-  public boolean isIndividual() {
-    return this == INDIVIDUAL;
+  public boolean isProfessional() {
+    return this == PROFESSIONAL;
   }
 
-  public boolean isTeam() {
-    return this == TEAM;
+  public boolean isPremium() {
+    return this == PREMIUM;
   }
 
   public boolean isEnterprise() {

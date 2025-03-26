@@ -11,33 +11,16 @@ public final class BundleDatabaseTable extends DatabaseTable {
   private static final String TABLE_NAME = "bundle";
 
   public static BundleDatabaseTable create(
-          DatabaseConnection connection, DatabaseKeyspace keyspace
+    DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
-    columns.add(DatabaseColumn.create("owner", DatabaseDataType.UUID,
+    columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("bundleType", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("bundleClass", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("bundlerRuntime", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("bundle_type", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("bundler_runtime", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("price", DatabaseDataType.DOUBLE));
     columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("workflowAccess", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("workflowNumberLimit", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("workflowOperationLimit", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("workflowTemplateAccess", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("processAccess", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("processNumberLimit", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("databaseAccess", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("databaseNumberLimit", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("databaseDataLimit", DatabaseDataType.DOUBLE));
-    columns.add(DatabaseColumn.create("webhookAccess", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("webhookNumberLimit", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("organizationAccess", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("organizationMemberLimit", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("organizationTeamLimit", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("deviceAccess", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("accountsAccess", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("accountsNumberLimit", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
     return new BundleDatabaseTable(connection, keyspace, TABLE_NAME, columns);
   }
 
@@ -49,44 +32,27 @@ public final class BundleDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertBundle(Bundle bundle) {
-    return insert(DatabaseRow.of(bundle.ownerId(), bundle.bundleType().toString(),
-      bundle.bundleClass().toString(), bundle.bundleRuntime().toString(),
-      bundle.price(), bundle.expiration(), bundle.workflowAccess(),
-      bundle.workflowNumberLimit(), bundle.workflowOperationLimit(),
-      bundle.workflowTemplateAccess(), bundle.processAccess(),
-      bundle.processNumberLimit(), bundle.databaseAccess(),
-      bundle.databaseNumberLimit(), bundle.databaseDataLimit(),
-      bundle.webhookAccess(), bundle.webhookNumberLimit(),
-      bundle.organizationAccess(), bundle.organizationMemberLimit(),
-      bundle.organizationTeamLimit(), bundle.deviceAccess(),
-      bundle.accountsAccess(), bundle.accountsNumberLimit()));
+    return insert(DatabaseRow.of(bundle.partnerId(), bundle.bundleType().toString(),
+      bundle.bundleRuntime().toString(), bundle.price(), bundle.expiration(),
+      bundle.serializeContent()));
   }
 
   public CompletableFuture<Void> updateBundle(Bundle bundle) {
-    return update(bundle.ownerId(),
-      DatabaseRow.of(bundle.ownerId(), bundle.bundleType().toString(),
-        bundle.bundleClass().toString(), bundle.bundleRuntime().toString(),
-        bundle.price(), bundle.expiration(), bundle.workflowAccess(),
-        bundle.workflowNumberLimit(), bundle.workflowOperationLimit(),
-        bundle.workflowTemplateAccess(), bundle.processAccess(),
-        bundle.processNumberLimit(), bundle.databaseAccess(),
-        bundle.databaseNumberLimit(), bundle.databaseDataLimit(),
-        bundle.webhookAccess(), bundle.webhookNumberLimit(),
-        bundle.organizationAccess(), bundle.organizationMemberLimit(),
-        bundle.organizationTeamLimit(), bundle.deviceAccess(),
-        bundle.accountsAccess(), bundle.accountsNumberLimit()));
+    return update(bundle.partnerId(), DatabaseRow.of(bundle.partnerId(),
+      bundle.bundleType().toString(), bundle.bundleRuntime().toString(),
+      bundle.price(), bundle.expiration(), bundle.serializeContent()));
   }
 
-  public CompletableFuture<Void> deleteBundle(UUID ownerId) {
-    return delete(ownerId);
+  public CompletableFuture<Void> deleteBundle(UUID partnerId) {
+    return delete(partnerId);
   }
 
-  public CompletableFuture<Boolean> bundleExists(UUID ownerId) {
-    return exists(ownerId);
+  public CompletableFuture<Boolean> bundleExists(UUID partnerId) {
+    return exists(partnerId);
   }
 
-  public CompletableFuture<Bundle> findBundle(UUID ownerId) {
-    return selectRow(ownerId).thenApply(Bundle::of);
+  public CompletableFuture<Bundle> findBundle(UUID partnerId) {
+    return selectRow(partnerId).thenApply(Bundle::of);
   }
 
   public CompletableFuture<List<Bundle>> findAllBundles() {

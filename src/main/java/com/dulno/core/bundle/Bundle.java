@@ -4,6 +4,7 @@ import com.dulno.core.database.DatabaseRow;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.json.JSONObject;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -13,92 +14,58 @@ import java.util.UUID;
 @AllArgsConstructor(staticName = "create")
 public final class Bundle {
   public static Bundle of(DatabaseRow row) {
+    var content = new JSONObject(row.findCell(5).longValue());
     return create(row.findCell(0).uuidValue(),
       BundleType.valueOf(row.findCell(1).stringValue()),
-      BundleClass.valueOf(row.findCell(2).stringValue()),
-      BundleRuntime.valueOf(row.findCell(3).stringValue()),
-      row.findCell(4).doubleValue(), row.findCell(5).longValue(),
-      row.findCell(6).booleanValue(), row.findCell(7).longValue(),
-      row.findCell(8).longValue(), row.findCell(9).booleanValue(),
-      row.findCell(10).booleanValue(), row.findCell(11).longValue(),
-      row.findCell(12).booleanValue(), row.findCell(13).longValue(),
-      row.findCell(14).doubleValue(), row.findCell(15).booleanValue(),
-      row.findCell(16).longValue(), row.findCell(17).booleanValue(),
-      row.findCell(18).longValue(), row.findCell(19).longValue(),
-      row.findCell(20).booleanValue(), row.findCell(21).booleanValue(),
-      row.findCell(22).longValue());
+      BundleRuntime.valueOf(row.findCell(2).stringValue()),
+      row.findCell(3).doubleValue(), row.findCell(4).longValue(),
+      content.getBoolean("collection_card_access"),
+      content.getBoolean("value_card_access"),
+      content.getBoolean("member_card_access"),
+      content.getBoolean("analysis_access"),
+      content.getBoolean("action_access"),
+      content.getBoolean("notification_access"),
+      content.getBoolean("portal_access"),
+      content.getBoolean("multi_portal_user_access"),
+      content.getBoolean("portal_permission_access"));
   }
 
   public static Bundle of(
-    UUID ownerId, BundlePreset preset, BundleRuntime runtime
+    UUID partnerId, BundlePreset preset, BundleRuntime runtime
   ) {
-    return of(ownerId, preset, runtime, calculatePresetPrice(preset, runtime),
-      preset.workflowOperationLimit(), preset.processNumberLimit(),
-      preset.databaseDataLimit(), preset.organizationMemberLimit(),
-      preset.organizationTeamLimit());
+    return of(partnerId, preset, runtime, calculatePresetPrice(preset, runtime));
   }
 
   private static double calculatePresetPrice(
     BundlePreset preset, BundleRuntime runtime
   ) {
-    if (preset.bundleType().isTrial()) {
-      return 0;
-    }
     return runtime.isMonthly() ? preset.monthlyPrice() : preset.yearlyPrice();
   }
 
   public static Bundle of(
-    UUID ownerId, BundlePreset preset, BundleRuntime runtime,
-    double price, long workflowOperationLimit, long processNumberLimit,
-    double databaseDataLimit, long organizationMemberLimit,
-    long organizationTeamLimit
+    UUID partnerId, BundlePreset preset, BundleRuntime runtime, double price
   ) {
-    return create(ownerId, preset.bundleType(), preset.bundleClass(), runtime,
-      price, calculateBundleExpiration(runtime), preset.workflowAccess(),
-      preset.workflowNumberLimit(), workflowOperationLimit,
-      preset.workflowTemplateAccess(), preset.processAccess(), processNumberLimit,
-      preset.databaseAccess(), preset.databaseNumberLimit(), databaseDataLimit,
-      preset.webhookAccess(), preset.webhookNumberLimit(),
-      preset.organizationAccess(), organizationMemberLimit, organizationTeamLimit,
-      preset.deviceAccess(), preset.accountsAccess(), preset.accountsNumberLimit());
+    return create(partnerId, preset.bundleType(), runtime, price,
+      calculateBundleExpiration(runtime), preset.collectionCardAccess(),
+      preset.valueCardAccess(), preset.memberCardAccess(),
+      preset.analysisAccess(), preset.actionAccess(), preset.notificationAccess(),
+      preset.portalAccess(), preset.multiPortalUserAccess(),
+      preset.portalPermissionAccess());
   }
 
   public static Bundle of(
-    UUID ownerId, BundlePreset preset, BundleRuntime runtime,
-    double price, long workflowNumberLimit, long workflowOperationLimit,
-    long processNumberLimit, long databaseNumberLimit, double databaseDataLimit,
-    long organizationMemberLimit, long organizationTeamLimit
+    UUID partnerId, BundlePreset preset, BundleRuntime runtime, double price,
+    long expiration
   ) {
-    return create(ownerId, preset.bundleType(), preset.bundleClass(), runtime,
-      price, calculateBundleExpiration(runtime), preset.workflowAccess(),
-      workflowNumberLimit, workflowOperationLimit,
-      preset.workflowTemplateAccess(), preset.processAccess(), processNumberLimit,
-      preset.databaseAccess(), databaseNumberLimit, databaseDataLimit,
-      preset.webhookAccess(), preset.webhookNumberLimit(),
-      preset.organizationAccess(), organizationMemberLimit, organizationTeamLimit,
-      preset.deviceAccess(), preset.accountsAccess(), preset.accountsNumberLimit());
-  }
-
-  public static Bundle of(
-    UUID ownerId, BundlePreset preset, BundleRuntime runtime, long expiration,
-    double price, long workflowNumberLimit, long workflowOperationLimit,
-    long processNumberLimit, long databaseNumberLimit, double databaseDataLimit,
-    long organizationMemberLimit, long organizationTeamLimit
-  ) {
-    return create(ownerId, preset.bundleType(), preset.bundleClass(), runtime,
+    return create(partnerId, preset.bundleType(), runtime,
       price, runtime.isUnbound() ? expiration : calculateBundleExpiration(runtime),
-      preset.workflowAccess(), workflowNumberLimit, workflowOperationLimit,
-      preset.workflowTemplateAccess(), preset.processAccess(), processNumberLimit,
-      preset.databaseAccess(), databaseNumberLimit, databaseDataLimit,
-      preset.webhookAccess(), preset.webhookNumberLimit(),
-      preset.organizationAccess(), organizationMemberLimit, organizationTeamLimit,
-      preset.deviceAccess(), preset.accountsAccess(), preset.accountsNumberLimit());
+      preset.collectionCardAccess(), preset.valueCardAccess(),
+      preset.memberCardAccess(), preset.analysisAccess(), preset.actionAccess(),
+      preset.notificationAccess(), preset.portalAccess(),
+      preset.multiPortalUserAccess(), preset.portalPermissionAccess());
   }
 
   private static long calculateBundleExpiration(BundleRuntime runtime) {
-    if (runtime.isInfinite()) {
-      return -1;
-    }
     var current = ZonedDateTime.now();
     var next = current.plusMonths(runtime.isMonthly() ? 1 : 12);
     if (next.getDayOfMonth() != current.getDayOfMonth()) {
@@ -108,31 +75,36 @@ public final class Bundle {
     return next.toInstant().toEpochMilli();
   }
 
-  private final UUID ownerId;
+  private final UUID partnerId;
   private final BundleType bundleType;
-  private final BundleClass bundleClass;
   private final BundleRuntime bundleRuntime;
   private final double price;
   private long expiration;
-  private final boolean workflowAccess;
-  private final long workflowNumberLimit;
-  private final long workflowOperationLimit;
-  private final boolean workflowTemplateAccess;
-  private final boolean processAccess;
-  private final long processNumberLimit;
-  private final boolean databaseAccess;
-  private final long databaseNumberLimit;
-  private final double databaseDataLimit;
-  private final boolean webhookAccess;
-  private final long webhookNumberLimit;
-  private final boolean organizationAccess;
-  private final long organizationMemberLimit;
-  private final long organizationTeamLimit;
-  private final boolean deviceAccess;
-  private final boolean accountsAccess;
-  private final long accountsNumberLimit;
+  private final boolean collectionCardAccess;
+  private final boolean valueCardAccess;
+  private final boolean memberCardAccess;
+  private final boolean analysisAccess;
+  private final boolean actionAccess;
+  private final boolean notificationAccess;
+  private final boolean portalAccess;
+  private final boolean multiPortalUserAccess;
+  private final boolean portalPermissionAccess;
 
   public void extend() {
     expiration = calculateBundleExpiration(bundleRuntime);
+  }
+
+  public String serializeContent() {
+    var content = new JSONObject();
+    content.put("collection_card_access", collectionCardAccess);
+    content.put("value_card_access", valueCardAccess);
+    content.put("member_card_access", memberCardAccess);
+    content.put("analysis_access", analysisAccess);
+    content.put("action_access", actionAccess);
+    content.put("notification_access", notificationAccess);
+    content.put("portal_access", portalAccess);
+    content.put("multi_portal_user_access", multiPortalUserAccess);
+    content.put("portal_permission_access", portalPermissionAccess);
+    return content.toString();
   }
 }
