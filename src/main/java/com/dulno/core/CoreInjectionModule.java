@@ -1,6 +1,7 @@
 package com.dulno.core;
 
 import com.dulno.core.access.AccessInjectionModule;
+import com.dulno.core.accessory.AccessoryInjectionModule;
 import com.dulno.core.bundle.BundleInjectionModule;
 import com.dulno.core.card.CardInjectionModule;
 import com.dulno.core.command.CommandInjectionModule;
@@ -49,6 +50,7 @@ public class CoreInjectionModule extends AbstractModule {
     install(SessionInjectionModule.create());
     install(MailInjectionModule.create());
     install(BundleInjectionModule.create());
+    install(AccessoryInjectionModule.create());
     install(StampInjectionModule.create());
     install(CardInjectionModule.create());
     install(UserInjectionModule.create());

@@ -2,5 +2,14 @@
   "mail.template.rights": "Alle Rechte vorbehalten",
   "mail.template.imprint": "Impressum",
   "mail.template.privacy": "Datenschutz",
-  "mail.template.contact": "Kontakt"
+  "mail.template.contact": "Kontakt",
+
+  "accessory.starter.kit.name": "Starter-Kit",
+  "accessory.starter.kit.description": "2x Stempel, 1x Aufsteller, ideal für den Einstieg von Dulno in Ihrem Geschäft",
+  "accessory.stamp.name": "Stempel",
+  "accessory.stamp.description": "1x Stempel, zum individuellen aufrüsten oder nachbuchen",
+  "accessory.tag.name": "NFC-Tag",
+  "accessory.tag.description": "1x NFC-Tag, der NFC-Tag ohne Stempel",
+  "accessory.display.name": "Aufsteller",
+  "accessory.display.description": "1x Aufsteller, damit Ihre Kunden die Dulno-App direkt kennenlernen und herunterladen können"
 }

@@ -2,5 +2,14 @@
   "mail.template.rights": "All rights reserved",
   "mail.template.imprint": "Imprint",
   "mail.template.privacy": "Privacy policy",
-  "mail.template.contact": "Contact"
+  "mail.template.contact": "Contact",
+
+  "accessory.starter.kit.name": "Starter kit",
+  "accessory.starter.kit.description": "2x Stamps, 1x Stand-up display, perfect for getting started with Dulno in your store",
+  "accessory.stamp.name": "Stamp",
+  "accessory.stamp.description": "1x Stamp, to upgrade or rebook individually",
+  "accessory.tag.name": "NFC tag",
+  "accessory.tag.description": "1x NFC tag, the NFC tag without a stamp",
+  "accessory.display.name": "Stand-up display",
+  "accessory.display.description": "1x Stand-up display, so that your customers can get to know and download the Dulno app directly"
 }
