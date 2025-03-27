@@ -16,4 +16,12 @@ public final class StampInjectionModule extends AbstractModule {
   ) {
     return StampDatabaseTable.create(connection, keyspace);
   }
+
+  @Provides
+  @Singleton
+  StampSetupDatabaseTable provideStampSetupDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return StampSetupDatabaseTable.create(connection, keyspace);
+  }
 }

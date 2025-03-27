@@ -17,6 +17,7 @@ public final class StampDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
+    columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("uid", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("master_key", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("name", DatabaseDataType.TEXT));
@@ -29,6 +30,7 @@ public final class StampDatabaseTable extends DatabaseTable {
   }
 
   private DatabaseTable uidView;
+  private DatabaseTable partnerView;
 
   private StampDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
@@ -40,46 +42,27 @@ public final class StampDatabaseTable extends DatabaseTable {
   private void initializeViews() {
     uidView = createMaterializedViewIfNotExists("uid_view", "uid",
       DatabaseColumn.Type.PARTITION_KEY);
+    partnerView = createMaterializedViewIfNotExists("partner_view", "partner",
+      DatabaseColumn.Type.PARTITION_KEY);
   }
 
   public CompletableFuture<Void> insertStamp(Stamp stamp) {
-    return insertStamp(stamp.id(), stamp.uid(), stamp.masterKey(),
-      stamp.name(), stamp.assignedCard(), stamp.creation());
+    return insertStamp(stamp.id(), stamp.partnerId(), stamp.uid(),
+      stamp.masterKey(), stamp.name(), stamp.assignedCard(), stamp.creation());
   }
 
   public CompletableFuture<Void> insertStamp(
-    UUID id, String uid, String masterKey, String name, UUID assignedCard,
-    long creation
+    UUID id, UUID partnerId, String uid, String masterKey, String name,
+    UUID assignedCard, long creation
   ) {
-    return insert(DatabaseRow.of(id, uid, masterKey, name, assignedCard, creation));
+    return insert(DatabaseRow.of(id, partnerId, uid, masterKey, name,
+      assignedCard, creation));
   }
 
-  public CompletableFuture<Void> changeStampName(UUID stampId, String newName) {
-    return findStamp(stampId).thenCompose(stamp -> changeStampName(stamp, newName));
-  }
-
-  private CompletableFuture<Void> changeStampName(Stamp stamp, String newName) {
-    stamp.changeName(newName);
-    return updateStamp(stamp);
-  }
-
-  public CompletableFuture<Void> changeStampAssignedCard(
-    UUID stampId, UUID newAssignedCard
-  ) {
-    return findStamp(stampId).thenCompose(stamp ->
-      changeStampLanguage(stamp, newAssignedCard));
-  }
-
-  private CompletableFuture<Void> changeStampLanguage(
-    Stamp stamp, UUID newAssignedCard
-  ) {
-    stamp.changeAssignedCard(newAssignedCard);
-    return updateStamp(stamp);
-  }
-
-  private CompletableFuture<Void> updateStamp(Stamp stamp) {
-    return update(stamp.id(), DatabaseRow.of(stamp.id(), stamp.uid(),
-      stamp.masterKey(), stamp.name(), stamp.assignedCard(), stamp.creation()));
+  public CompletableFuture<Void> updateStamp(Stamp stamp) {
+    return update(stamp.id(), DatabaseRow.of(stamp.id(), stamp.partnerId(),
+      stamp.uid(), stamp.masterKey(), stamp.name(), stamp.assignedCard(),
+      stamp.creation()));
   }
 
   public CompletableFuture<UUID> generateAvailableStampId() {
@@ -110,5 +93,11 @@ public final class StampDatabaseTable extends DatabaseTable {
   public CompletableFuture<Stamp> findStamp(String stampUid) {
     return uidView.selectRow(DatabaseCondition.of("uid", stampUid))
       .thenApply(row -> Stamp.of(row, uidView));
+  }
+
+  public CompletableFuture<List<Stamp>> findStampsOfPartner(UUID partnerId) {
+    return partnerView.selectRows(DatabaseCondition.of("partner", partnerId))
+      .thenApply(rows -> rows.stream().map(row -> Stamp.of(row, partnerView))
+        .toList());
   }
 }

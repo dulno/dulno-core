@@ -20,6 +20,7 @@ public final class Stamp {
 
   public static Stamp of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
+      row.findCell(columns.indexOf("partner")).uuidValue(),
       row.findCell(columns.indexOf("uid")).stringValue(),
       row.findCell(columns.indexOf("master_key")).stringValue(),
       row.findCell(columns.indexOf("name")).stringValue(),
@@ -28,11 +29,20 @@ public final class Stamp {
   }
 
   private final UUID id;
-  private final String uid;
-  private final String masterKey;
+  private final UUID partnerId;
+  private String uid;
+  private String masterKey;
   private String name;
   private UUID assignedCard;
   private final long creation;
+
+  public void updateUid(String newUid) {
+    this.uid = newUid;
+  }
+
+  public void updateMasterKey(String newMasterKey) {
+    this.masterKey = newMasterKey;
+  }
 
   public void changeName(String newName) {
     name = newName;
