@@ -52,6 +52,15 @@ public final class AccessoryDatabaseTable extends DatabaseTable {
     return insert(DatabaseRow.of(id, partnerId, accessoryId, price, purchaseDate));
   }
 
+  public CompletableFuture<UUID> generateAvailableAccessoryId() {
+    var futureResponse = new CompletableFuture<UUID>();
+    var id = UUID.randomUUID();
+    accessoryExists(id).thenApply(exists -> exists ?
+      generateAvailableAccessoryId().thenApply(futureResponse::complete) :
+      CompletableFuture.completedFuture(futureResponse.complete(id)));
+    return futureResponse;
+  }
+
   public CompletableFuture<Void> deleteAccessory(UUID accessoryId) {
     return delete(accessoryId);
   }

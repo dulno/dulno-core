@@ -23,6 +23,11 @@ public final class AccessoryPresetRepository {
       .findFirst();
   }
 
+  public Optional<AccessoryPreset> findPresetByPriceId(String priceId) {
+    return presets.stream().filter(preset -> preset.priceId().equals(priceId))
+      .findFirst();
+  }
+
   public List<AccessoryPreset> findAll() {
     return List.copyOf(presets);
   }
