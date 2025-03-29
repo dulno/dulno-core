@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor(staticName = "create")
 public final class Offer {
   public static Offer of(DatabaseRow row) {
-    var content = new JSONObject(row.findCell(7).longValue());
+    var content = new JSONObject(row.findCell(7).stringValue());
     return create(row.findCell(0).uuidValue(), row.findCell(1).uuidValue(),
       row.findCell(2).stringValue(),
       OfferStatus.valueOf(row.findCell(3).stringValue()),

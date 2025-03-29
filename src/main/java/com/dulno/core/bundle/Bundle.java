@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor(staticName = "create")
 public final class Bundle {
   public static Bundle of(DatabaseRow row) {
-    var content = new JSONObject(row.findCell(5).longValue());
+    var content = new JSONObject(row.findCell(5).stringValue());
     return create(row.findCell(0).uuidValue(),
       BundleType.valueOf(row.findCell(1).stringValue()),
       BundleRuntime.valueOf(row.findCell(2).stringValue()),

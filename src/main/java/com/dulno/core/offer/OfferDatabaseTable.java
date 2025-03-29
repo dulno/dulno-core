@@ -23,7 +23,7 @@ public final class OfferDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("bundle_type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("bundler_runtime", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("price", DatabaseDataType.DOUBLE));
-    columns.add(DatabaseColumn.create("content", DatabaseDataType.BOOLEAN));
+    columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
     return new OfferDatabaseTable(connection, keyspace, TABLE_NAME, columns);
   }
 
