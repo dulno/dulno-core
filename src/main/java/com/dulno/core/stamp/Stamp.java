@@ -25,6 +25,8 @@ public final class Stamp {
       row.findCell(columns.indexOf("master_key")).stringValue(),
       row.findCell(columns.indexOf("name")).stringValue(),
       row.findCell(columns.indexOf("assigned_card")).uuidValue(),
+      StampAssignmentRole.valueOf(row.findCell(columns.indexOf("assignment_role"))
+        .stringValue()),
       row.findCell(columns.indexOf("creation")).longValue());
   }
 
@@ -34,6 +36,7 @@ public final class Stamp {
   private String masterKey;
   private String name;
   private UUID assignedCard;
+  private StampAssignmentRole assignmentRole;
   private final long creation;
 
   public void updateUid(String newUid) {
@@ -48,7 +51,10 @@ public final class Stamp {
     name = newName;
   }
 
-  public void changeAssignedCard(UUID newAssignedCard) {
+  public void changeAssignment(
+    UUID newAssignedCard, StampAssignmentRole newAssignmentRole
+  ) {
     assignedCard = newAssignedCard;
+    assignmentRole = newAssignmentRole;
   }
 }

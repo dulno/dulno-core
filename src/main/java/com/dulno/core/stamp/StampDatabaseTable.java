@@ -22,6 +22,7 @@ public final class StampDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("master_key", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("name", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("assigned_card", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("assignment_role", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("creation", DatabaseDataType.BIGINT));
     var table = new StampDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
@@ -48,21 +49,22 @@ public final class StampDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertStamp(Stamp stamp) {
     return insertStamp(stamp.id(), stamp.partnerId(), stamp.uid(),
-      stamp.masterKey(), stamp.name(), stamp.assignedCard(), stamp.creation());
+      stamp.masterKey(), stamp.name(), stamp.assignedCard(),
+      stamp.assignmentRole().toString(), stamp.creation());
   }
 
   public CompletableFuture<Void> insertStamp(
     UUID id, UUID partnerId, String uid, String masterKey, String name,
-    UUID assignedCard, long creation
+    UUID assignedCard, String assignmentRole, long creation
   ) {
     return insert(DatabaseRow.of(id, partnerId, uid, masterKey, name,
-      assignedCard, creation));
+      assignedCard, assignmentRole, creation));
   }
 
   public CompletableFuture<Void> updateStamp(Stamp stamp) {
     return update(stamp.id(), DatabaseRow.of(stamp.id(), stamp.partnerId(),
       stamp.uid(), stamp.masterKey(), stamp.name(), stamp.assignedCard(),
-      stamp.creation()));
+      stamp.assignmentRole().toString(), stamp.creation()));
   }
 
   public CompletableFuture<UUID> generateAvailableStampId() {
