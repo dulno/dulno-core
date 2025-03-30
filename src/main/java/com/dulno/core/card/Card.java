@@ -33,7 +33,7 @@ public final class Card {
   private final UUID partner;
   private String backgroundColor;
   private String foregroundColor;
-  private CardType type;
+  private final CardType type;
   private String content;
   private final long creation;
 
@@ -43,10 +43,6 @@ public final class Card {
 
   public void changeForegroundColor(String newForegroundColor) {
     foregroundColor = newForegroundColor;
-  }
-
-  public void changeType(CardType newType) {
-    type = newType;
   }
 
   public void changeContent(String newContent) {
