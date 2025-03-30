@@ -35,7 +35,7 @@ public final class PartnerLogoDatabaseTable extends DatabaseTable {
     return insert(DatabaseRow.of(partnerId, ByteBuffer.wrap(logo)));
   }
 
-  private CompletableFuture<Void> updatePartnerLogo(UUID partnerId, byte[] logo) {
+  public CompletableFuture<Void> updatePartnerLogo(UUID partnerId, byte[] logo) {
     return update(partnerId, DatabaseRow.of(partnerId, ByteBuffer.wrap(logo)));
   }
 
