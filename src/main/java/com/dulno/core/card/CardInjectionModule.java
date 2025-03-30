@@ -16,5 +16,13 @@ public final class CardInjectionModule extends AbstractModule {
   ) {
     return CardDatabaseTable.create(connection, keyspace);
   }
+
+  @Provides
+  @Singleton
+  CardLogoDatabaseTable provideCardLogoDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return CardLogoDatabaseTable.create(connection, keyspace);
+  }
 }
 
