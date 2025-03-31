@@ -21,6 +21,8 @@ public final class StampDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("uid", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("master_key", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("name", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("type", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("state", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("assigned_card", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("assignment_role", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("creation", DatabaseDataType.BIGINT));
@@ -49,21 +51,24 @@ public final class StampDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertStamp(Stamp stamp) {
     return insertStamp(stamp.id(), stamp.partnerId(), stamp.uid(),
-      stamp.masterKey(), stamp.name(), stamp.assignedCard(),
+      stamp.masterKey(), stamp.name(), stamp.type().toString(),
+      stamp.state().toString(), stamp.assignedCard(),
       stamp.assignmentRole().toString(), stamp.creation());
   }
 
   public CompletableFuture<Void> insertStamp(
     UUID id, UUID partnerId, String uid, String masterKey, String name,
-    UUID assignedCard, String assignmentRole, long creation
+    String type, String state, UUID assignedCard, String assignmentRole,
+    long creation
   ) {
-    return insert(DatabaseRow.of(id, partnerId, uid, masterKey, name,
+    return insert(DatabaseRow.of(id, partnerId, uid, masterKey, name, type, state,
       assignedCard, assignmentRole, creation));
   }
 
   public CompletableFuture<Void> updateStamp(Stamp stamp) {
     return update(stamp.id(), DatabaseRow.of(stamp.id(), stamp.partnerId(),
-      stamp.uid(), stamp.masterKey(), stamp.name(), stamp.assignedCard(),
+      stamp.uid(), stamp.masterKey(), stamp.name(), stamp.type().toString(),
+      stamp.state().toString(), stamp.assignedCard(),
       stamp.assignmentRole().toString(), stamp.creation()));
   }
 

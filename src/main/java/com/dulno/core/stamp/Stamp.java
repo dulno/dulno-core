@@ -24,6 +24,8 @@ public final class Stamp {
       row.findCell(columns.indexOf("uid")).stringValue(),
       row.findCell(columns.indexOf("master_key")).stringValue(),
       row.findCell(columns.indexOf("name")).stringValue(),
+      StampType.valueOf(row.findCell(columns.indexOf("type")).stringValue()),
+      StampState.valueOf(row.findCell(columns.indexOf("state")).stringValue()),
       row.findCell(columns.indexOf("assigned_card")).uuidValue(),
       StampAssignmentRole.valueOf(row.findCell(columns.indexOf("assignment_role"))
         .stringValue()),
@@ -35,20 +37,26 @@ public final class Stamp {
   private String uid;
   private String masterKey;
   private String name;
+  private final StampType type;
+  private StampState state;
   private UUID assignedCard;
   private StampAssignmentRole assignmentRole;
   private final long creation;
 
   public void updateUid(String newUid) {
-    this.uid = newUid;
+    uid = newUid;
   }
 
   public void updateMasterKey(String newMasterKey) {
-    this.masterKey = newMasterKey;
+    masterKey = newMasterKey;
   }
 
   public void changeName(String newName) {
     name = newName;
+  }
+
+  public void changeState(StampState newState) {
+    state = newState;
   }
 
   public void changeAssignment(
