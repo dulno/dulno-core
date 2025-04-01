@@ -21,6 +21,7 @@ public final class PartnerLocationDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("latitude", DatabaseDataType.DOUBLE));
     columns.add(DatabaseColumn.create("longitude", DatabaseDataType.DOUBLE));
+    columns.add(DatabaseColumn.create("creation", DatabaseDataType.BIGINT));
     var table = new PartnerLocationDatabaseTable(connection, keyspace, TABLE_NAME,
       columns);
     table.createIfNotExists();
@@ -36,13 +37,15 @@ public final class PartnerLocationDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertPartnerLocation(PartnerLocation location) {
     return insertPartnerLocation(location.partnerId(), location.address(),
-      location.latitude(), location.longitude());
+      location.latitude(), location.longitude(), location.creation());
   }
 
   public CompletableFuture<Void> insertPartnerLocation(
-    UUID partnerId, String address, double latitude, double longitude
+    UUID partnerId, String address, double latitude, double longitude,
+    long creation
   ) {
-    return insert(DatabaseRow.of(partnerId, address, latitude, longitude));
+    return insert(DatabaseRow.of(partnerId, address, latitude, longitude,
+      creation));
   }
 
   public CompletableFuture<Boolean> partnerLocationExists(
@@ -54,7 +57,7 @@ public final class PartnerLocationDatabaseTable extends DatabaseTable {
   public CompletableFuture<Void> deletePartnerLocation(
     UUID partnerId, String address
   ) {
-    return delete(DatabaseCondition.of("partner", partnerId, "type", address));
+    return delete(DatabaseCondition.of("partner", partnerId, "address", address));
   }
 
   public CompletableFuture<PartnerLocation> findPartnerLocation(
@@ -67,5 +70,9 @@ public final class PartnerLocationDatabaseTable extends DatabaseTable {
   public CompletableFuture<List<PartnerLocation>> findPartnerLocations(UUID partnerId) {
     return selectRows(DatabaseCondition.of("partner", partnerId))
       .thenApply(rows -> rows.stream().map(PartnerLocation::of).toList());
+  }
+
+  public CompletableFuture<Long> countPartnerLocations(UUID partnerId) {
+    return count(DatabaseCondition.of("partner", partnerId));
   }
 }

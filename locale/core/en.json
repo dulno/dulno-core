@@ -4,6 +4,11 @@
   "mail.template.privacy": "Privacy policy",
   "mail.template.contact": "Contact",
 
+  "partner.link.type.website": "Website",
+  "partner.link.type.instagram": "Instagram",
+  "partner.link.type.facebook": "Facebook",
+  "partner.link.type.tiktok": "TikTok",
+
   "accessory.starter.kit.name": "Starter kit",
   "accessory.starter.kit.description": "2x Stamps, 1x Stand-up display, perfect for getting started with Dulno in your store",
   "accessory.stamp.name": "Stamp",

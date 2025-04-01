@@ -20,6 +20,7 @@ public final class PartnerLinkDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("type", DatabaseDataType.TEXT,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("link", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("creation", DatabaseDataType.BIGINT));
     var table = new PartnerLinkDatabaseTable(connection, keyspace, TABLE_NAME,
       columns);
     table.createIfNotExists();
@@ -34,13 +35,14 @@ public final class PartnerLinkDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertPartnerLink(PartnerLink link) {
-    return insertPartnerLink(link.partnerId(), link.type().toString(), link.link());
+    return insertPartnerLink(link.partnerId(), link.type().toString(),
+      link.link(), link.creation());
   }
 
   public CompletableFuture<Void> insertPartnerLink(
-    UUID partnerId, String type, String link
+    UUID partnerId, String type, String link, long creation
   ) {
-    return insert(DatabaseRow.of(partnerId, type, link));
+    return insert(DatabaseRow.of(partnerId, type, link, creation));
   }
 
   public CompletableFuture<Boolean> partnerLinkExists(UUID partnerId, String type) {
