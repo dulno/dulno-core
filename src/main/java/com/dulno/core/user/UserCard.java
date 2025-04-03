@@ -10,13 +10,13 @@ import java.util.UUID;
 @Getter
 @Accessors(fluent = true)
 @AllArgsConstructor(staticName = "create")
-public final class UserStamp {
-  public static UserStamp of(DatabaseRow row) {
+public final class UserCard {
+  public static UserCard of(DatabaseRow row) {
     return create(row.findCell(0).uuidValue(), row.findCell(1).uuidValue(),
-      row.findCell(2).integerValue());
+      row.findCell(2).stringValue());
   }
 
   private final UUID userId;
-  private final UUID stampId;
-  private final int value;
+  private final UUID cardId;
+  private final String content;
 }

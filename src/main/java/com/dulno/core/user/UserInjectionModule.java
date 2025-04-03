@@ -19,9 +19,25 @@ public final class UserInjectionModule extends AbstractModule {
 
   @Provides
   @Singleton
-  UserStampDatabaseTable provideUserStampDatabaseTable(
+  UserDeviceDatabaseTable provideUserDeviceDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    return UserStampDatabaseTable.create(connection, keyspace);
+    return UserDeviceDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  UserCardDatabaseTable provideUserStampDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return UserCardDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  UserFirebaseDatabaseTable provideUserFirebaseDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return UserFirebaseDatabaseTable.create(connection, keyspace);
   }
 }

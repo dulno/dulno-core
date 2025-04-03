@@ -20,6 +20,7 @@ public final class User {
 
   public static User of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
+      row.findCell(columns.indexOf("authentication_key")).stringValue(),
       row.findCell(columns.indexOf("email")).stringValue(),
       row.findCell(columns.indexOf("language")).stringValue(),
       row.findCell(columns.indexOf("compliant")).booleanValue(),
@@ -28,6 +29,7 @@ public final class User {
   }
 
   private final UUID id;
+  private final String authenticationKey;
   private String email;
   private String language;
   private final boolean compliant;
