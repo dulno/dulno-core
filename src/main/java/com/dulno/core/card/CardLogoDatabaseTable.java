@@ -1,6 +1,7 @@
 package com.dulno.core.card;
 
 import com.dulno.core.database.*;
+import com.dulno.core.database.condition.DatabaseCondition;
 import com.google.common.collect.Lists;
 
 import java.nio.ByteBuffer;
@@ -16,8 +17,10 @@ public final class CardLogoDatabaseTable extends DatabaseTable {
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID,
-      DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("logo", DatabaseDataType.BLOB));
+      DatabaseColumn.Type.PARTITION_KEY));
+    columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
+      DatabaseColumn.Type.CLUSTERING_KEY));
+    columns.add(DatabaseColumn.create("content", DatabaseDataType.BLOB));
     var table = new CardLogoDatabaseTable(connection, keyspace, TABLE_NAME,
       columns);
     table.createIfNotExists();
@@ -31,19 +34,34 @@ public final class CardLogoDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
-  public CompletableFuture<Void> insertCardLogo(UUID cardId, byte[] logo) {
-    return insert(DatabaseRow.of(cardId, ByteBuffer.wrap(logo)));
+  public CompletableFuture<Void> insertCardLogo(
+    UUID cardId, UUID logoId, byte[] content
+  ) {
+    return insert(DatabaseRow.of(cardId, logoId, ByteBuffer.wrap(content)));
   }
 
-  public CompletableFuture<Void> updateCardLogo(UUID cardId, byte[] logo) {
-    return update(cardId, DatabaseRow.of(cardId, ByteBuffer.wrap(logo)));
+  public CompletableFuture<UUID> generateAvailableCardLogoId(UUID cardId) {
+    var futureResponse = new CompletableFuture<UUID>();
+    var id = UUID.randomUUID();
+    cardLogoExists(cardId, id).thenApply(exists -> exists ?
+      generateAvailableCardLogoId(cardId).thenApply(futureResponse::complete) :
+      CompletableFuture.completedFuture(futureResponse.complete(id)));
+    return futureResponse;
+  }
+
+  public CompletableFuture<Boolean> cardLogoExists(UUID cardId, UUID logoId) {
+    return exists(DatabaseCondition.of("card", cardId, "id", logoId));
   }
 
   public CompletableFuture<Void> deleteCardLogo(UUID cardId) {
-    return delete(cardId);
+    return delete(DatabaseCondition.of("card", cardId));
   }
 
-  public CompletableFuture<byte[]> findCardLogo(UUID cardId) {
-    return selectRow(cardId).thenApply(row -> row.findCell(1).blobValue().array());
+  public CompletableFuture<Void> deleteCardLogo(UUID cardId, UUID logoId) {
+    return delete(DatabaseCondition.of("card", cardId, "id", logoId));
+  }
+
+  public CompletableFuture<CardLogo> findCardLogo(UUID cardId) {
+    return selectRow(DatabaseCondition.of("card", cardId)).thenApply(CardLogo::of);
   }
 }

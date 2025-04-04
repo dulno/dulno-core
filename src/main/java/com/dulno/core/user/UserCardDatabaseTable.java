@@ -49,6 +49,10 @@ public final class UserCardDatabaseTable extends DatabaseTable {
     return delete(DatabaseCondition.of("user", userId, "card", cardId));
   }
 
+  public CompletableFuture<Boolean> userCardExists(UUID userId, UUID cardId) {
+    return exists(DatabaseCondition.of("user", userId, "card", cardId));
+  }
+
   public CompletableFuture<List<UserCard>> findUserCards(UUID userId) {
     return selectRows(DatabaseCondition.of("user", userId))
       .thenApply(rows -> rows.stream().map(UserCard::of).toList());

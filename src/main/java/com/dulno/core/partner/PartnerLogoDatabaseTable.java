@@ -1,6 +1,7 @@
 package com.dulno.core.partner;
 
 import com.dulno.core.database.*;
+import com.dulno.core.database.condition.DatabaseCondition;
 import com.google.common.collect.Lists;
 
 import java.nio.ByteBuffer;
@@ -16,8 +17,10 @@ public final class PartnerLogoDatabaseTable extends DatabaseTable {
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID,
-      DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("logo", DatabaseDataType.BLOB));
+      DatabaseColumn.Type.PARTITION_KEY));
+    columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
+      DatabaseColumn.Type.CLUSTERING_KEY));
+    columns.add(DatabaseColumn.create("content", DatabaseDataType.BLOB));
     var table = new PartnerLogoDatabaseTable(connection, keyspace, TABLE_NAME,
       columns);
     table.createIfNotExists();
@@ -31,19 +34,35 @@ public final class PartnerLogoDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
-  public CompletableFuture<Void> insertPartnerLogo(UUID partnerId, byte[] logo) {
-    return insert(DatabaseRow.of(partnerId, ByteBuffer.wrap(logo)));
+  public CompletableFuture<Void> insertPartnerLogo(
+    UUID partnerId, UUID logoId, byte[] content
+  ) {
+    return insert(DatabaseRow.of(partnerId, logoId, ByteBuffer.wrap(content)));
   }
 
-  public CompletableFuture<Void> updatePartnerLogo(UUID partnerId, byte[] logo) {
-    return update(partnerId, DatabaseRow.of(partnerId, ByteBuffer.wrap(logo)));
+  public CompletableFuture<UUID> generateAvailablePartnerLogoId(UUID partnerId) {
+    var futureResponse = new CompletableFuture<UUID>();
+    var id = UUID.randomUUID();
+    partnerLogoExists(partnerId, id).thenApply(exists -> exists ?
+      generateAvailablePartnerLogoId(partnerId).thenApply(futureResponse::complete) :
+      CompletableFuture.completedFuture(futureResponse.complete(id)));
+    return futureResponse;
+  }
+
+  public CompletableFuture<Boolean> partnerLogoExists(UUID partnerId, UUID logoId) {
+    return exists(DatabaseCondition.of("partner", partnerId, "id", logoId));
   }
 
   public CompletableFuture<Void> deletePartnerLogo(UUID partnerId) {
-    return delete(partnerId);
+    return delete(DatabaseCondition.of("partner", partnerId));
   }
 
-  public CompletableFuture<byte[]> findPartnerLogo(UUID partnerId) {
-    return selectRow(partnerId).thenApply(row -> row.findCell(1).blobValue().array());
+  public CompletableFuture<Void> deletePartnerLogo(UUID partnerId, UUID logoId) {
+    return delete(DatabaseCondition.of("partner", partnerId, "id", logoId));
+  }
+
+  public CompletableFuture<PartnerLogo> findPartnerLogo(UUID partnerId) {
+    return selectRow(DatabaseCondition.of("partner", partnerId))
+      .thenApply(PartnerLogo::of);
   }
 }
