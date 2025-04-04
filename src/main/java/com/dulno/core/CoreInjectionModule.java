@@ -24,6 +24,7 @@ import com.dulno.core.sale.SaleInjectionModule;
 import com.dulno.core.stamp.StampInjectionModule;
 import com.dulno.core.stripe.StripeInjectionModule;
 import com.dulno.core.ticket.TicketInjectionModule;
+import com.dulno.core.user.ScanInjectionModule;
 import com.dulno.core.user.UserInjectionModule;
 import com.dulno.core.worker.WorkerInjectionModule;
 import com.google.inject.AbstractModule;
@@ -52,6 +53,7 @@ public class CoreInjectionModule extends AbstractModule {
     install(AccessoryInjectionModule.create());
     install(StampInjectionModule.create());
     install(CardInjectionModule.create());
+    install(ScanInjectionModule.create());
     install(UserInjectionModule.create());
     install(TicketInjectionModule.create());
     install(QuestionInjectionModule.create());

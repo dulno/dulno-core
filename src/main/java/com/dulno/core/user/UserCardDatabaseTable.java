@@ -32,6 +32,10 @@ public final class UserCardDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
+  public CompletableFuture<Void> insertUserCard(UserCard userCard) {
+    return insertUserCard(userCard.userId(), userCard.cardId(), userCard.content());
+  }
+
   public CompletableFuture<Void> insertUserCard(
     UUID userId, UUID cardId, String content
   ) {
