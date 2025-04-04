@@ -61,6 +61,12 @@ public final class PartnerLogoDatabaseTable extends DatabaseTable {
     return delete(DatabaseCondition.of("partner", partnerId, "id", logoId));
   }
 
+  public CompletableFuture<UUID> findPartnerLogoId(UUID partnerId) {
+    return selectRowColumns(DatabaseCondition.of("partner", partnerId),
+      Lists.newArrayList(findColumnByName("id")))
+      .thenApply(row -> row.findCell(0).uuidValue());
+  }
+
   public CompletableFuture<PartnerLogo> findPartnerLogo(UUID partnerId) {
     return selectRow(DatabaseCondition.of("partner", partnerId))
       .thenApply(PartnerLogo::of);

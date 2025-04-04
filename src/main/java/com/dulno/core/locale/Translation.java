@@ -2,6 +2,8 @@ package com.dulno.core.locale;
 
 import com.dulno.core.member.Member;
 import com.dulno.core.member.MemberDatabaseTable;
+import com.dulno.core.user.User;
+import com.dulno.core.user.UserDatabaseTable;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -11,13 +13,16 @@ import java.util.concurrent.CompletableFuture;
 @Singleton
 public final class Translation {
   private final MemberDatabaseTable memberDatabaseTable;
+  private final UserDatabaseTable userDatabaseTable;
   private final Locales locales;
 
   @Inject
   private Translation(
-    MemberDatabaseTable memberDatabaseTable, Locales locales
+    MemberDatabaseTable memberDatabaseTable, UserDatabaseTable userDatabaseTable,
+    Locales locales
   ) {
     this.memberDatabaseTable = memberDatabaseTable;
+    this.userDatabaseTable = userDatabaseTable;
     this.locales = locales;
   }
 
@@ -27,9 +32,9 @@ public final class Translation {
    * @param key The key of the locale
    * @return A future that contains the translated locale
    */
-  public CompletableFuture<String> translate(UUID memberId, String key) {
+  public CompletableFuture<String> translateMember(UUID memberId, String key) {
     return memberDatabaseTable.findMember(memberId)
-      .thenApply(member -> translate(member, key));
+      .thenApply(member -> translateMember(member, key));
   }
 
   /**
@@ -38,8 +43,29 @@ public final class Translation {
    * @param key The key of the locale
    * @return A future that contains the translated locale
    */
-  public String translate(Member member, String key) {
+  public String translateMember(Member member, String key) {
     return translate(member.language(), key);
+  }
+
+  /**
+   * Translates a locale for a user
+   * @param userId The id of the user
+   * @param key The key of the locale
+   * @return A future that contains the translated locale
+   */
+  public CompletableFuture<String> translateUser(UUID userId, String key) {
+    return userDatabaseTable.findUser(userId)
+      .thenApply(user -> translateUser(user, key));
+  }
+
+  /**
+   * Translates a locale for a user
+   * @param user The user
+   * @param key The key of the locale
+   * @return A future that contains the translated locale
+   */
+  public String translateUser(User user, String key) {
+    return translate(user.language(), key);
   }
 
   /**

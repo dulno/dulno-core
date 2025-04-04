@@ -1,5 +1,6 @@
 package com.dulno.core.database.skeleton;
 
+import com.dulno.core.database.DatabaseColumn;
 import com.dulno.core.database.DatabaseRow;
 import com.dulno.core.database.condition.DatabaseCondition;
 import com.dulno.core.iterator.AsyncIterator;
@@ -72,6 +73,39 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   }
 
   /**
+   * Is used to find a single row
+   * @param value The primary key value
+   * @return A future that contains the database row
+   */
+  default CompletableFuture<DatabaseRow> selectRowColumns(
+    Object value, List<DatabaseColumn> columns
+  ) {
+    return selectRowColumns(
+      DatabaseCondition.of(findPrimaryKeyColumn().name(), value), columns);
+  }
+
+  /**
+   * Is used to find a single row
+   * @param condition The condition with which the row can be found
+   * @return A future that contains the database row
+   */
+  default CompletableFuture<DatabaseRow> selectRowColumns(
+    DatabaseCondition condition, List<DatabaseColumn> columns
+  ) {
+    var compilation = new StringBuilder();
+    for (var i = 0; i < columns.size(); i++) {
+      compilation.append(columns.get(i).name());
+      if (i < columns.size() - 1) {
+        compilation.append(", ");
+      }
+    }
+    var futureResponse = new CompletableFuture<DatabaseRow>();
+    selectRows(condition, compilation.toString()).thenAccept(rows ->
+      futureResponse.complete(rows.isEmpty() ? DatabaseRow.of() : rows.get(0)));
+    return futureResponse;
+  }
+
+  /**
    * Is used to find a single row secured (optional result)
    * @param value The primary key value
    * @return A future that contains the database row
@@ -102,7 +136,19 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   default CompletableFuture<List<DatabaseRow>> selectRows(
     DatabaseCondition condition
   ) {
-    return selectRows(condition, -1);
+    return selectRows(condition, columnNameCompilation(), -1);
+  }
+
+  /**
+   * Is used to find a multiple rows
+   * @param condition The condition with which the rows can be found
+   * @param columnNames The names of the columns to be selected
+   * @return A future that contains the database rows
+   */
+  default CompletableFuture<List<DatabaseRow>> selectRows(
+    DatabaseCondition condition, String columnNames
+  ) {
+    return selectRows(condition, columnNames, -1);
   }
 
   /**
@@ -114,13 +160,26 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   default CompletableFuture<List<DatabaseRow>> selectRows(
     DatabaseCondition condition, long limit
   ) {
+    return selectRows(condition, columnNameCompilation(), limit);
+  }
+
+  /**
+   * Is used to find a multiple rows
+   * @param condition The condition with which the rows can be found
+   * @param columnNames The names of the columns to be selected
+   * @param limit The limit of entries that should be returned
+   * @return A future that contains the database rows
+   */
+  default CompletableFuture<List<DatabaseRow>> selectRows(
+    DatabaseCondition condition, String columnNames, long limit
+  ) {
     CompletableFuture<List<DatabaseRow>> result;
     if (transformationState().isInactive() ||
       transformationState().isFillTemporary() || transformationState().isUseNew()
     ) {
-      result = selectRowsFix(condition, limit);
+      result = selectRowsFix(condition, columnNames, limit);
     } else {
-      result = temporaryTable().selectRowsFix(condition, limit);
+      result = temporaryTable().selectRowsFix(condition, columnNames, limit);
     }
     if (transformation() != null && (transformationState().isFillTemporary() ||
       transformationState().isUseTemporary() || transformationState().isFillNew())
@@ -138,10 +197,10 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
    * @return A future that contains the database rows
    */
   default CompletableFuture<List<DatabaseRow>> selectRowsFix(
-    DatabaseCondition condition, long limit
+    DatabaseCondition condition, String columnNames, long limit
   ) {
     var query = new StringBuilder("SELECT ");
-    query.append(columnNameCompilation());
+    query.append(columnNames);
     query.append(" FROM ");
     query.append(fullName());
     var conditionValue = condition.build();

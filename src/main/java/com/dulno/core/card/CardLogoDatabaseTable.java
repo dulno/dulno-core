@@ -61,6 +61,12 @@ public final class CardLogoDatabaseTable extends DatabaseTable {
     return delete(DatabaseCondition.of("card", cardId, "id", logoId));
   }
 
+  public CompletableFuture<UUID> findCardLogoId(UUID cardId) {
+    return selectRowColumns(DatabaseCondition.of("card", cardId),
+      Lists.newArrayList(findColumnByName("id")))
+      .thenApply(row -> row.findCell(0).uuidValue());
+  }
+
   public CompletableFuture<CardLogo> findCardLogo(UUID cardId) {
     return selectRow(DatabaseCondition.of("card", cardId)).thenApply(CardLogo::of);
   }

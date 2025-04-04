@@ -74,6 +74,20 @@ public final class UserDatabaseTable extends DatabaseTable {
     return updateUser(user);
   }
 
+  public CompletableFuture<Void> changeUserNewsletter(
+    UUID userId, boolean newNewsletter
+  ) {
+    return findUser(userId)
+      .thenCompose(user -> changeUserNewsletter(user, newNewsletter));
+  }
+
+  private CompletableFuture<Void> changeUserNewsletter(
+    User user, boolean newNewsletter
+  ) {
+    user.changeNewsletter(newNewsletter);
+    return updateUser(user);
+  }
+
   private CompletableFuture<Void> updateUser(User user) {
     return update(user.id(), DatabaseRow.of(user.id(), user.authenticationKey(),
       user.email().toLowerCase(), user.language(), user.compliant(),

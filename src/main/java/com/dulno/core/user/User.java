@@ -33,7 +33,7 @@ public final class User {
   private String email;
   private String language;
   private final boolean compliant;
-  private final boolean newsletter;
+  private boolean newsletter;
   private final long accession;
 
   public void changeEmail(String newEmail) {
@@ -42,5 +42,9 @@ public final class User {
 
   public void changeLanguage(String newLanguage) {
     language = newLanguage;
+  }
+
+  public void changeNewsletter(boolean newNewsletter) {
+    newsletter = newNewsletter;
   }
 }

@@ -40,4 +40,12 @@ public final class UserInjectionModule extends AbstractModule {
   ) {
     return UserFirebaseDatabaseTable.create(connection, keyspace);
   }
+
+  @Provides
+  @Singleton
+  UserVerificationDatabaseTable provideUserVerificationDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return UserVerificationDatabaseTable.create(connection, keyspace);
+  }
 }
