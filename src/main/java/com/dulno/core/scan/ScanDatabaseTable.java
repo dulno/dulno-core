@@ -16,13 +16,15 @@ public final class ScanDatabaseTable extends DatabaseTable {
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
-      DatabaseColumn.Type.PRIMARY_KEY));
+      DatabaseColumn.Type.PARTITION_KEY));
+    columns.add(DatabaseColumn.create("picc", DatabaseDataType.TEXT,
+      DatabaseColumn.Type.CLUSTERING_KEY));
+    columns.add(DatabaseColumn.create("cmac", DatabaseDataType.TEXT,
+      DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("user", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("stamp", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
-    columns.add(DatabaseColumn.create("picc", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("cmac", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("time", DatabaseDataType.BIGINT));
     var table = new ScanDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
@@ -44,6 +46,8 @@ public final class ScanDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("picc", DatabaseDataType.TEXT,
       DatabaseColumn.Type.PARTITION_KEY));
     columns.add(DatabaseColumn.create("cmac", DatabaseDataType.TEXT,
+      DatabaseColumn.Type.CLUSTERING_KEY));
+    columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
     piccCmacView = createMaterializedViewIfNotExists("picc_cmac_view", columns);
   }
@@ -71,7 +75,7 @@ public final class ScanDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Boolean> scanExists(UUID scanId) {
-    return exists(scanId);
+    return exists(DatabaseCondition.of("id", scanId));
   }
 
   public CompletableFuture<Boolean> scanExists(String picc, String cmac) {
@@ -79,11 +83,12 @@ public final class ScanDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> deleteScan(UUID scanId) {
-    return delete(scanId);
+    return delete(DatabaseCondition.of("id", scanId));
   }
 
   public CompletableFuture<Scan> findScan(UUID scanId) {
-    return selectRow(scanId).thenApply(row -> Scan.of(row, this));
+    return selectRow(DatabaseCondition.of("id", scanId))
+      .thenApply(row -> Scan.of(row, this));
   }
 
   public CompletableFuture<Scan> findScan(String picc, String cmac) {
