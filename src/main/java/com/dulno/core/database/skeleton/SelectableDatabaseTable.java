@@ -214,7 +214,8 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
     }
     query.append(condition.filteringAddition());
     query.append(";");
+    var columnCount = columnNames.length() - columnNames.replace(",", "").length() + 1;
     return connection().execute(query, condition.values()).thenApply(result ->
-      DatabaseRow.multiple(result.currentPage(), columns().size()));
+      DatabaseRow.multiple(result.currentPage(), columnCount));
   }
 }
