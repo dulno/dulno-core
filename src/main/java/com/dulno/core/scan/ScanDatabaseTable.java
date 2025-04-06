@@ -53,16 +53,16 @@ public final class ScanDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertScan(Scan scan) {
-    return insertScan(scan.id(), scan.userId(), scan.stampId(), scan.cardId(),
-      scan.partnerId(), scan.picc(), scan.cmac(), scan.time());
+    return insertScan(scan.id(), scan.picc(), scan.cmac(), scan.userId(),
+      scan.stampId(), scan.cardId(), scan.partnerId(), scan.time());
   }
 
   public CompletableFuture<Void> insertScan(
-    UUID id, UUID userId, UUID stampId, UUID cardId, UUID partnerId, String picc,
-    String cmac, long time
+    UUID id, String picc, String cmac, UUID userId, UUID stampId, UUID cardId,
+    UUID partnerId, long time
   ) {
-    return insert(DatabaseRow.of(id, userId, stampId, cardId, partnerId, picc,
-      cmac, time));
+    return insert(DatabaseRow.of(id, picc, cmac, userId, stampId, cardId,
+      partnerId, time));
   }
 
   public CompletableFuture<UUID> generateAvailableScanId() {
