@@ -20,6 +20,7 @@ public final class UserCardDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("last_update", DatabaseDataType.BIGINT));
     var table = new UserCardDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     return table;
@@ -33,20 +34,21 @@ public final class UserCardDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertUserCard(UserCard userCard) {
-    return insertUserCard(userCard.userId(), userCard.cardId(), userCard.content());
+    return insertUserCard(userCard.userId(), userCard.cardId(),
+      userCard.content(), userCard.lastUpdate());
   }
 
   public CompletableFuture<Void> insertUserCard(
-    UUID userId, UUID cardId, String content
+    UUID userId, UUID cardId, String content, long lastUpdate
   ) {
-    return insert(DatabaseRow.of(userId, cardId, content));
+    return insert(DatabaseRow.of(userId, cardId, content, lastUpdate));
   }
 
   public CompletableFuture<Void> updateUserCardContent(
-    UUID userId, UUID cardId, String content
+    UUID userId, UUID cardId, String content, long lastUpdate
   ) {
     return update(DatabaseCondition.of("user", userId, "card", cardId),
-      DatabaseRow.of(userId, cardId, content));
+      DatabaseRow.of(userId, cardId, content, lastUpdate));
   }
 
   public CompletableFuture<Void> deleteUserCard(UUID userId, UUID cardId) {
