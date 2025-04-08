@@ -7,6 +7,7 @@ import com.dulno.core.command.CommandInjectionModule;
 import com.dulno.core.database.DatabaseInjectionModule;
 import com.dulno.core.environment.EnvironmentInjectionModule;
 import com.dulno.core.error.ErrorInjectionModule;
+import com.dulno.core.google.GoogleInjectionModule;
 import com.dulno.core.intro.IntroInjectionModule;
 import com.dulno.core.locale.LocaleInjectionModule;
 import com.dulno.core.log.Log;
@@ -65,6 +66,7 @@ public class CoreInjectionModule extends AbstractModule {
     install(CommandInjectionModule.create());
     install(StripeInjectionModule.create());
     install(OfferInjectionModule.create());
+    install(GoogleInjectionModule.create());
     install(MaintenanceInjectionModule.create());
     install(ErrorInjectionModule.create());
     install(EnvironmentInjectionModule.create());
