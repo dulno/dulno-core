@@ -9,24 +9,24 @@ import com.dulno.core.ntag.lrp.LRPCipher;
 import com.dulno.core.ntag.lrp.LRPMultiCipher;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HexFormat;
+import java.util.stream.IntStream;
 
 @RequiredArgsConstructor(staticName = "create")
 public final class NTAG {
   public static NTAG of(
     String key, String picc, String mac, CMACType type
   ) throws Exception {
-    return of(Hex.decodeHex(key), Hex.decodeHex(picc), Hex.decodeHex(mac), type);
+    return of(HexFormat.of().parseHex(key), HexFormat.of().parseHex(picc),
+      HexFormat.of().parseHex(mac), type);
   }
 
   public static NTAG of(byte[] key, byte[] picc, byte[] mac, CMACType type) {
@@ -47,8 +47,9 @@ public final class NTAG {
       curIdx += 7;
     }
     if ((tag & 0b01000000) != 0) {
-      counter = ByteBuffer.wrap(Arrays.copyOfRange(alldata, curIdx, curIdx + 3))
-        .order(ByteOrder.LITTLE_ENDIAN).getInt();
+      var data = Arrays.copyOfRange(alldata, curIdx, curIdx + 3);
+      counter = IntStream.range(0, data.length)
+        .map(i -> ((((int) data[i]) & 0xff) << (8 * i))).sum();
     }
     return create(key, uid, counter, mac, type);
   }
