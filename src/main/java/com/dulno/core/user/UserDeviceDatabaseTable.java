@@ -67,6 +67,26 @@ public final class UserDeviceDatabaseTable extends DatabaseTable {
     return futureResponse;
   }
 
+  public CompletableFuture<Void> transferUserDevice(
+    UUID deviceId, UUID newUser
+  ) {
+    return findUserDevice(deviceId).thenCompose(user ->
+      transferUserDevice(user, newUser));
+  }
+
+  private CompletableFuture<Void> transferUserDevice(
+    UserDevice device, UUID newUser
+  ) {
+    device.transfer(newUser);
+    return updateUserDevice(device);
+  }
+
+  private CompletableFuture<Void> updateUserDevice(UserDevice device) {
+    return update(device.id(), DatabaseRow.of(device.id(), device.userId(),
+      device.operatingSystem(), device.operatingSystemVersion(), device.brand(),
+      device.model(), device.name()));
+  }
+
   public CompletableFuture<Boolean> userDeviceExists(UUID id) {
     return exists(id);
   }

@@ -30,11 +30,15 @@ public final class UserDevice {
   }
 
   private final UUID id;
-  private final UUID userId;
+  private UUID userId;
   private final String deviceId;
   private final String operatingSystem;
   private final String operatingSystemVersion;
   private final String brand;
   private final String model;
   private final String name;
+
+  public void transfer(UUID newUser) {
+    userId = newUser;
+  }
 }
