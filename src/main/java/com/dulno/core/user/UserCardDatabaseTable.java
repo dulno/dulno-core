@@ -19,6 +19,8 @@ public final class UserCardDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.PARTITION_KEY));
     columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
+    columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
+      DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("last_update", DatabaseDataType.BIGINT));
     var table = new UserCardDatabaseTable(connection, keyspace, TABLE_NAME, columns);
@@ -35,28 +37,50 @@ public final class UserCardDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertUserCard(UserCard userCard) {
     return insertUserCard(userCard.userId(), userCard.cardId(),
-      userCard.content(), userCard.lastUpdate());
+      userCard.userCardId(), userCard.content(), userCard.lastUpdate());
   }
 
   public CompletableFuture<Void> insertUserCard(
-    UUID userId, UUID cardId, String content, long lastUpdate
+    UUID userId, UUID cardId, UUID userCardId, String content, long lastUpdate
   ) {
-    return insert(DatabaseRow.of(userId, cardId, content, lastUpdate));
+    return insert(DatabaseRow.of(userId, cardId, userCardId, content, lastUpdate));
   }
 
   public CompletableFuture<Void> updateUserCardContent(
-    UUID userId, UUID cardId, String content, long lastUpdate
+    UUID userId, UUID cardId, UUID userCardId, String content, long lastUpdate
   ) {
-    return update(DatabaseCondition.of("user", userId, "card", cardId),
-      DatabaseRow.of(userId, cardId, content, lastUpdate));
+    var condition = DatabaseCondition.of("user", userId, "card", cardId,
+      "id", userCardId);
+    return update(condition, DatabaseRow.of(userId, cardId, content, lastUpdate));
   }
 
-  public CompletableFuture<Void> deleteUserCard(UUID userId, UUID cardId) {
-    return delete(DatabaseCondition.of("user", userId, "card", cardId));
+  public CompletableFuture<UUID> generateAvailableUserId(UUID userId, UUID cardId) {
+    var futureResponse = new CompletableFuture<UUID>();
+    var id = UUID.randomUUID();
+    userCardExists(userId, cardId, id).thenApply(exists -> exists ?
+      generateAvailableUserId(userId, cardId).thenApply(futureResponse::complete) :
+      CompletableFuture.completedFuture(futureResponse.complete(id)));
+    return futureResponse;
+  }
+
+  public CompletableFuture<Void> deleteUserCard(
+    UUID userId, UUID cardId, UUID userCardId
+  ) {
+    var condition = DatabaseCondition.of("user", userId, "card", cardId,
+      "id", userCardId);
+    return delete(condition);
   }
 
   public CompletableFuture<Boolean> userCardExists(UUID userId, UUID cardId) {
     return exists(DatabaseCondition.of("user", userId, "card", cardId));
+  }
+
+  public CompletableFuture<Boolean> userCardExists(
+    UUID userId, UUID cardId, UUID userCardId
+  ) {
+    var condition = DatabaseCondition.of("user", userId, "card", cardId,
+      "id", userCardId);
+    return exists(condition);
   }
 
   public CompletableFuture<List<UserCard>> findUserCards(UUID userId) {
@@ -64,9 +88,19 @@ public final class UserCardDatabaseTable extends DatabaseTable {
       .thenApply(rows -> rows.stream().map(UserCard::of).toList());
   }
 
-  public CompletableFuture<String> findUserCardContent(UUID userId, UUID cardId) {
-    return selectRow(DatabaseCondition.of("user", userId, "card", cardId))
-      .thenApply(row -> row.findCell(2).stringValue());
+  public CompletableFuture<List<UserCard>> findUserCards(
+    UUID userId, UUID cardId
+  ) {
+    return selectRows(DatabaseCondition.of("user", userId, "card", cardId))
+      .thenApply(rows -> rows.stream().map(UserCard::of).toList());
+  }
+
+  public CompletableFuture<String> findUserCardContent(
+    UUID userId, UUID cardId, UUID userCardId
+  ) {
+    var condition = DatabaseCondition.of("user", userId, "card", cardId,
+      "id", userCardId);
+    return selectRow(condition).thenApply(row -> row.findCell(2).stringValue());
   }
 }
 
