@@ -51,7 +51,8 @@ public final class UserCardDatabaseTable extends DatabaseTable {
   ) {
     var condition = DatabaseCondition.of("user", userId, "card", cardId,
       "id", userCardId);
-    return update(condition, DatabaseRow.of(userId, cardId, content, lastUpdate));
+    return update(condition, DatabaseRow.of(userId, cardId, userCardId,
+      content, lastUpdate));
   }
 
   public CompletableFuture<UUID> generateAvailableUserId(UUID userId, UUID cardId) {
