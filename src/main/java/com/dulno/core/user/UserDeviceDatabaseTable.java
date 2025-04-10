@@ -45,9 +45,9 @@ public final class UserDeviceDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertUserDevice(UserDevice device) {
-    return insert(DatabaseRow.of(device.id(), device.userId(),
+    return insertUserDevice(device.id(), device.userId(), device.deviceId(),
       device.operatingSystem(), device.operatingSystemVersion(), device.brand(),
-      device.model(), device.name()));
+      device.model(), device.name());
   }
 
   public CompletableFuture<Void> insertUserDevice(
@@ -83,8 +83,8 @@ public final class UserDeviceDatabaseTable extends DatabaseTable {
 
   private CompletableFuture<Void> updateUserDevice(UserDevice device) {
     return update(device.id(), DatabaseRow.of(device.id(), device.userId(),
-      device.operatingSystem(), device.operatingSystemVersion(), device.brand(),
-      device.model(), device.name()));
+      device.deviceId(), device.operatingSystem(), device.operatingSystemVersion(),
+      device.brand(), device.model(), device.name()));
   }
 
   public CompletableFuture<Boolean> userDeviceExists(UUID id) {
