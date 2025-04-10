@@ -20,6 +20,14 @@ public final class UserCard {
   private final UUID userId;
   private final UUID cardId;
   private final UUID userCardId;
-  private final String content;
-  private final long lastUpdate;
+  private String content;
+  private long lastUpdate;
+
+  public void changeContent(String newContent) {
+    content = newContent;
+  }
+
+  public void changeLastUpdate(long newLastUpdate) {
+    lastUpdate = newLastUpdate;
+  }
 }

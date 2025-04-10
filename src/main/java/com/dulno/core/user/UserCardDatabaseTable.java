@@ -46,7 +46,12 @@ public final class UserCardDatabaseTable extends DatabaseTable {
     return insert(DatabaseRow.of(userId, cardId, userCardId, content, lastUpdate));
   }
 
-  public CompletableFuture<Void> updateUserCardContent(
+  public CompletableFuture<Void> updateUserCard(UserCard userCard) {
+    return updateUserCard(userCard.userId(), userCard.cardId(),
+      userCard.userCardId(), userCard.content(), userCard.lastUpdate());
+  }
+
+  public CompletableFuture<Void> updateUserCard(
     UUID userId, UUID cardId, UUID userCardId, String content, long lastUpdate
   ) {
     var condition = DatabaseCondition.of("user", userId, "card", cardId,
