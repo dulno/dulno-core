@@ -101,7 +101,7 @@ public final class UserDeviceDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<List<UserDevice>> findUserDevices(UUID userId) {
     return userView.selectRows(DatabaseCondition.of("user", userId))
-      .thenApply(rows -> rows.stream().map(row -> UserDevice.of(row, this))
+      .thenApply(rows -> rows.stream().map(row -> UserDevice.of(row, userView))
         .toList());
   }
 }
