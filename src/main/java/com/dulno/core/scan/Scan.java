@@ -20,7 +20,6 @@ public final class Scan {
 
   public static Scan of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
-      row.findCell(columns.indexOf("user")).uuidValue(),
       row.findCell(columns.indexOf("stamp")).uuidValue(),
       row.findCell(columns.indexOf("card")).uuidValue(),
       row.findCell(columns.indexOf("partner")).uuidValue(),
@@ -30,7 +29,6 @@ public final class Scan {
   }
 
   private final UUID id;
-  private final UUID userId;
   private final UUID stampId;
   private final UUID cardId;
   private final UUID partnerId;

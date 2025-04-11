@@ -21,14 +21,22 @@ public final class UserItemDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.CLUSTERING_KEY));
     var table = new UserItemDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
+    table.initializeViews();
     return table;
   }
+
+  private DatabaseTable itemView;
 
   private UserItemDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
     super(connection, keyspace, name, columns);
+  }
+
+  private void initializeViews() {
+    itemView = createMaterializedViewIfNotExists("item_view", "item",
+      DatabaseColumn.Type.PARTITION_KEY);
   }
 
   public CompletableFuture<Void> insertUserItem(UUID userId, UUID itemId) {
@@ -41,6 +49,10 @@ public final class UserItemDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Boolean> userItemExists(UUID userId, UUID itemId) {
     return exists(DatabaseCondition.of("user", userId, "item", itemId));
+  }
+
+  public CompletableFuture<Boolean> userItemExists(UUID itemId) {
+    return itemView.exists(DatabaseCondition.of("item", itemId));
   }
 
   public CompletableFuture<List<UUID>> findUserItems(UUID userId) {
