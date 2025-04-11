@@ -1,4 +1,4 @@
-package com.dulno.core.scan;
+package com.dulno.core.item;
 
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
@@ -8,12 +8,12 @@ import com.google.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "create")
-public final class ScanInjectionModule extends AbstractModule {
+public final class ItemInjectionModule extends AbstractModule {
   @Provides
   @Singleton
-  ScanDatabaseTable provideScanDatabaseTable(
+  ItemDatabaseTable provideItemDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    return ScanDatabaseTable.create(connection, keyspace);
+    return ItemDatabaseTable.create(connection, keyspace);
   }
 }

@@ -1,4 +1,4 @@
-package com.dulno.core.user;
+package com.dulno.core.user.device;
 
 import com.dulno.core.database.DatabaseColumn;
 import com.dulno.core.database.DatabaseRow;

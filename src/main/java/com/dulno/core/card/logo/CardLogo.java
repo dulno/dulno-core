@@ -1,4 +1,4 @@
-package com.dulno.core.card;
+package com.dulno.core.card.logo;
 
 import com.dulno.core.database.DatabaseRow;
 import lombok.AllArgsConstructor;

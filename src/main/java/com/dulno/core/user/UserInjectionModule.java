@@ -2,6 +2,10 @@ package com.dulno.core.user;
 
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
+import com.dulno.core.user.device.UserDeviceDatabaseTable;
+import com.dulno.core.user.item.UserItemDatabaseTable;
+import com.dulno.core.user.scan.UserScanDatabaseTable;
+import com.dulno.core.user.verification.UserVerificationDatabaseTable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -27,18 +31,18 @@ public final class UserInjectionModule extends AbstractModule {
 
   @Provides
   @Singleton
-  UserCardDatabaseTable provideUserStampDatabaseTable(
+  UserItemDatabaseTable provideUserItemDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    return UserCardDatabaseTable.create(connection, keyspace);
+    return UserItemDatabaseTable.create(connection, keyspace);
   }
 
   @Provides
   @Singleton
-  UserFirebaseDatabaseTable provideUserFirebaseDatabaseTable(
+  UserScanDatabaseTable provideUserScanDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    return UserFirebaseDatabaseTable.create(connection, keyspace);
+    return UserScanDatabaseTable.create(connection, keyspace);
   }
 
   @Provides

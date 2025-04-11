@@ -1,4 +1,4 @@
-package com.dulno.core.partner;
+package com.dulno.core.partner.member;
 
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;

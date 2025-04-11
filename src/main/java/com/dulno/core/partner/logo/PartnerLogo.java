@@ -1,4 +1,4 @@
-package com.dulno.core.partner;
+package com.dulno.core.partner.logo;
 
 import com.dulno.core.database.DatabaseRow;
 import lombok.AllArgsConstructor;

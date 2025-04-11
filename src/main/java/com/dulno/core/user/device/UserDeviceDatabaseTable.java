@@ -1,4 +1,4 @@
-package com.dulno.core.user;
+package com.dulno.core.user.device;
 
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;

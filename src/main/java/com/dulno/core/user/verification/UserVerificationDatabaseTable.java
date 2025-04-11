@@ -1,4 +1,4 @@
-package com.dulno.core.user;
+package com.dulno.core.user.verification;
 
 import com.dulno.core.database.*;
 import com.google.common.collect.Lists;

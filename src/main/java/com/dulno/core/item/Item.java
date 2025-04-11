@@ -1,4 +1,4 @@
-package com.dulno.core.user;
+package com.dulno.core.item;
 
 import com.dulno.core.database.DatabaseRow;
 import lombok.AllArgsConstructor;
@@ -10,16 +10,14 @@ import java.util.UUID;
 @Getter
 @Accessors(fluent = true)
 @AllArgsConstructor(staticName = "create")
-public final class UserCard {
-  public static UserCard of(DatabaseRow row) {
+public final class Item {
+  public static Item of(DatabaseRow row) {
     return create(row.findCell(0).uuidValue(), row.findCell(1).uuidValue(),
-      row.findCell(2).uuidValue(), row.findCell(3).stringValue(),
-      row.findCell(4).longValue());
+      row.findCell(2).stringValue(), row.findCell(3).longValue());
   }
 
-  private final UUID userId;
+  private final UUID itemId;
   private final UUID cardId;
-  private final UUID userCardId;
   private String content;
   private long lastUpdate;
 
