@@ -4,6 +4,20 @@
   "mail.template.privacy": "Datenschutz",
   "mail.template.contact": "Kontakt",
 
+  "card.stamp.icon.circle": "Kreis",
+  "card.stamp.icon.square": "Viereck",
+  "card.stamp.icon.star": "Stern",
+  "card.stamp.icon.heart": "Herz",
+  "card.stamp.icon.smiley": "Smiley",
+  "card.stamp.icon.bell": "Glocke",
+  "card.stamp.icon.bookmark": "Lesezeichen",
+  "card.stamp.icon.diamond": "Diamant",
+
+  "card.member.icon.crown": "Krone",
+  "card.member.icon.star": "Stern",
+  "card.member.icon.heart": "Herz",
+  "card.member.icon.user": "Nutzer",
+
   "partner.link.type.website": "Website",
   "partner.link.type.instagram": "Instagram",
   "partner.link.type.facebook": "Facebook",

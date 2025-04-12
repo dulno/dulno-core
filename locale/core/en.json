@@ -4,6 +4,20 @@
   "mail.template.privacy": "Privacy policy",
   "mail.template.contact": "Contact",
 
+  "card.stamp.icon.circle": "Circle",
+  "card.stamp.icon.square": "Square",
+  "card.stamp.icon.star": "Star",
+  "card.stamp.icon.heart": "Heart",
+  "card.stamp.icon.smiley": "Smiley",
+  "card.stamp.icon.bell": "Bell",
+  "card.stamp.icon.bookmark": "Bookmark",
+  "card.stamp.icon.diamond": "Diamond",
+
+  "card.member.icon.crown": "Crown",
+  "card.member.icon.star": "Star",
+  "card.member.icon.heart": "Heart",
+  "card.member.icon.user": "User",
+
   "partner.link.type.website": "Website",
   "partner.link.type.instagram": "Instagram",
   "partner.link.type.facebook": "Facebook",
