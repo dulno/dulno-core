@@ -1,4 +1,4 @@
-package com.dulno.core.scan;
+package com.dulno.core.partner.scan;
 
 import com.dulno.core.database.*;
 import com.google.common.collect.Lists;

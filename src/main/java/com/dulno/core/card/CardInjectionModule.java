@@ -1,5 +1,6 @@
 package com.dulno.core.card;
 
+import com.dulno.core.card.logo.CardLogoDatabaseTable;
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
 import com.google.inject.AbstractModule;

@@ -21,7 +21,6 @@ public final class ScanDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("cmac", DatabaseDataType.TEXT,
       DatabaseColumn.Type.CLUSTERING_KEY));
-    columns.add(DatabaseColumn.create("user", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("stamp", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
@@ -53,16 +52,16 @@ public final class ScanDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertScan(Scan scan) {
-    return insertScan(scan.id(), scan.picc(), scan.cmac(), scan.userId(),
-      scan.stampId(), scan.cardId(), scan.partnerId(), scan.time());
+    return insertScan(scan.id(), scan.picc(), scan.cmac(), scan.stampId(),
+      scan.cardId(), scan.partnerId(), scan.time());
   }
 
   public CompletableFuture<Void> insertScan(
-    UUID id, String picc, String cmac, UUID userId, UUID stampId, UUID cardId,
+    UUID id, String picc, String cmac, UUID stampId, UUID cardId,
     UUID partnerId, long time
   ) {
-    return insert(DatabaseRow.of(id, picc, cmac, userId, stampId, cardId,
-      partnerId, time));
+    return insert(DatabaseRow.of(id, picc, cmac, stampId, cardId, partnerId,
+      time));
   }
 
   public CompletableFuture<UUID> generateAvailableScanId() {

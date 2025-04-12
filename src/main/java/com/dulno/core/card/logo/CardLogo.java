@@ -1,4 +1,4 @@
-package com.dulno.core.user;
+package com.dulno.core.card.logo;
 
 import com.dulno.core.database.DatabaseRow;
 import lombok.AllArgsConstructor;
@@ -10,14 +10,13 @@ import java.util.UUID;
 @Getter
 @Accessors(fluent = true)
 @AllArgsConstructor(staticName = "create")
-public final class UserCard {
-  public static UserCard of(DatabaseRow row) {
+public final class CardLogo {
+  public static CardLogo of(DatabaseRow row) {
     return create(row.findCell(0).uuidValue(), row.findCell(1).uuidValue(),
-      row.findCell(2).stringValue(), row.findCell(3).longValue());
+      row.findCell(2).blobValue().array());
   }
 
-  private final UUID userId;
   private final UUID cardId;
-  private final String content;
-  private final long lastUpdate;
+  private final UUID logoId;
+  private final byte[] content;
 }

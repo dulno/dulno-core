@@ -32,7 +32,7 @@ public final class User {
   private final String authenticationKey;
   private String email;
   private String language;
-  private final boolean compliant;
+  private boolean compliant;
   private boolean newsletter;
   private final long accession;
 
@@ -42,6 +42,10 @@ public final class User {
 
   public void changeLanguage(String newLanguage) {
     language = newLanguage;
+  }
+
+  public void changeCompliant(boolean newCompliant) {
+    compliant = newCompliant;
   }
 
   public void changeNewsletter(boolean newNewsletter) {

@@ -56,39 +56,7 @@ public final class UserDatabaseTable extends DatabaseTable {
       language, compliant, newsletter, accession));
   }
 
-  public CompletableFuture<Void> changeUserEmail(UUID userId, String newEmail) {
-    return findUser(userId).thenCompose(user -> changeUserEmail(user, newEmail));
-  }
-
-  private CompletableFuture<Void> changeUserEmail(User user, String newEmail) {
-    user.changeEmail(newEmail);
-    return updateUser(user);
-  }
-
-  public CompletableFuture<Void> changeUserLanguage(UUID userId, String newLanguage) {
-    return findUser(userId).thenCompose(user -> changeUserLanguage(user, newLanguage));
-  }
-
-  private CompletableFuture<Void> changeUserLanguage(User user, String newLanguage) {
-    user.changeLanguage(newLanguage);
-    return updateUser(user);
-  }
-
-  public CompletableFuture<Void> changeUserNewsletter(
-    UUID userId, boolean newNewsletter
-  ) {
-    return findUser(userId)
-      .thenCompose(user -> changeUserNewsletter(user, newNewsletter));
-  }
-
-  private CompletableFuture<Void> changeUserNewsletter(
-    User user, boolean newNewsletter
-  ) {
-    user.changeNewsletter(newNewsletter);
-    return updateUser(user);
-  }
-
-  private CompletableFuture<Void> updateUser(User user) {
+  public CompletableFuture<Void> updateUser(User user) {
     return update(user.id(), DatabaseRow.of(user.id(), user.authenticationKey(),
       user.email().toLowerCase(), user.language(), user.compliant(),
       user.newsletter(), user.accession()));

@@ -1,4 +1,4 @@
-package com.dulno.core.user;
+package com.dulno.core.user.device;
 
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;
@@ -45,9 +45,9 @@ public final class UserDeviceDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertUserDevice(UserDevice device) {
-    return insert(DatabaseRow.of(device.id(), device.userId(),
+    return insertUserDevice(device.id(), device.userId(), device.deviceId(),
       device.operatingSystem(), device.operatingSystemVersion(), device.brand(),
-      device.model(), device.name()));
+      device.model(), device.name());
   }
 
   public CompletableFuture<Void> insertUserDevice(
@@ -67,6 +67,26 @@ public final class UserDeviceDatabaseTable extends DatabaseTable {
     return futureResponse;
   }
 
+  public CompletableFuture<Void> transferUserDevice(
+    UUID deviceId, UUID newUser
+  ) {
+    return findUserDevice(deviceId).thenCompose(user ->
+      transferUserDevice(user, newUser));
+  }
+
+  private CompletableFuture<Void> transferUserDevice(
+    UserDevice device, UUID newUser
+  ) {
+    device.transfer(newUser);
+    return updateUserDevice(device);
+  }
+
+  private CompletableFuture<Void> updateUserDevice(UserDevice device) {
+    return update(device.id(), DatabaseRow.of(device.id(), device.userId(),
+      device.deviceId(), device.operatingSystem(), device.operatingSystemVersion(),
+      device.brand(), device.model(), device.name()));
+  }
+
   public CompletableFuture<Boolean> userDeviceExists(UUID id) {
     return exists(id);
   }
@@ -81,7 +101,7 @@ public final class UserDeviceDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<List<UserDevice>> findUserDevices(UUID userId) {
     return userView.selectRows(DatabaseCondition.of("user", userId))
-      .thenApply(rows -> rows.stream().map(row -> UserDevice.of(row, this))
+      .thenApply(rows -> rows.stream().map(row -> UserDevice.of(row, userView))
         .toList());
   }
 }

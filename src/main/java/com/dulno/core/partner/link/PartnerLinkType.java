@@ -1,4 +1,4 @@
-package com.dulno.core.partner;
+package com.dulno.core.partner.link;
 
 public enum PartnerLinkType {
   WEBSITE,
