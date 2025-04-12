@@ -16,6 +16,7 @@ import com.dulno.core.member.MemberInjectionModule;
 import com.dulno.core.member.session.SessionInjectionModule;
 import com.dulno.core.module.ModuleInjectionModule;
 import com.dulno.core.module.ModuleLoader;
+import com.dulno.core.notification.NotificationInjectionModule;
 import com.dulno.core.offer.OfferInjectionModule;
 import com.dulno.core.partner.PartnerInjectionModule;
 import com.dulno.core.question.QuestionInjectionModule;
@@ -55,6 +56,7 @@ public class CoreInjectionModule extends AbstractModule {
     install(CardInjectionModule.create());
     install(ScanInjectionModule.create());
     install(UserInjectionModule.create());
+    install(NotificationInjectionModule.create());
     install(TicketInjectionModule.create());
     install(QuestionInjectionModule.create());
     install(SaleInjectionModule.create());
