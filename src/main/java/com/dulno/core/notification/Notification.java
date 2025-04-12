@@ -39,12 +39,16 @@ public final class Notification {
 
   private Map<String, Object> createPayload() {
     var payload = Maps.<String, Object>newHashMap();
-    payload.put("to", receiver);
-    var notification = Maps.<String, Object>newHashMap();
-    notification.put("title", title);
-    notification.put("body", body);
-    notification.put("sound", "default");
-    payload.put("notification", notification);
+    var message = Maps.<String, Object>newHashMap();
+    message.put("topic", receiver);
+    var data = Maps.<String, Object>newHashMap();
+    data.put("title", title);
+    data.put("body", body);
+    message.put("data", data);
+    var android = Maps.<String, Object>newHashMap();
+    android.put("priority", "HIGH");
+    message.put("android", android);
+    payload.put("message", message);
     return payload;
   }
 }
