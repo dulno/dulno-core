@@ -24,6 +24,12 @@
   "partner.link.type.facebook": "Facebook",
   "partner.link.type.tiktok": "TikTok",
 
+  "campaign.type.discount": "Rabatt",
+  "campaign.type.event": "Ereignis",
+  "campaign.type.launch": "Neuheit",
+  "campaign.type.seasonal": "Saison",
+  "campaign.type.recruiting": "Einstellung",
+
   "accessory.starter.kit.name": "Starter-Kit",
   "accessory.starter.kit.description": "2x Stempel, 1x Aufsteller, ideal für den Einstieg von Dulno in Ihrem Geschäft",
   "accessory.stamp.name": "Stempel",

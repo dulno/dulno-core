@@ -23,7 +23,7 @@ public final class Bundle {
       content.getBoolean("value_card_access"),
       content.getBoolean("member_card_access"),
       content.getBoolean("analysis_access"),
-      content.getBoolean("action_access"),
+      content.getBoolean("campaign_access"),
       content.getBoolean("notification_access"),
       content.getBoolean("portal_access"),
       content.getBoolean("multi_portal_user_access"),
@@ -48,7 +48,7 @@ public final class Bundle {
     return create(partnerId, preset.bundleType(), runtime, price,
       calculateBundleExpiration(runtime), preset.collectionCardAccess(),
       preset.valueCardAccess(), preset.memberCardAccess(),
-      preset.analysisAccess(), preset.actionAccess(), preset.notificationAccess(),
+      preset.analysisAccess(), preset.campaignAccess(), preset.notificationAccess(),
       preset.portalAccess(), preset.multiPortalUserAccess(),
       preset.portalPermissionAccess());
   }
@@ -60,7 +60,7 @@ public final class Bundle {
     return create(partnerId, preset.bundleType(), runtime,
       price, runtime.isUnbound() ? expiration : calculateBundleExpiration(runtime),
       preset.collectionCardAccess(), preset.valueCardAccess(),
-      preset.memberCardAccess(), preset.analysisAccess(), preset.actionAccess(),
+      preset.memberCardAccess(), preset.analysisAccess(), preset.campaignAccess(),
       preset.notificationAccess(), preset.portalAccess(),
       preset.multiPortalUserAccess(), preset.portalPermissionAccess());
   }
@@ -84,7 +84,7 @@ public final class Bundle {
   private final boolean valueCardAccess;
   private final boolean memberCardAccess;
   private final boolean analysisAccess;
-  private final boolean actionAccess;
+  private final boolean campaignAccess;
   private final boolean notificationAccess;
   private final boolean portalAccess;
   private final boolean multiPortalUserAccess;
@@ -100,7 +100,7 @@ public final class Bundle {
     content.put("value_card_access", valueCardAccess);
     content.put("member_card_access", memberCardAccess);
     content.put("analysis_access", analysisAccess);
-    content.put("action_access", actionAccess);
+    content.put("campaign_access", campaignAccess);
     content.put("notification_access", notificationAccess);
     content.put("portal_access", portalAccess);
     content.put("multi_portal_user_access", multiPortalUserAccess);

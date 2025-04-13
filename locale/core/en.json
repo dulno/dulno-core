@@ -24,6 +24,12 @@
   "partner.link.type.facebook": "Facebook",
   "partner.link.type.tiktok": "TikTok",
 
+  "campaign.type.discount": "Discount",
+  "campaign.type.event": "Event",
+  "campaign.type.launch": "Launch",
+  "campaign.type.seasonal": "Seasonal",
+  "campaign.type.recruiting": "Recruiting",
+
   "accessory.starter.kit.name": "Starter kit",
   "accessory.starter.kit.description": "2x Stamps, 1x Stand-up display, perfect for getting started with Dulno in your store",
   "accessory.stamp.name": "Stamp",

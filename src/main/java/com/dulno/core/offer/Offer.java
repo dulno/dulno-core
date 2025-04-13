@@ -26,7 +26,7 @@ public final class Offer {
       content.getBoolean("value_card_access"),
       content.getBoolean("member_card_access"),
       content.getBoolean("analysis_access"),
-      content.getBoolean("action_access"),
+      content.getBoolean("campaign_access"),
       content.getBoolean("notification_access"),
       content.getBoolean("portal_access"),
       content.getBoolean("multi_portal_user_access"),
@@ -39,7 +39,7 @@ public final class Offer {
   ) {
     return create(id, partnerId, priceId, offerStatus, preset.bundleType(),
       runtime, price, preset.collectionCardAccess(), preset.valueCardAccess(),
-      preset.memberCardAccess(), preset.analysisAccess(), preset.actionAccess(),
+      preset.memberCardAccess(), preset.analysisAccess(), preset.campaignAccess(),
       preset.notificationAccess(), preset.portalAccess(),
       preset.multiPortalUserAccess(), preset.portalPermissionAccess());
   }
@@ -55,7 +55,7 @@ public final class Offer {
   private final boolean valueCardAccess;
   private final boolean memberCardAccess;
   private final boolean analysisAccess;
-  private final boolean actionAccess;
+  private final boolean campaignAccess;
   private final boolean notificationAccess;
   private final boolean portalAccess;
   private final boolean multiPortalUserAccess;
@@ -68,7 +68,7 @@ public final class Offer {
   public Bundle toBundle() {
     return Bundle.create(partnerId, bundleType, bundleRuntime, price,
       calculateBundleExpiration(bundleRuntime), collectionCardAccess,
-      valueCardAccess, memberCardAccess, analysisAccess, actionAccess,
+      valueCardAccess, memberCardAccess, analysisAccess, campaignAccess,
       notificationAccess, portalAccess, multiPortalUserAccess, portalPermissionAccess);
   }
 
@@ -91,7 +91,7 @@ public final class Offer {
     content.put("value_card_access", valueCardAccess);
     content.put("member_card_access", memberCardAccess);
     content.put("analysis_access", analysisAccess);
-    content.put("action_access", actionAccess);
+    content.put("campaign_access", campaignAccess);
     content.put("notification_access", notificationAccess);
     content.put("portal_access", portalAccess);
     content.put("multi_portal_user_access", multiPortalUserAccess);
