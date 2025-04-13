@@ -53,7 +53,8 @@ public final class CampaignDatabaseTable extends DatabaseTable {
     UUID id, UUID partnerId, String title, String description, String type,
     long start, long end
   ) {
-    return insert(DatabaseRow.of(id, partnerId, description, type, start, end));
+    return insert(DatabaseRow.of(id, partnerId, title, description, type,
+      start, end));
   }
 
   public CompletableFuture<Void> updateCampaign(Campaign campaign) {
