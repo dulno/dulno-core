@@ -15,6 +15,7 @@ public enum CardStampIcon {
   HEART("heart", "card.stamp.icon.heart"),
   SMILEY("face-smile", "card.stamp.icon.smiley"),
   BELL("bell", "card.stamp.icon.bell"),
+  THUMBS_UP("thumbs-up", "card.stamp.icon.thumbs.up"),
   BOOKMARK("bookmark", "card.stamp.icon.bookmark"),
   DIAMOND("gem", "card.stamp.icon.diamond");
 
