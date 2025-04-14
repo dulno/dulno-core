@@ -30,6 +30,7 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
   }
 
   private DatabaseTable campaignView;
+  private DatabaseTable stateView;
 
   private CampaignNotificationDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
@@ -40,6 +41,8 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
 
   private void initializeViews() {
     campaignView = createMaterializedViewIfNotExists("campaign_view", "campaign",
+      DatabaseColumn.Type.PARTITION_KEY);
+    stateView = createMaterializedViewIfNotExists("state_view", "state",
       DatabaseColumn.Type.PARTITION_KEY);
   }
 
@@ -102,6 +105,15 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
     return campaignView.selectRows(DatabaseCondition.of("campaign", campaignId))
       .thenApply(rows -> rows.stream()
         .map(row -> CampaignNotification.of(row, campaignView))
+        .toList());
+  }
+
+  public CompletableFuture<List<CampaignNotification>> findNotificationsByState(
+    String state
+  ) {
+    return stateView.selectRows(DatabaseCondition.of("state", state))
+      .thenApply(rows -> rows.stream()
+        .map(row -> CampaignNotification.of(row, stateView))
         .toList());
   }
 }
