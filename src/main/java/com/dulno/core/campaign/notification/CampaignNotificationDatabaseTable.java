@@ -18,6 +18,7 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("campaign", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("title", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("body", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("dispatch", DatabaseDataType.BIGINT));
@@ -30,6 +31,7 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
   }
 
   private DatabaseTable campaignView;
+  private DatabaseTable partnerView;
   private DatabaseTable stateView;
 
   private CampaignNotificationDatabaseTable(
@@ -42,6 +44,8 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
   private void initializeViews() {
     campaignView = createMaterializedViewIfNotExists("campaign_view", "campaign",
       DatabaseColumn.Type.PARTITION_KEY);
+    partnerView = createMaterializedViewIfNotExists("partner_view", "partner",
+      DatabaseColumn.Type.PARTITION_KEY);
     stateView = createMaterializedViewIfNotExists("state_view", "state",
       DatabaseColumn.Type.PARTITION_KEY);
   }
@@ -50,16 +54,17 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
     CampaignNotification campaignNotification
   ) {
     return insertCampaignNotification(campaignNotification.id(),
-      campaignNotification.campaignId(), campaignNotification.title(),
-      campaignNotification.body(), campaignNotification.dispatch(),
-      campaignNotification.state().toString());
+      campaignNotification.campaignId(), campaignNotification.partnerId(),
+      campaignNotification.title(), campaignNotification.body(),
+      campaignNotification.dispatch(), campaignNotification.state().toString());
   }
 
   public CompletableFuture<Void> insertCampaignNotification(
-    UUID id, UUID campaignId, String title, String body, long dispatch,
-    String state
+    UUID id, UUID campaignId, UUID partnerId, String title, String body,
+    long dispatch, String state
   ) {
-    return insert(DatabaseRow.of(id, campaignId, title, body, dispatch, state));
+    return insert(DatabaseRow.of(id, campaignId, partnerId, title, body,
+      dispatch, state));
   }
 
   public CompletableFuture<Void> updateCampaignNotification(
@@ -67,8 +72,9 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
   ) {
     return update(campaignNotification.id(), DatabaseRow.of(
       campaignNotification.id(), campaignNotification.campaignId(),
-      campaignNotification.title(), campaignNotification.body(),
-      campaignNotification.dispatch(), campaignNotification.state().toString()));
+      campaignNotification.partnerId(), campaignNotification.title(),
+      campaignNotification.body(), campaignNotification.dispatch(),
+      campaignNotification.state().toString()));
   }
 
   public CompletableFuture<UUID> generateAvailableCampaignNotificationId() {
@@ -105,6 +111,15 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
     return campaignView.selectRows(DatabaseCondition.of("campaign", campaignId))
       .thenApply(rows -> rows.stream()
         .map(row -> CampaignNotification.of(row, campaignView))
+        .toList());
+  }
+
+  public CompletableFuture<List<CampaignNotification>> findNotificationsOfPartner(
+    UUID partnerId
+  ) {
+    return partnerView.selectRows(DatabaseCondition.of("partner", partnerId))
+      .thenApply(rows -> rows.stream()
+        .map(row -> CampaignNotification.of(row, partnerView))
         .toList());
   }
 

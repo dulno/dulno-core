@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__({@Inject}))
 public final class CampaignNotificationSchedule {
   private final CampaignNotificationDatabaseTable campaignNotificationDatabaseTable;
-  private final CampaignDatabaseTable campaignDatabaseTable;
   private final WorkerEnvironment workerEnvironment;
   private final NotificationFactory notificationFactory;
   private final ErrorRepository errorRepository;
@@ -59,18 +58,15 @@ public final class CampaignNotificationSchedule {
       if (!shouldDispatchNotification(notification)) {
         continue;
       }
-      campaignDatabaseTable.findCampaign(notification.campaignId())
-        .thenAccept(campaign -> dispatchNotification(notification, campaign));
+      dispatchNotification(notification);
     }
   }
 
-  private void dispatchNotification(
-    CampaignNotification notification, Campaign campaign
-  ) {
+  private void dispatchNotification(CampaignNotification notification) {
     notification.changeState(CampaignNotificationState.SENT);
     campaignNotificationDatabaseTable.updateCampaignNotification(notification);
     try {
-      notificationFactory.create(campaign.partnerId().toString(),
+      notificationFactory.create(notification.partnerId().toString(),
         notification.title(), notification.body()).send();
     } catch (Exception exception) {
       errorRepository.processError(exception);

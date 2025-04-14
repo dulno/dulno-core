@@ -21,6 +21,7 @@ public final class CampaignNotification {
   public static CampaignNotification of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
       row.findCell(columns.indexOf("campaign")).uuidValue(),
+      row.findCell(columns.indexOf("partner")).uuidValue(),
       row.findCell(columns.indexOf("title")).stringValue(),
       row.findCell(columns.indexOf("body")).stringValue(),
       row.findCell(columns.indexOf("dispatch")).longValue(),
@@ -30,6 +31,7 @@ public final class CampaignNotification {
 
   private final UUID id;
   private final UUID campaignId;
+  private final UUID partnerId;
   private String title;
   private String body;
   private long dispatch;
