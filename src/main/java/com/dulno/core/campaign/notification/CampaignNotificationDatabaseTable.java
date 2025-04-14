@@ -56,7 +56,7 @@ public final class CampaignNotificationDatabaseTable extends DatabaseTable {
     UUID id, UUID campaignId, String title, String body, long dispatch,
     String state
   ) {
-    return insert(DatabaseRow.of(id, campaignId, title, body, dispatch));
+    return insert(DatabaseRow.of(id, campaignId, title, body, dispatch, state));
   }
 
   public CompletableFuture<Void> updateCampaignNotification(
