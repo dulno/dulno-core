@@ -7,11 +7,13 @@ import com.dulno.core.worker.client.WorkerOperatorClient;
 import com.dulno.core.worker.event.database.TableStateRequestEvent;
 import com.dulno.core.worker.event.database.TableStateResponseEvent;
 import com.dulno.core.worker.event.database.TableTransformEvent;
+import com.dulno.core.worker.event.node.NodeEnvironmentEvent;
 import com.dulno.core.worker.event.node.NodeHandshakeResponseEvent;
 import com.dulno.core.worker.event.node.NodePingEvent;
 import com.dulno.core.worker.packet.incoming.database.PacketIncomingTableStateRequest;
 import com.dulno.core.worker.packet.incoming.database.PacketIncomingTableStateResponse;
 import com.dulno.core.worker.packet.incoming.database.PacketIncomingTableTransform;
+import com.dulno.core.worker.packet.incoming.node.PacketIncomingEnvironment;
 import com.dulno.core.worker.packet.incoming.node.PacketIncomingHandshakeResponse;
 import com.dulno.core.worker.packet.incoming.node.PacketIncomingPing;
 import com.dulno.core.worker.packet.outgoing.node.PacketOutgoingDisconnect;
@@ -20,6 +22,7 @@ import com.dulno.core.worker.server.database.TableStateRequestHook;
 import com.dulno.core.worker.server.database.TableStateResponseHook;
 import com.dulno.core.worker.server.database.TableTransformHook;
 import com.dulno.core.worker.server.node.NodeDisconnectHook;
+import com.dulno.core.worker.server.node.NodeEnvironmentHook;
 import com.dulno.core.worker.server.node.NodeHandshakeResponseHook;
 import com.dulno.core.worker.server.node.NodePingHook;
 import com.google.inject.Inject;
@@ -54,6 +57,7 @@ public final class WorkerDistribution {
   private void registerPackets() throws Exception {
     packetRegistry.registerPacket(PacketIncomingHandshakeResponse.class);
     packetRegistry.registerPacket(PacketIncomingPing.class);
+    packetRegistry.registerPacket(PacketIncomingEnvironment.class);
     packetRegistry.registerPacket(PacketIncomingTableTransform.class);
     packetRegistry.registerPacket(PacketIncomingTableStateRequest.class);
     packetRegistry.registerPacket(PacketIncomingTableStateResponse.class);
@@ -63,6 +67,7 @@ public final class WorkerDistribution {
     hookRegistry.register(injector.getInstance(NodeDisconnectHook.class));
     hookRegistry.register(injector.getInstance(NodeHandshakeResponseHook.class));
     hookRegistry.register(injector.getInstance(NodePingHook.class));
+    hookRegistry.register(injector.getInstance(NodeEnvironmentHook.class));
     hookRegistry.register(injector.getInstance(TableTransformHook.class));
     hookRegistry.register(injector.getInstance(TableStateRequestHook.class));
     hookRegistry.register(injector.getInstance(TableStateResponseHook.class));
@@ -74,6 +79,9 @@ public final class WorkerDistribution {
     packetEventRepository.<WorkerOperatorClient, PacketIncomingPing>registerEvent(
       PacketIncomingPing.class, (client, packet) ->
         NodePingEvent.create(client, packet.value()));
+    packetEventRepository.registerEvent(PacketIncomingEnvironment.class,
+      (client, packet) -> NodeEnvironmentEvent.create(packet.yourAddress(),
+        packet.neighborAddresses()));
     packetEventRepository.registerEvent(PacketIncomingTableTransform.class,
       (client, packet) -> TableTransformEvent.create(packet.tableClass()));
     packetEventRepository.registerEvent(PacketIncomingTableStateRequest.class,
