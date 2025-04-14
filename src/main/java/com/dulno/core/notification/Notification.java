@@ -18,6 +18,7 @@ public final class Notification {
   private final String receiver;
   private final String title;
   private final String body;
+  private final Map<String, Object> data;
 
   private static final String FIREBASE_URL =
     "https://fcm.googleapis.com/v1/projects/%s/messages:send";
@@ -41,10 +42,11 @@ public final class Notification {
     var payload = Maps.<String, Object>newHashMap();
     var message = Maps.<String, Object>newHashMap();
     message.put("topic", receiver);
-    var data = Maps.<String, Object>newHashMap();
-    data.put("title", title);
-    data.put("body", body);
-    message.put("data", data);
+    var content = Maps.<String, Object>newHashMap();
+    content.put("title", title);
+    content.put("body", body);
+    content.putAll(data);
+    message.put("data", content);
     var android = Maps.<String, Object>newHashMap();
     android.put("priority", "HIGH");
     message.put("android", android);

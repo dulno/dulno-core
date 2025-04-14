@@ -1,7 +1,5 @@
 package com.dulno.core.campaign.notification;
 
-import com.dulno.core.campaign.Campaign;
-import com.dulno.core.campaign.CampaignDatabaseTable;
 import com.dulno.core.error.ErrorRepository;
 import com.dulno.core.notification.NotificationFactory;
 import com.dulno.core.worker.environment.WorkerEnvironment;
@@ -14,6 +12,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -66,8 +65,11 @@ public final class CampaignNotificationSchedule {
     notification.changeState(CampaignNotificationState.SENT);
     campaignNotificationDatabaseTable.updateCampaignNotification(notification);
     try {
+      var notificationData = Map.<String, Object>of(
+        "partner", notification.partnerId(),
+        "campaign", notification.campaignId());
       notificationFactory.create(notification.partnerId().toString(),
-        notification.title(), notification.body()).send();
+        notification.title(), notification.body(), notificationData).send();
     } catch (Exception exception) {
       errorRepository.processError(exception);
     }

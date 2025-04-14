@@ -1,10 +1,13 @@
 package com.dulno.core.notification;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
 
 @Singleton
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__({@Inject}))
@@ -13,7 +16,13 @@ public final class NotificationFactory {
   private final GoogleCredentials googleCredentials;
 
   public Notification create(String receiver, String title, String body) {
+    return create(receiver, title, body, Maps.newHashMap());
+  }
+
+  public Notification create(
+    String receiver, String title, String body, Map<String, Object> data
+  ) {
     return Notification.create(notificationConfiguration, googleCredentials,
-      receiver, title, body);
+      receiver, title, body, data);
   }
 }
