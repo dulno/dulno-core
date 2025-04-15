@@ -19,7 +19,7 @@ public final class NodeEnvironmentHook implements Hook {
   @EventHook
   private void nodeEnvironment(NodeEnvironmentEvent event) {
     var previousState = environment.state();
-    environment.update(environment.self(), environment.neighbors());
+    environment.update(event.yourAddress(), event.neighborAddresses());
     if (previousState.isWorker() && environment.state().isHead()) {
       log.info("This worker is now the operator head");
     } else if (previousState.isHead() && environment.state().isWorker()) {
