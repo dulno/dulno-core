@@ -75,6 +75,7 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   /**
    * Is used to find a single row
    * @param value The primary key value
+   * @param columns The columns which should be retrieved
    * @return A future that contains the database row
    */
   default CompletableFuture<DatabaseRow> selectRowColumns(
@@ -87,6 +88,7 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   /**
    * Is used to find a single row
    * @param condition The condition with which the row can be found
+   * @param columns The columns which should be retrieved
    * @return A future that contains the database row
    */
   default CompletableFuture<DatabaseRow> selectRowColumns(
@@ -102,6 +104,41 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
     var futureResponse = new CompletableFuture<DatabaseRow>();
     selectRows(condition, compilation.toString()).thenAccept(rows ->
       futureResponse.complete(rows.isEmpty() ? DatabaseRow.of() : rows.get(0)));
+    return futureResponse;
+  }
+
+  /**
+   * Is used to find a multiple row
+   * @param value The primary key value
+   * @param columns The columns which should be retrieved
+   * @return A future that contains the database rows
+   */
+  default CompletableFuture<List<DatabaseRow>> selectRowsColumns(
+    Object value, List<DatabaseColumn> columns
+  ) {
+    return selectRowsColumns(
+      DatabaseCondition.of(findPrimaryKeyColumn().name(), value), columns);
+  }
+
+  /**
+   * Is used to find a multiple row
+   * @param condition The condition with which the row can be found
+   * @param columns The columns which should be retrieved
+   * @return A future that contains the database rows
+   */
+  default CompletableFuture<List<DatabaseRow>> selectRowsColumns(
+    DatabaseCondition condition, List<DatabaseColumn> columns
+  ) {
+    var compilation = new StringBuilder();
+    for (var i = 0; i < columns.size(); i++) {
+      compilation.append(columns.get(i).name());
+      if (i < columns.size() - 1) {
+        compilation.append(", ");
+      }
+    }
+    var futureResponse = new CompletableFuture<List<DatabaseRow>>();
+    selectRows(condition, compilation.toString())
+      .thenAccept(futureResponse::complete);
     return futureResponse;
   }
 

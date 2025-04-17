@@ -2,11 +2,11 @@ package com.dulno.core.partner;
 
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
+import com.dulno.core.partner.analysis.*;
 import com.dulno.core.partner.link.PartnerLinkDatabaseTable;
 import com.dulno.core.partner.location.PartnerLocationDatabaseTable;
 import com.dulno.core.partner.logo.PartnerLogoDatabaseTable;
 import com.dulno.core.partner.member.PartnerMemberDatabaseTable;
-import com.dulno.core.partner.scan.PartnerScanDatabaseTable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -66,5 +66,37 @@ public final class PartnerInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return PartnerScanDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerActivityDatabaseTable providePartnerActivityDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerActivityDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerNewUserDatabaseTable providePartnerNewUserDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerNewUserDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerNewCardDatabaseTable providePartnerNewCardDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerNewCardDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerUserLanguageDatabaseTable providePartnerUserLanguageDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerUserLanguageDatabaseTable.create(connection, keyspace);
   }
 }

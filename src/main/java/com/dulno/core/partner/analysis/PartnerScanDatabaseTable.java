@@ -1,6 +1,7 @@
-package com.dulno.core.partner.scan;
+package com.dulno.core.partner.analysis;
 
 import com.dulno.core.database.*;
+import com.dulno.core.database.condition.DatabaseCondition;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -15,11 +16,13 @@ public final class PartnerScanDatabaseTable extends DatabaseTable {
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID,
-      DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("scans", DatabaseDataType.COUNTER));
+      DatabaseColumn.Type.PARTITION_KEY));
+    columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
+      DatabaseColumn.Type.CLUSTERING_KEY));
+    columns.add(DatabaseColumn.create("date", DatabaseDataType.BIGINT));
     var table = new PartnerScanDatabaseTable(connection, keyspace, TABLE_NAME,
       columns);
-    table.createIfNotExists();;
+    table.createIfNotExists();
     return table;
   }
 
@@ -30,25 +33,20 @@ public final class PartnerScanDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
-  public CompletableFuture<Void> addPartnerScan(UUID partnerId) {
-    return updatePartnerScans(partnerId, 1);
-  }
-
-  private CompletableFuture<Void> updatePartnerScans(
-    UUID partnerId, long scansAddition
+  public CompletableFuture<Void> insertPartnerScan(
+    UUID partnerId, UUID scanId, long date
   ) {
-    return updateCounter(partnerId, DatabaseRow.of(partnerId, scansAddition));
+    return insert(DatabaseRow.of(partnerId, scanId, date));
   }
 
   public CompletableFuture<Void> deletePartnerScans(UUID partnerId) {
-    return delete(partnerId);
+    return delete(DatabaseCondition.of("partner", partnerId));
   }
 
-  public CompletableFuture<Boolean> partnerScansExists(UUID partnerId) {
-    return exists(partnerId);
-  }
-
-  public CompletableFuture<Long> findPartnerScans(UUID partnerId) {
-    return selectRow(partnerId).thenApply(row -> row.findCell(1).longValue());
+  public CompletableFuture<List<Long>> findPartnerScans(UUID partnerId) {
+    return selectRowsColumns(DatabaseCondition.of("partner", partnerId),
+      Lists.newArrayList(findColumnByName("date")))
+      .thenApply(rows -> rows.stream().map(row -> row.findCell(0).longValue())
+        .toList());
   }
 }
