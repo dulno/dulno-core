@@ -36,25 +36,31 @@ public final class PartnerCardUsageDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> addPartnerCardUsage(
-    UUID partnerId, String state
+    UUID partnerId, PartnerCardState state
   ) {
     return updatePartnerCardUsage(partnerId, state, 1);
   }
 
+  public CompletableFuture<Void> removePartnerCardUsage(
+    UUID partnerId, PartnerCardState state
+  ) {
+    return updatePartnerCardUsage(partnerId, state, -1);
+  }
+
   private CompletableFuture<Void> updatePartnerCardUsage(
-    UUID partnerId, String state, long numberAddition
+    UUID partnerId, PartnerCardState state, long numberAddition
   ) {
     var condition = DatabaseCondition.of("partner", partnerId,
-      "state", state);
-    return updateCounter(condition, DatabaseRow.of(partnerId, state,
+      "state", state.toString());
+    return updateCounter(condition, DatabaseRow.of(partnerId, state.toString(),
       numberAddition));
   }
 
   public CompletableFuture<Void> deletePartnerCardUsage(
-    UUID partnerId, String state
+    UUID partnerId, PartnerCardState state
   ) {
     return delete(DatabaseCondition.of("partner", partnerId,
-      "state", state));
+      "state", state.toString()));
   }
 
   public CompletableFuture<Void> deletePartnerCardUsages(UUID partnerId) {
@@ -62,33 +68,34 @@ public final class PartnerCardUsageDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Boolean> partnerCardUsageExists(
-    UUID partnerId, String state
+    UUID partnerId, PartnerCardState state
   ) {
     return exists(DatabaseCondition.of("partner", partnerId,
-      "state", state));
+      "state", state.toString()));
   }
 
   public CompletableFuture<Long> findPartnerCardUsageNumber(
-    UUID partnerId, String state
+    UUID partnerId, PartnerCardState state
   ) {
     var condition = DatabaseCondition.of("partner", partnerId,
-      "state", state);
+      "state", state.toString());
     return selectRow(condition).thenApply(row -> row.findCell(2).longValue());
   }
 
-  public CompletableFuture<Map<String, Long>> findPartnerCardUsages(
+  public CompletableFuture<Map<PartnerCardState, Long>> findPartnerCardUsages(
     UUID partnerId
   ) {
     return selectRows(DatabaseCondition.of("partner", partnerId))
       .thenApply(this::assemblyPartnerCardUsages);
   }
 
-  private Map<String, Long> assemblyPartnerCardUsages(
+  private Map<PartnerCardState, Long> assemblyPartnerCardUsages(
     List<DatabaseRow> rows
   ) {
-    var states = Maps.<String, Long>newHashMap();
+    var states = Maps.<PartnerCardState, Long>newHashMap();
     for (DatabaseRow row : rows) {
-      states.put(row.findCell(1).stringValue(), row.findCell(2).longValue());
+      states.put(PartnerCardState.valueOf(row.findCell(1).stringValue()),
+        row.findCell(2).longValue());
     }
     return states;
   }
