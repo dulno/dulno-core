@@ -19,7 +19,6 @@ public final class ItemDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID));
-    columns.add(DatabaseColumn.create("card_type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("content", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("last_update", DatabaseDataType.BIGINT));
     var table = new ItemDatabaseTable(connection, keyspace, TABLE_NAME, columns);
