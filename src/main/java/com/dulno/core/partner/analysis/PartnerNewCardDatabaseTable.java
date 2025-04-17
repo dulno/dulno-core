@@ -33,10 +33,30 @@ public final class PartnerNewCardDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
+  public CompletableFuture<Void> insertPartnerNewCard(UUID partnerId, long date) {
+    return generateAvailablePartnerNewCardId(partnerId)
+      .thenCompose(newCardId -> insert(DatabaseRow.of(partnerId, newCardId, date)));
+  }
+
   public CompletableFuture<Void> insertPartnerNewCard(
-    UUID partnerId, UUID scanId, long date
+    UUID partnerId, UUID newCardId, long date
   ) {
-    return insert(DatabaseRow.of(partnerId, scanId, date));
+    return insert(DatabaseRow.of(partnerId, newCardId, date));
+  }
+
+  public CompletableFuture<UUID> generateAvailablePartnerNewCardId(UUID partnerId) {
+    var futureResponse = new CompletableFuture<UUID>();
+    var id = UUID.randomUUID();
+    partnerNewCardExists(partnerId, id).thenApply(exists -> exists ?
+      generateAvailablePartnerNewCardId(partnerId).thenApply(futureResponse::complete) :
+      CompletableFuture.completedFuture(futureResponse.complete(id)));
+    return futureResponse;
+  }
+
+  public CompletableFuture<Boolean> partnerNewCardExists(
+    UUID partnerId, UUID newCardId
+  ) {
+    return exists(DatabaseCondition.of("partner", partnerId, "id", newCardId));
   }
 
   public CompletableFuture<Void> deletePartnerNewCards(UUID partnerId) {

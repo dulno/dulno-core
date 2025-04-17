@@ -33,10 +33,30 @@ public final class PartnerNewUserDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
+  public CompletableFuture<Void> insertPartnerNewUser(UUID partnerId, long date) {
+    return generateAvailablePartnerNewUserId(partnerId)
+      .thenCompose(newUserId -> insert(DatabaseRow.of(partnerId, newUserId, date)));
+  }
+
   public CompletableFuture<Void> insertPartnerNewUser(
-    UUID partnerId, UUID scanId, long date
+    UUID partnerId, UUID newUserId, long date
   ) {
-    return insert(DatabaseRow.of(partnerId, scanId, date));
+    return insert(DatabaseRow.of(partnerId, newUserId, date));
+  }
+
+  public CompletableFuture<UUID> generateAvailablePartnerNewUserId(UUID partnerId) {
+    var futureResponse = new CompletableFuture<UUID>();
+    var id = UUID.randomUUID();
+    partnerNewUserExists(partnerId, id).thenApply(exists -> exists ?
+      generateAvailablePartnerNewUserId(partnerId).thenApply(futureResponse::complete) :
+      CompletableFuture.completedFuture(futureResponse.complete(id)));
+    return futureResponse;
+  }
+
+  public CompletableFuture<Boolean> partnerNewUserExists(
+    UUID partnerId, UUID newUserId
+  ) {
+    return exists(DatabaseCondition.of("partner", partnerId, "id", newUserId));
   }
 
   public CompletableFuture<Void> deletePartnerNewUsers(UUID partnerId) {

@@ -70,14 +70,6 @@ public final class PartnerInjectionModule extends AbstractModule {
 
   @Provides
   @Singleton
-  PartnerActivityDatabaseTable providePartnerActivityDatabaseTable(
-    DatabaseConnection connection, DatabaseKeyspace keyspace
-  ) {
-    return PartnerActivityDatabaseTable.create(connection, keyspace);
-  }
-
-  @Provides
-  @Singleton
   PartnerNewUserDatabaseTable providePartnerNewUserDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
@@ -90,6 +82,14 @@ public final class PartnerInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return PartnerNewCardDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerCardUsageDatabaseTable providePartnerCardUsageDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerCardUsageDatabaseTable.create(connection, keyspace);
   }
 
   @Provides

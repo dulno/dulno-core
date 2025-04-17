@@ -30,7 +30,7 @@ public final class Card {
   }
 
   private final UUID id;
-  private final UUID partner;
+  private final UUID partnerId;
   private String backgroundColor;
   private String foregroundColor;
   private final CardType type;

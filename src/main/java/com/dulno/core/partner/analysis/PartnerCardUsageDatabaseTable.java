@@ -10,86 +10,86 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public final class PartnerUserLanguageDatabaseTable extends DatabaseTable {
-  private static final String TABLE_NAME = "partner_user_language";
+public final class PartnerCardUsageDatabaseTable extends DatabaseTable {
+  private static final String TABLE_NAME = "partner_card_usage";
 
-  public static PartnerUserLanguageDatabaseTable create(
+  public static PartnerCardUsageDatabaseTable create(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID,
       DatabaseColumn.Type.PARTITION_KEY));
-    columns.add(DatabaseColumn.create("language", DatabaseDataType.TEXT,
+    columns.add(DatabaseColumn.create("state", DatabaseDataType.TEXT,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("number", DatabaseDataType.COUNTER));
-    var table = new PartnerUserLanguageDatabaseTable(connection, keyspace,
+    var table = new PartnerCardUsageDatabaseTable(connection, keyspace,
       TABLE_NAME, columns);
     table.createIfNotExists();;
     return table;
   }
 
-  private PartnerUserLanguageDatabaseTable(
+  private PartnerCardUsageDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
     super(connection, keyspace, name, columns);
   }
 
-  public CompletableFuture<Void> addPartnerUserLanguage(
-    UUID partnerId, String language
+  public CompletableFuture<Void> addPartnerCardUsage(
+    UUID partnerId, String state
   ) {
-    return updatePartnerUserLanguage(partnerId, language, 1);
+    return updatePartnerCardUsage(partnerId, state, 1);
   }
 
-  private CompletableFuture<Void> updatePartnerUserLanguage(
-    UUID partnerId, String language, long numberAddition
+  private CompletableFuture<Void> updatePartnerCardUsage(
+    UUID partnerId, String state, long numberAddition
   ) {
     var condition = DatabaseCondition.of("partner", partnerId,
-      "language", language);
-    return updateCounter(condition, DatabaseRow.of(partnerId, language,
+      "state", state);
+    return updateCounter(condition, DatabaseRow.of(partnerId, state,
       numberAddition));
   }
 
-  public CompletableFuture<Void> deletePartnerUserLanguage(
-    UUID partnerId, String language
+  public CompletableFuture<Void> deletePartnerCardUsage(
+    UUID partnerId, String state
   ) {
     return delete(DatabaseCondition.of("partner", partnerId,
-      "language", language));
+      "state", state));
   }
 
-  public CompletableFuture<Void> deletePartnerUserLanguages(UUID partnerId) {
+  public CompletableFuture<Void> deletePartnerCardUsages(UUID partnerId) {
     return delete(DatabaseCondition.of("partner", partnerId));
   }
 
-  public CompletableFuture<Boolean> partnerUserLanguageExists(
-    UUID partnerId, String language
+  public CompletableFuture<Boolean> partnerCardUsageExists(
+    UUID partnerId, String state
   ) {
     return exists(DatabaseCondition.of("partner", partnerId,
-      "language", language));
+      "state", state));
   }
 
-  public CompletableFuture<Long> findPartnerUserLanguageNumber(
-    UUID partnerId, String language
+  public CompletableFuture<Long> findPartnerCardUsageNumber(
+    UUID partnerId, String state
   ) {
     var condition = DatabaseCondition.of("partner", partnerId,
-      "language", language);
+      "state", state);
     return selectRow(condition).thenApply(row -> row.findCell(2).longValue());
   }
 
-  public CompletableFuture<Map<String, Long>> findPartnerUserLanguages(
+  public CompletableFuture<Map<String, Long>> findPartnerCardUsages(
     UUID partnerId
   ) {
     return selectRows(DatabaseCondition.of("partner", partnerId))
-      .thenApply(this::assemblyPartnerUserLanguages);
+      .thenApply(this::assemblyPartnerCardUsages);
   }
 
-  private Map<String, Long> assemblyPartnerUserLanguages(
+  private Map<String, Long> assemblyPartnerCardUsages(
     List<DatabaseRow> rows
   ) {
-    var languages = Maps.<String, Long>newHashMap();
+    var states = Maps.<String, Long>newHashMap();
     for (DatabaseRow row : rows) {
-      languages.put(row.findCell(1).stringValue(), row.findCell(2).longValue());
+      states.put(row.findCell(1).stringValue(), row.findCell(2).longValue());
     }
-    return languages;
+    return states;
   }
 }

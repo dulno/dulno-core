@@ -44,7 +44,7 @@ public final class CardDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertCard(Card card) {
-    return insertCard(card.id(), card.partner(), card.backgroundColor(),
+    return insertCard(card.id(), card.partnerId(), card.backgroundColor(),
       card.foregroundColor(), card.type().toString(), card.content(),
       card.creation());
   }
@@ -58,7 +58,7 @@ public final class CardDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> updateCard(Card card) {
-    return update(card.id(), DatabaseRow.of(card.id(), card.partner(),
+    return update(card.id(), DatabaseRow.of(card.id(), card.partnerId(),
       card.backgroundColor(), card.foregroundColor(), card.type().toString(),
       card.content(), card.creation()));
   }

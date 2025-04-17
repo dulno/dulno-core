@@ -33,10 +33,30 @@ public final class PartnerScanDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
+  public CompletableFuture<Void> insertPartnerScan(UUID partnerId, long date) {
+    return generateAvailablePartnerScanId(partnerId)
+      .thenCompose(scanId -> insert(DatabaseRow.of(partnerId, scanId, date)));
+  }
+
   public CompletableFuture<Void> insertPartnerScan(
     UUID partnerId, UUID scanId, long date
   ) {
     return insert(DatabaseRow.of(partnerId, scanId, date));
+  }
+
+  public CompletableFuture<UUID> generateAvailablePartnerScanId(UUID partnerId) {
+    var futureResponse = new CompletableFuture<UUID>();
+    var id = UUID.randomUUID();
+    partnerScanExists(partnerId, id).thenApply(exists -> exists ?
+      generateAvailablePartnerScanId(partnerId).thenApply(futureResponse::complete) :
+      CompletableFuture.completedFuture(futureResponse.complete(id)));
+    return futureResponse;
+  }
+
+  public CompletableFuture<Boolean> partnerScanExists(
+    UUID partnerId, UUID scanId
+  ) {
+    return exists(DatabaseCondition.of("partner", partnerId, "id", scanId));
   }
 
   public CompletableFuture<Void> deletePartnerScans(UUID partnerId) {
