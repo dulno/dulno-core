@@ -26,7 +26,8 @@ public final class Card {
       row.findCell(columns.indexOf("foreground_color")).stringValue(),
       CardType.valueOf(row.findCell(columns.indexOf("type")).stringValue()),
       row.findCell(columns.indexOf("content")).stringValue(),
-      row.findCell(columns.indexOf("creation")).longValue());
+      row.findCell(columns.indexOf("creation")).longValue(),
+      CardState.valueOf(row.findCell(columns.indexOf("state")).stringValue()));
   }
 
   private final UUID id;
@@ -36,6 +37,7 @@ public final class Card {
   private final CardType type;
   private String content;
   private final long creation;
+  private CardState state;
 
   public void changeBackgroundColor(String newBackgroundColor) {
     backgroundColor = newBackgroundColor;
@@ -47,5 +49,9 @@ public final class Card {
 
   public void changeContent(String newContent) {
     content = newContent;
+  }
+
+  public void changeState(CardState newState) {
+    state = newState;
   }
 }
