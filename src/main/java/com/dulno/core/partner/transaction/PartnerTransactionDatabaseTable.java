@@ -19,7 +19,7 @@ public final class PartnerTransactionDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.PARTITION_KEY));
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
-    columns.add(DatabaseColumn.create("card", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("value", DatabaseDataType.DOUBLE));
     columns.add(DatabaseColumn.create("time", DatabaseDataType.BIGINT));
     var table = new PartnerTransactionDatabaseTable(connection, keyspace,
