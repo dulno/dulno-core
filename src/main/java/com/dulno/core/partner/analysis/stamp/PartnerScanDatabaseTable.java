@@ -1,4 +1,4 @@
-package com.dulno.core.partner.analysis;
+package com.dulno.core.partner.analysis.stamp;
 
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;

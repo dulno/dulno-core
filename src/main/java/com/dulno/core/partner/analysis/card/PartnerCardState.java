@@ -1,4 +1,4 @@
-package com.dulno.core.partner.analysis;
+package com.dulno.core.partner.analysis.card;
 
 public enum PartnerCardState {
   UNUSED,

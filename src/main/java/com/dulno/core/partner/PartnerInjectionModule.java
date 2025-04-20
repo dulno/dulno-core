@@ -7,13 +7,20 @@ import com.dulno.core.partner.link.PartnerLinkDatabaseTable;
 import com.dulno.core.partner.location.PartnerLocationDatabaseTable;
 import com.dulno.core.partner.logo.PartnerLogoDatabaseTable;
 import com.dulno.core.partner.member.PartnerMemberDatabaseTable;
+import com.dulno.core.partner.transaction.PartnerTransactionDatabaseTable;
 import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "create")
 public final class PartnerInjectionModule extends AbstractModule {
+  @Override
+  protected void configure() {
+    install(PartnerAnalysisInjectionModule.create());
+  }
+
   @Provides
   @Singleton
   PartnerConfiguration providePartnerConfiguration() throws Exception {
@@ -62,41 +69,9 @@ public final class PartnerInjectionModule extends AbstractModule {
 
   @Provides
   @Singleton
-  PartnerScanDatabaseTable providePartnerScanDatabaseTable(
+  PartnerTransactionDatabaseTable providePartnerTransactionDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    return PartnerScanDatabaseTable.create(connection, keyspace);
-  }
-
-  @Provides
-  @Singleton
-  PartnerNewUserDatabaseTable providePartnerNewUserDatabaseTable(
-    DatabaseConnection connection, DatabaseKeyspace keyspace
-  ) {
-    return PartnerNewUserDatabaseTable.create(connection, keyspace);
-  }
-
-  @Provides
-  @Singleton
-  PartnerNewCardDatabaseTable providePartnerNewCardDatabaseTable(
-    DatabaseConnection connection, DatabaseKeyspace keyspace
-  ) {
-    return PartnerNewCardDatabaseTable.create(connection, keyspace);
-  }
-
-  @Provides
-  @Singleton
-  PartnerCardUsageDatabaseTable providePartnerCardUsageDatabaseTable(
-    DatabaseConnection connection, DatabaseKeyspace keyspace
-  ) {
-    return PartnerCardUsageDatabaseTable.create(connection, keyspace);
-  }
-
-  @Provides
-  @Singleton
-  PartnerUserLanguageDatabaseTable providePartnerUserLanguageDatabaseTable(
-    DatabaseConnection connection, DatabaseKeyspace keyspace
-  ) {
-    return PartnerUserLanguageDatabaseTable.create(connection, keyspace);
+    return PartnerTransactionDatabaseTable.create(connection, keyspace);
   }
 }

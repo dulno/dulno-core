@@ -1,4 +1,4 @@
-package com.dulno.core.partner.analysis;
+package com.dulno.core.partner.analysis.user;
 
 import com.datastax.oss.driver.shaded.guava.common.collect.Maps;
 import com.dulno.core.database.*;
