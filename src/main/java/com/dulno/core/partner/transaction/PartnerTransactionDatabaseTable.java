@@ -55,6 +55,10 @@ public final class PartnerTransactionDatabaseTable extends DatabaseTable {
     return delete(DatabaseCondition.of("partner", partnerId, "id", transactionId));
   }
 
+  public CompletableFuture<Void> deletePartnerTransactions(UUID partnerId) {
+    return delete(DatabaseCondition.of("partner", partnerId));
+  }
+
   public CompletableFuture<UUID> generateAvailablePartnerTransactionId(
     UUID partnerId
   ) {
