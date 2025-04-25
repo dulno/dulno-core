@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Accessors(fluent = true)
@@ -61,6 +62,14 @@ public final class DatabaseCell {
       return null;
     }
     return (List<T>) value;
+  }
+
+
+  public <K, V> Map<K, V> mapValue() {
+    if (!(value instanceof Map<?, ?>)) {
+      return null;
+    }
+    return (Map<K, V>) value;
   }
 
   public ByteBuffer blobValue() {

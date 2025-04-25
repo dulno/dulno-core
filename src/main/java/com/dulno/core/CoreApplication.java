@@ -3,6 +3,7 @@ package com.dulno.core;
 import com.dulno.core.application.ApplicationLaunchEvent;
 import com.dulno.core.application.ApplicationPostRunEvent;
 import com.dulno.core.application.ApplicationPreRunEvent;
+import com.dulno.core.campaign.notification.CampaignNotificationHook;
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.transformation.DatabaseDiscrepancyHook;
 import com.dulno.core.error.ErrorRepository;
@@ -66,5 +67,6 @@ public class CoreApplication {
 
   private static void registerHooks(HookRegistry registry, Injector injector) {
     registry.register(injector.getInstance(DatabaseDiscrepancyHook.class));
+    registry.register(injector.getInstance(CampaignNotificationHook.class));
   }
 }

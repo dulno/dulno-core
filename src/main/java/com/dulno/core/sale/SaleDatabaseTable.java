@@ -22,17 +22,17 @@ public final class SaleDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PARTITION_KEY));
     columns.add(DatabaseColumn.create("sender", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("firstName", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("lastName", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("phoneNumber", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("first_name", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("last_name", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("phone_number", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("country", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("companyName", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("companySize", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("companyRole", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("company_name", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("company_size", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("company_role", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("title", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT,
       DatabaseColumn.Type.CLUSTERING_KEY));
-    columns.add(DatabaseColumn.create("expirationTime", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT));
     var table = new SaleDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     table.createIndexIfNotExists("status");
@@ -56,7 +56,7 @@ public final class SaleDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT,
       DatabaseColumn.Type.PARTITION_KEY));
-    columns.add(DatabaseColumn.create("expirationTime", DatabaseDataType.BIGINT,
+    columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
@@ -68,17 +68,17 @@ public final class SaleDatabaseTable extends DatabaseTable {
     return insertSale(sale.id(), sale.sender(), sale.firstName(),
       sale.lastName(), sale.phoneNumber(), sale.country(), sale.companyName(),
       sale.companySize(), sale.companyRole(), sale.title(),
-      sale.status().toString(), sale.expirationTime());
+      sale.status().toString(), sale.expiration());
   }
 
   public CompletableFuture<Void> insertSale(
     UUID id, String sender, String firstName, String lastName,
     String phoneNumber, String country, String companyName, String companySize,
-    String companyRole, String title, String status, long expirationTime
+    String companyRole, String title, String status, long expiration
   ) {
     return insert(DatabaseRow.of(id, sender, firstName, lastName, phoneNumber,
       country, companyName, companySize, companyRole, title, status,
-      expirationTime));
+      expiration));
   }
 
   public CompletableFuture<Void> updateSaleStatus(UUID id, Sale.Status status) {
@@ -94,27 +94,27 @@ public final class SaleDatabaseTable extends DatabaseTable {
       .thenCompose(value -> insertSale(sale));
   }
 
-  public CompletableFuture<Void> resetSaleExpirationTime(UUID id) {
+  public CompletableFuture<Void> resetSaleExpiration(UUID id) {
     var futureResponse = new CompletableFuture<Void>();
-    findSale(id).thenAccept(sale -> resetSaleExpirationTime(sale)
+    findSale(id).thenAccept(sale -> resetSaleExpiration(sale)
       .thenAccept(futureResponse::complete));
     return futureResponse;
   }
 
-  private CompletableFuture<Void> resetSaleExpirationTime(Sale sale) {
-    sale.resetExpirationTime();
+  private CompletableFuture<Void> resetSaleExpiration(Sale sale) {
+    sale.resetExpiration();
     return updateSale(sale);
   }
 
-  public CompletableFuture<Void> disableSaleExpirationTime(UUID id) {
+  public CompletableFuture<Void> disableSaleExpiration(UUID id) {
     var futureResponse = new CompletableFuture<Void>();
-    findSale(id).thenAccept(sale -> disableSaleExpirationTime(sale)
+    findSale(id).thenAccept(sale -> disableSaleExpiration(sale)
       .thenAccept(futureResponse::complete));
     return futureResponse;
   }
 
-  private CompletableFuture<Void> disableSaleExpirationTime(Sale sale) {
-    sale.disableExpirationTime();
+  private CompletableFuture<Void> disableSaleExpiration(Sale sale) {
+    sale.disableExpiration();
     return updateSale(sale);
   }
 
@@ -124,7 +124,7 @@ public final class SaleDatabaseTable extends DatabaseTable {
     return update(condition, DatabaseRow.of(sale.id(), sale.sender(),
       sale.firstName(), sale.lastName(), sale.phoneNumber(), sale.country(),
       sale.companyName(), sale.companySize(), sale.companyRole(), sale.title(),
-      sale.status().toString(), sale.expirationTime()));
+      sale.status().toString(), sale.expiration()));
   }
 
   public CompletableFuture<UUID> generateAvailableSaleId() {
@@ -163,7 +163,7 @@ public final class SaleDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Long> countPendingSales() {
     return statusExpirationView.count(DatabaseCondition.of(
-      DatabaseComparison.create("expirationTime", -1L),
+      DatabaseComparison.create("expiration", -1L),
       DatabaseComparison.create("status", Ticket.Status.OPEN.toString())));
   }
 }

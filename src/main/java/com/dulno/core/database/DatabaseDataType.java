@@ -14,6 +14,7 @@ public enum DatabaseDataType {
   INET,
   INT,
   LIST,
+  MAP,
   SMALLINT,
   TEXT,
   TIME,

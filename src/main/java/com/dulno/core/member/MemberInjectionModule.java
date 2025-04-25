@@ -15,10 +15,7 @@ public final class MemberInjectionModule extends AbstractModule {
   MemberDatabaseTable providememberDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    var memberDatabaseTable = MemberDatabaseTable.create(connection, keyspace);
-    memberDatabaseTable.createIfNotExists();
-    memberDatabaseTable.createIndexIfNotExists("email");
-    return memberDatabaseTable;
+    return MemberDatabaseTable.create(connection, keyspace);
   }
 
   @Provides
@@ -26,10 +23,7 @@ public final class MemberInjectionModule extends AbstractModule {
   MemberVerificationDatabaseTable provideMemberVerificationDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    var memberVerificationDatabaseTable = MemberVerificationDatabaseTable.create(
-      connection, keyspace);
-    memberVerificationDatabaseTable.createIfNotExists();
-    return memberVerificationDatabaseTable;
+    return MemberVerificationDatabaseTable.create(connection, keyspace);
   }
 
   @Provides
@@ -37,10 +31,7 @@ public final class MemberInjectionModule extends AbstractModule {
   MemberPasswordResetDatabaseTable provideMemberPasswordResetDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    var memberPasswordResetDatabaseTable = MemberPasswordResetDatabaseTable.create(
-      connection, keyspace);
-    memberPasswordResetDatabaseTable.createIfNotExists();
-    return memberPasswordResetDatabaseTable;
+    return MemberPasswordResetDatabaseTable.create(connection, keyspace);
   }
 
   @Provides
@@ -48,10 +39,7 @@ public final class MemberInjectionModule extends AbstractModule {
   MemberEmailChangeDatabaseTable provideMemberEmailChangeDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    var memberEmailChangeDatabaseTable = MemberEmailChangeDatabaseTable.create(
-      connection, keyspace);
-    memberEmailChangeDatabaseTable.createIfNotExists();
-    return memberEmailChangeDatabaseTable;
+    return MemberEmailChangeDatabaseTable.create(connection, keyspace);
   }
 
   @Provides
@@ -59,9 +47,6 @@ public final class MemberInjectionModule extends AbstractModule {
   MultiFactorAuthDatabaseTable provideMultiFactorAuthDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    var multiFactorAuthDatabaseTable = MultiFactorAuthDatabaseTable.create(
-      connection, keyspace);
-    multiFactorAuthDatabaseTable.createIfNotExists();
-    return multiFactorAuthDatabaseTable;
+    return MultiFactorAuthDatabaseTable.create(connection, keyspace);
   }
 }

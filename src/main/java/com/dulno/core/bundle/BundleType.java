@@ -1,21 +1,31 @@
 package com.dulno.core.bundle;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
+@Getter
+@Accessors(fluent = true)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum BundleType {
-  TRIAL,
-  INDIVIDUAL,
-  TEAM,
-  ENTERPRISE;
+  BASIC(1),
+  PROFESSIONAL(2),
+  PREMIUM(3),
+  ENTERPRISE(4);
 
-  public boolean isTrial() {
-    return this == TRIAL;
+  private final int value;
+
+  public boolean isBasic() {
+    return this == BASIC;
   }
 
-  public boolean isIndividual() {
-    return this == INDIVIDUAL;
+  public boolean isProfessional() {
+    return this == PROFESSIONAL;
   }
 
-  public boolean isTeam() {
-    return this == TEAM;
+  public boolean isPremium() {
+    return this == PREMIUM;
   }
 
   public boolean isEnterprise() {

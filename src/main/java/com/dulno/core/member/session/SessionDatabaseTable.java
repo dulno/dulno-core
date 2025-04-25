@@ -21,13 +21,13 @@ public final class SessionDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("devicePlatform", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("ipAddress", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("device_platform", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("ip_address", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("country", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("city", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("openTime", DatabaseDataType.BIGINT));
-    columns.add(DatabaseColumn.create("refreshToken", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("lastRefresh", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("open_time", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("refresh_token", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("last_refresh", DatabaseDataType.BIGINT));
     var table = new SessionDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     table.createIndexIfNotExists("member");

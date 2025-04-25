@@ -1,6 +1,5 @@
 package com.dulno.core.stripe;
 
-import com.dulno.core.bundle.BundleClass;
 import com.dulno.core.bundle.BundlePreset;
 import com.dulno.core.bundle.BundleRuntime;
 import com.dulno.core.bundle.BundleType;
@@ -41,50 +40,36 @@ public final class StripeConfiguration extends Configuration {
     checkoutWebhookSecret = json.getString("checkoutWebhookSecret");
     paymentWebhookSecret = json.getString("paymentWebhookSecret");
     priceIds = Maps.newHashMap();
-    registerPriceId(json, BundleType.INDIVIDUAL, BundleClass.BEGINNER, BundleRuntime.MONTHLY);
-    registerPriceId(json, BundleType.INDIVIDUAL, BundleClass.ADVANCED, BundleRuntime.MONTHLY);
-    registerPriceId(json, BundleType.INDIVIDUAL, BundleClass.EXPERT, BundleRuntime.MONTHLY);
-    registerPriceId(json, BundleType.INDIVIDUAL, BundleClass.BEGINNER, BundleRuntime.YEARLY);
-    registerPriceId(json, BundleType.INDIVIDUAL, BundleClass.ADVANCED, BundleRuntime.YEARLY);
-    registerPriceId(json, BundleType.INDIVIDUAL, BundleClass.EXPERT, BundleRuntime.YEARLY);
-    registerPriceId(json, BundleType.TEAM, BundleClass.BEGINNER, BundleRuntime.MONTHLY);
-    registerPriceId(json, BundleType.TEAM, BundleClass.ADVANCED, BundleRuntime.MONTHLY);
-    registerPriceId(json, BundleType.TEAM, BundleClass.EXPERT, BundleRuntime.MONTHLY);
-    registerPriceId(json, BundleType.TEAM, BundleClass.BEGINNER, BundleRuntime.YEARLY);
-    registerPriceId(json, BundleType.TEAM, BundleClass.ADVANCED, BundleRuntime.YEARLY);
-    registerPriceId(json, BundleType.TEAM, BundleClass.EXPERT, BundleRuntime.YEARLY);
+    registerPriceId(json, BundleType.BASIC, BundleRuntime.MONTHLY);
+    registerPriceId(json, BundleType.BASIC, BundleRuntime.YEARLY);
+    registerPriceId(json, BundleType.PROFESSIONAL, BundleRuntime.MONTHLY);
+    registerPriceId(json, BundleType.PROFESSIONAL, BundleRuntime.YEARLY);
+    registerPriceId(json, BundleType.PREMIUM, BundleRuntime.MONTHLY);
+    registerPriceId(json, BundleType.PREMIUM, BundleRuntime.YEARLY);
   }
 
   private void registerPriceId(
-    JSONObject json, BundleType bundleType, BundleClass bundleClass,
-    BundleRuntime bundleRuntime
+    JSONObject json, BundleType bundleType, BundleRuntime bundleRuntime
   ) {
     var typeString = switch(bundleType) {
-      case INDIVIDUAL -> "Individual";
-      case TEAM -> "Team";
-      case TRIAL, ENTERPRISE -> "";
-    };
-    var classString = switch(bundleClass) {
-      case BEGINNER -> "Beginner";
-      case ADVANCED -> "Advanced";
-      case EXPERT -> "Expert";
-      case NONE -> "";
+      case BASIC -> "Basic";
+      case PROFESSIONAL -> "Professional";
+      case PREMIUM -> "Premium";
+      case ENTERPRISE -> "";
     };
     var runtimeString = switch(bundleRuntime) {
       case MONTHLY -> "Monthly";
       case YEARLY -> "Yearly";
-      case INFINITE, UNBOUND -> "";
+      case UNBOUND -> "";
     };
-    priceIds.put(bundleType.toString() + "-" + bundleClass.toString() + "-" +
-        bundleRuntime.toString(),
-      json.getString("price" + typeString + classString + runtimeString + "Id"));
+    priceIds.put(bundleType.toString() + "-" + bundleRuntime.toString(),
+      json.getString("price" + typeString + runtimeString + "Id"));
   }
 
   public String findPriceId(
-    BundleType bundleType, BundleClass bundleClass, BundleRuntime bundleRuntime
+    BundleType bundleType, BundleRuntime bundleRuntime
   ) {
-    return priceIds.get(bundleType.toString() + "-" + bundleClass.toString() +
-      "-" + bundleRuntime.toString());
+    return priceIds.get(bundleType.toString() + "-" + bundleRuntime.toString());
   }
 
   public boolean priceIdExists(String priceId) {
@@ -93,62 +78,26 @@ public final class StripeConfiguration extends Configuration {
 
   public List<String> findPriceIdsOfType(BundleType bundleType) {
     var priceIds = Lists.<String>newArrayList();
-    priceIds.add(findPriceId(bundleType, BundleClass.BEGINNER,
-      BundleRuntime.MONTHLY));
-    priceIds.add(findPriceId(bundleType, BundleClass.ADVANCED,
-      BundleRuntime.MONTHLY));
-    priceIds.add(findPriceId(bundleType, BundleClass.EXPERT,
-      BundleRuntime.MONTHLY));
-    priceIds.add(findPriceId(bundleType, BundleClass.BEGINNER,
-      BundleRuntime.YEARLY));
-    priceIds.add(findPriceId(bundleType, BundleClass.ADVANCED,
-      BundleRuntime.YEARLY));
-    priceIds.add(findPriceId(bundleType, BundleClass.EXPERT,
-      BundleRuntime.YEARLY));
-    return priceIds;
-  }
-
-  public List<String> findPriceIdsOfTypeAndClass(
-    BundleType bundleType, BundleClass bundleClass
-  ) {
-    var priceIds = Lists.<String>newArrayList();
-    priceIds.add(findPriceId(bundleType, bundleClass,
-      BundleRuntime.MONTHLY));
-    priceIds.add(findPriceId(bundleType, bundleClass,
-      BundleRuntime.YEARLY));
+    priceIds.add(findPriceId(bundleType, BundleRuntime.MONTHLY));
+    priceIds.add(findPriceId(bundleType, BundleRuntime.YEARLY));
     return priceIds;
   }
 
   public List<String> findPriceIdsOfRuntime(BundleRuntime bundleRuntime) {
     var priceIds = Lists.<String>newArrayList();
-    priceIds.add(findPriceId(BundleType.INDIVIDUAL, BundleClass.BEGINNER,
-      bundleRuntime));
-    priceIds.add(findPriceId(BundleType.INDIVIDUAL, BundleClass.ADVANCED,
-      bundleRuntime));
-    priceIds.add(findPriceId(BundleType.INDIVIDUAL, BundleClass.EXPERT,
-      bundleRuntime));
-    priceIds.add(findPriceId(BundleType.TEAM, BundleClass.BEGINNER,
-      bundleRuntime));
-    priceIds.add(findPriceId(BundleType.TEAM, BundleClass.ADVANCED,
-      bundleRuntime));
-    priceIds.add(findPriceId(BundleType.TEAM, BundleClass.EXPERT,
-      bundleRuntime));
+    priceIds.add(findPriceId(BundleType.BASIC, bundleRuntime));
+    priceIds.add(findPriceId(BundleType.PROFESSIONAL, bundleRuntime));
+    priceIds.add(findPriceId(BundleType.PREMIUM, bundleRuntime));
     return priceIds;
   }
 
   public Optional<BundlePreset> findBundlePreset(String priceId) throws Exception {
-    if (findPriceIdsOfTypeAndClass(BundleType.INDIVIDUAL, BundleClass.BEGINNER).contains(priceId)) {
-      return Optional.of(BundlePreset.createAndLoad(BundleType.INDIVIDUAL, BundleClass.BEGINNER));
-    } else if (findPriceIdsOfTypeAndClass(BundleType.INDIVIDUAL, BundleClass.ADVANCED).contains(priceId)) {
-      return Optional.of(BundlePreset.createAndLoad(BundleType.INDIVIDUAL, BundleClass.ADVANCED));
-    } else if (findPriceIdsOfTypeAndClass(BundleType.INDIVIDUAL, BundleClass.EXPERT).contains(priceId)) {
-      return Optional.of(BundlePreset.createAndLoad(BundleType.INDIVIDUAL, BundleClass.EXPERT));
-    } else if (findPriceIdsOfTypeAndClass(BundleType.TEAM, BundleClass.BEGINNER).contains(priceId)) {
-      return Optional.of(BundlePreset.createAndLoad(BundleType.TEAM, BundleClass.BEGINNER));
-    } else if (findPriceIdsOfTypeAndClass(BundleType.TEAM, BundleClass.ADVANCED).contains(priceId)) {
-      return Optional.of(BundlePreset.createAndLoad(BundleType.TEAM, BundleClass.ADVANCED));
-    } else if (findPriceIdsOfTypeAndClass(BundleType.TEAM, BundleClass.EXPERT).contains(priceId)) {
-      return Optional.of(BundlePreset.createAndLoad(BundleType.TEAM, BundleClass.EXPERT));
+    if (findPriceIdsOfType(BundleType.BASIC).contains(priceId)) {
+      return Optional.of(BundlePreset.createAndLoad(BundleType.BASIC));
+    } else if (findPriceIdsOfType(BundleType.PROFESSIONAL).contains(priceId)) {
+      return Optional.of(BundlePreset.createAndLoad(BundleType.PROFESSIONAL));
+    } else if (findPriceIdsOfType(BundleType.PREMIUM).contains(priceId)) {
+      return Optional.of(BundlePreset.createAndLoad(BundleType.PREMIUM));
     }
     return Optional.empty();
   }

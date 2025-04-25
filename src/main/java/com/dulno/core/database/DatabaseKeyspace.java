@@ -139,6 +139,12 @@ public final class DatabaseKeyspace {
       return DatabaseListColumn.create(columnName, DatabaseDataType.valueOf(
           dataType.replace("LIST", "").replace("<", "").replace(">", "")),
         columnType);
+    } else if (dataType.contains("MAP")) {
+      var dataTypeSplit = dataType.replace("MAP", "").replace("<", "")
+        .replace(">", "").split(", ");
+      return DatabaseMapColumn.create(columnName,
+        DatabaseDataType.valueOf(dataTypeSplit[0]),
+        DatabaseDataType.valueOf(dataTypeSplit[1]), columnType);
     }
     return DatabaseColumn.create(columnName, DatabaseDataType.valueOf(dataType),
       columnType);

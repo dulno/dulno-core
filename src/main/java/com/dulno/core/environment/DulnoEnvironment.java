@@ -12,7 +12,7 @@ public final class DulnoEnvironment {
   }
 
   private enum Type {
-    PRODUCTIVE,
+    PRODUCTION,
     STAGING,
     LOCAL
   }
@@ -27,8 +27,8 @@ public final class DulnoEnvironment {
     }
   }
 
-  public boolean isProductive() {
-    return type == Type.PRODUCTIVE;
+  public boolean isProduction() {
+    return type == Type.PRODUCTION;
   }
 
   public boolean isStaging() {
@@ -40,14 +40,14 @@ public final class DulnoEnvironment {
   }
 
   public String domain() {
-    if (isProductive()) {
+    if (isProduction()) {
       return "dulno.com";
     }
     return "dulno.dev";
   }
 
   public String publicEndpoint() {
-    if (isProductive()) {
+    if (isProduction()) {
       return "api.dulno.com";
     }
     return "pub.dulno.dev";

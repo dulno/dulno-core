@@ -3,7 +3,6 @@ package com.dulno.core.bundle;
 public enum BundleRuntime {
   MONTHLY,
   YEARLY,
-  INFINITE,
   UNBOUND;
 
   public boolean isMonthly() {
@@ -12,10 +11,6 @@ public enum BundleRuntime {
 
   public boolean isYearly() {
     return this == YEARLY;
-  }
-
-  public boolean isInfinite() {
-    return this == INFINITE;
   }
 
   public boolean isUnbound() {

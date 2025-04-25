@@ -18,7 +18,7 @@ public final class TicketMessageDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("ticket", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("author", DatabaseDataType.UUID));
-    columns.add(DatabaseColumn.create("authorType", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("author_type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("message", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("time", DatabaseDataType.BIGINT));
     return new TicketMessageDatabaseTable(connection, keyspace, TABLE_NAME, columns);
