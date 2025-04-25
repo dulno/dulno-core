@@ -22,13 +22,4 @@ public final class BundlePresetRepository {
     return presets.stream().filter(preset -> preset.bundleType().equals(bundleType))
       .findFirst();
   }
-
-  public Optional<BundlePreset> findPreset(
-    BundleType bundleType, BundleClass bundleClass
-  ) {
-    return presets.stream()
-      .filter(preset -> preset.bundleType().equals(bundleType))
-      .filter(preset -> preset.bundleClass().equals(bundleClass))
-      .findFirst();
-  }
 }

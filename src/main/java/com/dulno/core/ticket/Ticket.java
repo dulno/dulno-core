@@ -23,9 +23,9 @@ public final class Ticket {
       row.findCell(columns.indexOf("title")).stringValue(),
       Type.valueOf(row.findCell(columns.indexOf("type")).stringValue()),
       Status.valueOf(row.findCell(columns.indexOf("status")).stringValue()),
-      row.findCell(columns.indexOf("expirationTime")).longValue(),
+      row.findCell(columns.indexOf("expiration")).longValue(),
       row.findCell(columns.indexOf("messages")).listValue(),
-      row.findCell(columns.indexOf("lastMessageSeen")).booleanValue());
+      row.findCell(columns.indexOf("last_message_seen")).booleanValue());
   }
 
   public enum Type {
@@ -49,7 +49,7 @@ public final class Ticket {
   @Getter
   private Status status;
   @Getter
-  private long expirationTime;
+  private long expiration;
   private final List<UUID> messages;
   @Getter
   private boolean lastMessageSeen;
@@ -72,12 +72,12 @@ public final class Ticket {
 
   private static final long EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 14;
 
-  public void resetExpirationTime() {
-    expirationTime = System.currentTimeMillis() + EXPIRATION_TIME;
+  public void resetExpiration() {
+    expiration = System.currentTimeMillis() + EXPIRATION_TIME;
   }
 
-  public void disableExpirationTime() {
-    expirationTime = -1;
+  public void disableExpiration() {
+    expiration = -1;
   }
 
   public List<UUID> messages() {

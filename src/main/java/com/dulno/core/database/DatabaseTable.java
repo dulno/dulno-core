@@ -172,6 +172,15 @@ public class DatabaseTable implements CreatableDatabaseTable,
   }
 
   /**
+   * Is used to find a certain column by its name
+   * @return The column
+   */
+  public DatabaseColumn findColumnByName(String name) {
+    return columns.stream().filter(column -> column.name().equals(name))
+      .findFirst().get();
+  }
+
+  /**
    * Is used to add a new column to the database table
    * @param column The new column
    * @return A future that is completed when the operation is completed

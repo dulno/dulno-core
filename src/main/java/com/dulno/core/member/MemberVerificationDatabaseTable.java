@@ -16,8 +16,11 @@ public final class MemberVerificationDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("verificationToken", DatabaseDataType.TEXT));
-    return new MemberVerificationDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    columns.add(DatabaseColumn.create("verification_token", DatabaseDataType.TEXT));
+    var table = new MemberVerificationDatabaseTable(connection, keyspace,
+      TABLE_NAME, columns);
+    table.createIfNotExists();
+    return table;
   }
 
   private MemberVerificationDatabaseTable(
@@ -42,6 +45,11 @@ public final class MemberVerificationDatabaseTable extends DatabaseTable {
   public CompletableFuture<String> findVerification(UUID memberId) {
     return selectRow(memberId).thenApply(row ->
       row.findCell(1).stringValue());
+  }
+
+  public CompletableFuture<List<UUID>> findAllVerifications() {
+    return selectAllRows().thenApply(rows ->
+      rows.stream().map(row -> row.findCell(0).uuidValue()).toList());
   }
 }
 

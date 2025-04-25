@@ -2,5 +2,40 @@
   "mail.template.rights": "Alle Rechte vorbehalten",
   "mail.template.imprint": "Impressum",
   "mail.template.privacy": "Datenschutz",
-  "mail.template.contact": "Kontakt"
+  "mail.template.contact": "Kontakt",
+
+  "card.stamp.icon.circle": "Kreis",
+  "card.stamp.icon.square": "Viereck",
+  "card.stamp.icon.star": "Stern",
+  "card.stamp.icon.heart": "Herz",
+  "card.stamp.icon.smiley": "Smiley",
+  "card.stamp.icon.bell": "Glocke",
+  "card.stamp.icon.thumbs.up": "Daumen hoch",
+  "card.stamp.icon.bookmark": "Lesezeichen",
+  "card.stamp.icon.diamond": "Diamant",
+
+  "card.member.icon.crown": "Krone",
+  "card.member.icon.star": "Stern",
+  "card.member.icon.heart": "Herz",
+  "card.member.icon.user": "Nutzer",
+
+  "partner.link.type.website": "Website",
+  "partner.link.type.instagram": "Instagram",
+  "partner.link.type.facebook": "Facebook",
+  "partner.link.type.tiktok": "TikTok",
+
+  "campaign.type.discount": "Rabatt",
+  "campaign.type.event": "Ereignis",
+  "campaign.type.launch": "Neuheit",
+  "campaign.type.seasonal": "Saison",
+  "campaign.type.recruiting": "Einstellung",
+
+  "accessory.starter.kit.name": "Starter-Kit",
+  "accessory.starter.kit.description": "2x Stempel, 1x Aufsteller, ideal für den Einstieg von Dulno in Ihrem Geschäft",
+  "accessory.stamp.name": "Stempel",
+  "accessory.stamp.description": "1x Stempel, zum individuellen aufrüsten oder nachbuchen",
+  "accessory.tag.name": "NFC-Tag",
+  "accessory.tag.description": "1x NFC-Tag, der NFC-Tag ohne Stempel",
+  "accessory.display.name": "Aufsteller",
+  "accessory.display.description": "1x Aufsteller, damit Ihre Kunden die Dulno-App direkt kennenlernen und herunterladen können"
 }

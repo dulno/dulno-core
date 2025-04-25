@@ -24,7 +24,7 @@ public final class QuestionDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("title", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT,
       DatabaseColumn.Type.CLUSTERING_KEY));
-    columns.add(DatabaseColumn.create("expirationTime", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT));
     var table = new QuestionDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     table.createIndexIfNotExists("status");
@@ -48,7 +48,7 @@ public final class QuestionDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT,
       DatabaseColumn.Type.PARTITION_KEY));
-    columns.add(DatabaseColumn.create("expirationTime", DatabaseDataType.BIGINT,
+    columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
@@ -58,13 +58,13 @@ public final class QuestionDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertQuestion(Question question) {
     return insertQuestion(question.id(), question.sender(),
-      question.title(), question.status().toString(), question.expirationTime());
+      question.title(), question.status().toString(), question.expiration());
   }
 
   public CompletableFuture<Void> insertQuestion(
-    UUID id,  String sender, String title, String status, long expirationTime
+    UUID id,  String sender, String title, String status, long expiration
   ) {
-    return insert(DatabaseRow.of(id, sender, title, status, expirationTime));
+    return insert(DatabaseRow.of(id, sender, title, status, expiration));
   }
 
   public CompletableFuture<Void> updateQuestionStatus(
@@ -84,27 +84,27 @@ public final class QuestionDatabaseTable extends DatabaseTable {
       .thenCompose(value -> insertQuestion(question));
   }
 
-  public CompletableFuture<Void> resetQuestionExpirationTime(UUID id) {
+  public CompletableFuture<Void> resetQuestionExpiration(UUID id) {
     var futureResponse = new CompletableFuture<Void>();
-    findQuestion(id).thenAccept(question -> resetQuestionExpirationTime(question)
+    findQuestion(id).thenAccept(question -> resetQuestionExpiration(question)
       .thenAccept(futureResponse::complete));
     return futureResponse;
   }
 
-  private CompletableFuture<Void> resetQuestionExpirationTime(Question question) {
-    question.resetExpirationTime();
+  private CompletableFuture<Void> resetQuestionExpiration(Question question) {
+    question.resetExpiration();
     return updateQuestion(question);
   }
 
-  public CompletableFuture<Void> disableQuestionExpirationTime(UUID id) {
+  public CompletableFuture<Void> disableQuestionExpiration(UUID id) {
     var futureResponse = new CompletableFuture<Void>();
-    findQuestion(id).thenAccept(question -> disableQuestionExpirationTime(question)
+    findQuestion(id).thenAccept(question -> disableQuestionExpiration(question)
       .thenAccept(futureResponse::complete));
     return futureResponse;
   }
 
-  private CompletableFuture<Void> disableQuestionExpirationTime(Question question) {
-    question.disableExpirationTime();
+  private CompletableFuture<Void> disableQuestionExpiration(Question question) {
+    question.disableExpiration();
     return updateQuestion(question);
   }
 
@@ -112,7 +112,7 @@ public final class QuestionDatabaseTable extends DatabaseTable {
     var condition = DatabaseCondition.of("id", question.id(), "status",
       question.status().toString());
     return update(condition, DatabaseRow.of(question.id(), question.sender(),
-      question.title(), question.status().toString(), question.expirationTime()));
+      question.title(), question.status().toString(), question.expiration()));
   }
 
   public CompletableFuture<UUID> generateAvailableQuestionId() {
@@ -151,7 +151,7 @@ public final class QuestionDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Long> countPendingQuestions() {
     return statusExpirationView.count(DatabaseCondition.of(
-      DatabaseComparison.create("expirationTime", -1L),
+      DatabaseComparison.create("expiration", -1L),
       DatabaseComparison.create("status", Ticket.Status.OPEN.toString())));
   }
 }

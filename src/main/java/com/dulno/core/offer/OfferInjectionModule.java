@@ -16,8 +16,8 @@ public final class OfferInjectionModule extends AbstractModule {
   ) {
     var offerDatabaseTable = OfferDatabaseTable.create(connection, keyspace);
     offerDatabaseTable.createIfNotExists();
-    offerDatabaseTable.createIndexIfNotExists("priceId");
-    offerDatabaseTable.createIndexIfNotExists("target");
+    offerDatabaseTable.createIndexIfNotExists("price_id");
+    offerDatabaseTable.createIndexIfNotExists("partner");
     return offerDatabaseTable;
   }
 }

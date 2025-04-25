@@ -21,11 +21,16 @@ public final class MemberDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("email", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("password", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("language", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("legalAccepted", DatabaseDataType.BOOLEAN));
+    columns.add(DatabaseColumn.create("compliant", DatabaseDataType.BOOLEAN));
     columns.add(DatabaseColumn.create("newsletter", DatabaseDataType.BOOLEAN));
-    columns.add(DatabaseColumn.create("joinDate", DatabaseDataType.BIGINT));
-    return new MemberDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    columns.add(DatabaseColumn.create("accession", DatabaseDataType.BIGINT));
+    var table = new MemberDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    table.createIfNotExists();
+    table.initializeViews();
+    return table;
   }
+
+  private DatabaseTable emailView;
 
   private MemberDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
@@ -34,18 +39,23 @@ public final class MemberDatabaseTable extends DatabaseTable {
     super(connection, keyspace, name, columns);
   }
 
+  private void initializeViews() {
+    emailView = createMaterializedViewIfNotExists("email_view", "email",
+      DatabaseColumn.Type.PARTITION_KEY);
+  }
+
   public CompletableFuture<Void> insertMember(Member member) {
     return insertMember(member.id(), member.name(), member.email(),
-      member.passwordHash(), member.language(), member.legalAccepted(),
-      member.newsletter(), member.joinDate());
+      member.passwordHash(), member.language(), member.compliant(),
+      member.newsletter(), member.accession());
   }
 
   public CompletableFuture<Void> insertMember(
     UUID id, String name, String email, String passwordHash, String language,
-    boolean legalAccepted, boolean newsletter, long joinDate
+    boolean compliant, boolean newsletter, long accession
   ) {
     return insert(DatabaseRow.of(id, name, email.toLowerCase(), passwordHash,
-      language, legalAccepted, newsletter, joinDate));
+      language, compliant, newsletter, accession));
   }
 
   public CompletableFuture<Void> changeMemberName(UUID memberId, String newName) {
@@ -80,7 +90,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
     return updateMember(member);
   }
 
-  public CompletableFuture<Void>  changeMemberLanguage(UUID memberId, String newLanguage) {
+  public CompletableFuture<Void> changeMemberLanguage(UUID memberId, String newLanguage) {
     return findMember(memberId).thenCompose(member -> changeMemberLanguage(member, newLanguage));
   }
 
@@ -92,7 +102,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
   private CompletableFuture<Void> updateMember(Member member) {
     return update(member.id(), DatabaseRow.of(member.id(), member.name(),
       member.email().toLowerCase(), member.passwordHash(), member.language(),
-      member.legalAccepted(), member.newsletter(), member.joinDate()));
+      member.compliant(), member.newsletter(), member.accession()));
   }
 
   public CompletableFuture<UUID> generateAvailableMemberId() {
@@ -109,7 +119,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Boolean> memberExists(String email) {
-    return exists(DatabaseCondition.of("email", email.toLowerCase()));
+    return emailView.exists(DatabaseCondition.of("email", email.toLowerCase()));
   }
 
   public CompletableFuture<Void> deleteMember(UUID memberId) {
@@ -117,7 +127,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Member> findMember(UUID memberId) {
-    return selectRow(memberId).thenApply(Member::of);
+    return selectRow(memberId).thenApply(row -> Member.of(row, this));
   }
 
   public CompletableFuture<Member> findMemberIfExists(UUID memberId) {
@@ -137,7 +147,7 @@ public final class MemberDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Member> findMember(String email) {
-    return selectRow(DatabaseCondition.of("email", email.toLowerCase()))
-      .thenApply(Member::of);
+    return emailView.selectRow(DatabaseCondition.of("email", email.toLowerCase()))
+      .thenApply(row -> Member.of(row, emailView));
   }
 }

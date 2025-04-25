@@ -19,7 +19,7 @@ public final class Partner {
   private final UUID id;
   private String name;
   private String description;
-  private final long joinDate;
+  private final long accession;
 
   public void changeName(String newName) {
     name = newName;

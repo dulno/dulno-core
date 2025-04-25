@@ -17,7 +17,7 @@ public final class StripeCompletionDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PARTITION_KEY));
-    columns.add(DatabaseColumn.create("completionToken", DatabaseDataType.TEXT,
+    columns.add(DatabaseColumn.create("completion_token", DatabaseDataType.TEXT,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("confirmed", DatabaseDataType.BOOLEAN));
     return new StripeCompletionDatabaseTable(connection, keyspace, TABLE_NAME, columns);
@@ -41,28 +41,28 @@ public final class StripeCompletionDatabaseTable extends DatabaseTable {
     UUID memberId, String completionToken
   ) {
     var condition = DatabaseCondition.of("member", memberId,
-      "completionToken", completionToken);
+      "completion_token", completionToken);
     return update(condition, DatabaseRow.of(memberId, completionToken, true),
       "USING TTL " + (60 * 60));
   }
 
   public void deleteStripeCompletion(UUID memberId, String completionToken) {
     delete(DatabaseCondition.of("member", memberId,
-      "completionToken", completionToken));
+      "completion_token", completionToken));
   }
 
   public CompletableFuture<Boolean> stripeCompletionExists(
     UUID memberId, String completionToken
   ) {
     return exists(DatabaseCondition.of("member", memberId,
-      "completionToken", completionToken));
+      "completion_token", completionToken));
   }
 
   public CompletableFuture<Boolean> isStripeCompletionConfirmed(
     UUID memberId, String completionToken
   ) {
     return selectRow(DatabaseCondition.of("member", memberId,
-      "completionToken", completionToken))
+      "completion_token", completionToken))
       .thenApply(row -> row.findCell(2).booleanValue());
   }
 }

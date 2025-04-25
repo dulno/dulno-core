@@ -2,5 +2,40 @@
   "mail.template.rights": "All rights reserved",
   "mail.template.imprint": "Imprint",
   "mail.template.privacy": "Privacy policy",
-  "mail.template.contact": "Contact"
+  "mail.template.contact": "Contact",
+
+  "card.stamp.icon.circle": "Circle",
+  "card.stamp.icon.square": "Square",
+  "card.stamp.icon.star": "Star",
+  "card.stamp.icon.heart": "Heart",
+  "card.stamp.icon.smiley": "Smiley",
+  "card.stamp.icon.bell": "Bell",
+  "card.stamp.icon.thumbs.up": "Thumbs up",
+  "card.stamp.icon.bookmark": "Bookmark",
+  "card.stamp.icon.diamond": "Diamond",
+
+  "card.member.icon.crown": "Crown",
+  "card.member.icon.star": "Star",
+  "card.member.icon.heart": "Heart",
+  "card.member.icon.user": "User",
+
+  "partner.link.type.website": "Website",
+  "partner.link.type.instagram": "Instagram",
+  "partner.link.type.facebook": "Facebook",
+  "partner.link.type.tiktok": "TikTok",
+
+  "campaign.type.discount": "Discount",
+  "campaign.type.event": "Event",
+  "campaign.type.launch": "Launch",
+  "campaign.type.seasonal": "Seasonal",
+  "campaign.type.recruiting": "Recruiting",
+
+  "accessory.starter.kit.name": "Starter kit",
+  "accessory.starter.kit.description": "2x Stamps, 1x Stand-up display, perfect for getting started with Dulno in your store",
+  "accessory.stamp.name": "Stamp",
+  "accessory.stamp.description": "1x Stamp, to upgrade or rebook individually",
+  "accessory.tag.name": "NFC tag",
+  "accessory.tag.description": "1x NFC tag, the NFC tag without a stamp",
+  "accessory.display.name": "Stand-up display",
+  "accessory.display.description": "1x Stand-up display, so that your customers can get to know and download the Dulno app directly"
 }

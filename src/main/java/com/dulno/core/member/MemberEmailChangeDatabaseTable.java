@@ -18,9 +18,12 @@ public final class MemberEmailChangeDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("newEmail", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("changeToken", DatabaseDataType.TEXT));
-    return new MemberEmailChangeDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    columns.add(DatabaseColumn.create("new_email", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("change_token", DatabaseDataType.TEXT));
+    var table = new MemberEmailChangeDatabaseTable(connection, keyspace,
+      TABLE_NAME, columns);
+    table.createIfNotExists();
+    return table;
   }
 
   private MemberEmailChangeDatabaseTable(

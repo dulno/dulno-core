@@ -25,8 +25,8 @@ public final class SaleInjectionModule extends AbstractModule {
     var saleMessageDatabaseTable = SaleMessageDatabaseTable.create(
       databaseConnection, databaseKeyspace);
     saleMessageDatabaseTable.createIfNotExists();
-    saleMessageDatabaseTable.createIndexIfNotExists("publicId");
-    saleMessageDatabaseTable.createIndexIfNotExists("saleId");
+    saleMessageDatabaseTable.createIndexIfNotExists("public_id");
+    saleMessageDatabaseTable.createIndexIfNotExists("sale_id");
     return saleMessageDatabaseTable;
   }
 }

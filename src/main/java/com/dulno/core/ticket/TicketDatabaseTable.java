@@ -28,14 +28,14 @@ public final class TicketDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("title", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT));
-    columns.add(DatabaseColumn.create("expirationTime", DatabaseDataType.BIGINT,
+    columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseListColumn.create("messages", DatabaseDataType.UUID));
-    columns.add(DatabaseColumn.create("lastMessageSeen", DatabaseDataType.BOOLEAN));
+    columns.add(DatabaseColumn.create("last_message_seen", DatabaseDataType.BOOLEAN));
     var table = new TicketDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     table.createIndexIfNotExists("status");
-    table.createIndexIfNotExists("lastMessageSeen");
+    table.createIndexIfNotExists("last_message_seen");
     table.createIndexIfNotExists("title",
       "'org.apache.cassandra.index.sasi.SASIIndex' WITH OPTIONS = " +
         "{'mode': 'CONTAINS', 'analyzer_class': " +
@@ -67,7 +67,7 @@ public final class TicketDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("status", DatabaseDataType.TEXT,
       DatabaseColumn.Type.PARTITION_KEY));
-    columns.add(DatabaseColumn.create("expirationTime", DatabaseDataType.BIGINT,
+    columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("creator", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
@@ -80,14 +80,14 @@ public final class TicketDatabaseTable extends DatabaseTable {
   public CompletableFuture<Void> insertTicket(Ticket ticket) {
     return insertTicket(ticket.id(), ticket.creator(), ticket.title(),
       ticket.type().toString(), ticket.status().toString(),
-      ticket.expirationTime(), ticket.messages(), ticket.lastMessageSeen());
+      ticket.expiration(), ticket.messages(), ticket.lastMessageSeen());
   }
 
   public CompletableFuture<Void> insertTicket(
     UUID id, UUID creator, String title, String type, String status,
-    long expirationTime, List<UUID> messageIds, boolean lastMessageSeen
+    long expiration, List<UUID> messageIds, boolean lastMessageSeen
   ) {
-    return insert(DatabaseRow.of(creator, id, title, type, status, expirationTime,
+    return insert(DatabaseRow.of(creator, id, title, type, status, expiration,
       messageIds, lastMessageSeen));
   }
 
@@ -151,10 +151,10 @@ public final class TicketDatabaseTable extends DatabaseTable {
 
   private CompletableFuture<Void> updateTicket(Ticket ticket) {
     var condition = DatabaseCondition.of("creator", ticket.creator(),
-      "id", ticket.id(), "expirationTime", ticket.expirationTime());
+      "id", ticket.id(), "expiration", ticket.expiration());
     return update(condition, DatabaseRow.of(ticket.creator(), ticket.id(),
       ticket.title(), ticket.type().toString(), ticket.status().toString(),
-      ticket.expirationTime(), ticket.messages(), ticket.lastMessageSeen()));
+      ticket.expiration(), ticket.messages(), ticket.lastMessageSeen()));
   }
 
   public CompletableFuture<UUID> generateAvailableTicketId() {
@@ -173,7 +173,7 @@ public final class TicketDatabaseTable extends DatabaseTable {
   public CompletableFuture<Void> deleteTicket(UUID ticketId) {
     return findTicket(ticketId).thenCompose(ticket ->
       delete(DatabaseCondition.of("creator", ticket.creator(), "id", ticket.id(),
-        "expirationTime", ticket.expirationTime())));
+        "expiration", ticket.expiration())));
   }
 
   public CompletableFuture<Ticket> findTicket(UUID ticketId) {
@@ -264,7 +264,7 @@ public final class TicketDatabaseTable extends DatabaseTable {
   public CompletableFuture<Boolean> hasUnseenTickets(UUID creatorId) {
     return exists(DatabaseCondition.of(
       DatabaseComparison.create("creator", creatorId),
-      DatabaseComparison.create("lastMessageSeen", false)));
+      DatabaseComparison.create("last_message_seen", false)));
   }
 
   public CompletableFuture<List<Ticket>> findOpenTickets() {
@@ -275,7 +275,7 @@ public final class TicketDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Long> countPendingTickets() {
     return statusExpirationView.count(DatabaseCondition.of(
-      DatabaseComparison.create("expirationTime", -1L),
+      DatabaseComparison.create("expiration", -1L),
       DatabaseComparison.create("status", Ticket.Status.OPEN.toString())));
   }
 }

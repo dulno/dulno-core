@@ -16,8 +16,11 @@ public final class MemberPasswordResetDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("member", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("resetToken", DatabaseDataType.TEXT));
-    return new MemberPasswordResetDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    columns.add(DatabaseColumn.create("reset_token", DatabaseDataType.TEXT));
+    var table = new MemberPasswordResetDatabaseTable(connection, keyspace,
+      TABLE_NAME, columns);
+    table.createIfNotExists();
+    return table;
   }
 
   private MemberPasswordResetDatabaseTable(
