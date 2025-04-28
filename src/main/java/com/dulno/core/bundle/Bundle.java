@@ -19,15 +19,14 @@ public final class Bundle {
       BundleType.valueOf(row.findCell(1).stringValue()),
       BundleRuntime.valueOf(row.findCell(2).stringValue()),
       row.findCell(3).doubleValue(), row.findCell(4).longValue(),
+      content.getBoolean("portal_access"),
       content.getBoolean("collection_card_access"),
       content.getBoolean("value_card_access"),
       content.getBoolean("member_card_access"),
       content.getBoolean("analysis_access"),
+      content.getBoolean("balances_access"),
       content.getBoolean("campaign_access"),
-      content.getBoolean("notification_access"),
-      content.getBoolean("portal_access"),
-      content.getBoolean("multi_portal_user_access"),
-      content.getBoolean("portal_permission_access"));
+      content.getBoolean("notification_access"));
   }
 
   public static Bundle of(
@@ -46,11 +45,10 @@ public final class Bundle {
     UUID partnerId, BundlePreset preset, BundleRuntime runtime, double price
   ) {
     return create(partnerId, preset.bundleType(), runtime, price,
-      calculateBundleExpiration(runtime), preset.collectionCardAccess(),
-      preset.valueCardAccess(), preset.memberCardAccess(),
-      preset.analysisAccess(), preset.campaignAccess(), preset.notificationAccess(),
-      preset.portalAccess(), preset.multiPortalUserAccess(),
-      preset.portalPermissionAccess());
+      calculateBundleExpiration(runtime), preset.portalAccess(),
+      preset.collectionCardAccess(), preset.valueCardAccess(),
+      preset.memberCardAccess(), preset.analysisAccess(), preset.balancesAccess(),
+      preset.campaignAccess(), preset.notificationAccess());
   }
 
   public static Bundle of(
@@ -59,10 +57,9 @@ public final class Bundle {
   ) {
     return create(partnerId, preset.bundleType(), runtime,
       price, runtime.isUnbound() ? expiration : calculateBundleExpiration(runtime),
-      preset.collectionCardAccess(), preset.valueCardAccess(),
-      preset.memberCardAccess(), preset.analysisAccess(), preset.campaignAccess(),
-      preset.notificationAccess(), preset.portalAccess(),
-      preset.multiPortalUserAccess(), preset.portalPermissionAccess());
+      preset.portalAccess(), preset.collectionCardAccess(), preset.valueCardAccess(),
+      preset.memberCardAccess(), preset.analysisAccess(), preset.balancesAccess(),
+      preset.campaignAccess(), preset.notificationAccess());
   }
 
   private static long calculateBundleExpiration(BundleRuntime runtime) {
@@ -80,15 +77,14 @@ public final class Bundle {
   private final BundleRuntime bundleRuntime;
   private final double price;
   private long expiration;
+  private final boolean portalAccess;
   private final boolean collectionCardAccess;
   private final boolean valueCardAccess;
   private final boolean memberCardAccess;
   private final boolean analysisAccess;
+  private final boolean balancesAccess;
   private final boolean campaignAccess;
   private final boolean notificationAccess;
-  private final boolean portalAccess;
-  private final boolean multiPortalUserAccess;
-  private final boolean portalPermissionAccess;
 
   public void extend() {
     expiration = calculateBundleExpiration(bundleRuntime);
@@ -96,15 +92,14 @@ public final class Bundle {
 
   public String serializeContent() {
     var content = new JSONObject();
+    content.put("portal_access", portalAccess);
     content.put("collection_card_access", collectionCardAccess);
     content.put("value_card_access", valueCardAccess);
     content.put("member_card_access", memberCardAccess);
     content.put("analysis_access", analysisAccess);
+    content.put("balances_access", balancesAccess);
     content.put("campaign_access", campaignAccess);
     content.put("notification_access", notificationAccess);
-    content.put("portal_access", portalAccess);
-    content.put("multi_portal_user_access", multiPortalUserAccess);
-    content.put("portal_permission_access", portalPermissionAccess);
     return content.toString();
   }
 }
