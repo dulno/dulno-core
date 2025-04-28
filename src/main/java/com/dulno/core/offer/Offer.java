@@ -22,15 +22,14 @@ public final class Offer {
       BundleType.valueOf(row.findCell(4).stringValue()),
       BundleRuntime.valueOf(row.findCell(5).stringValue()),
       row.findCell(6).doubleValue(),
+      content.getBoolean("portal_access"),
       content.getBoolean("collection_card_access"),
       content.getBoolean("value_card_access"),
       content.getBoolean("member_card_access"),
       content.getBoolean("analysis_access"),
+      content.getBoolean("balance_access"),
       content.getBoolean("campaign_access"),
-      content.getBoolean("notification_access"),
-      content.getBoolean("portal_access"),
-      content.getBoolean("multi_portal_user_access"),
-      content.getBoolean("portal_permission_access"));
+      content.getBoolean("notification_access"));
   }
 
   public static Offer of(
@@ -38,10 +37,9 @@ public final class Offer {
     BundlePreset preset, BundleRuntime runtime, double price
   ) {
     return create(id, partnerId, priceId, offerStatus, preset.bundleType(),
-      runtime, price, preset.collectionCardAccess(), preset.valueCardAccess(),
-      preset.memberCardAccess(), preset.analysisAccess(), preset.campaignAccess(),
-      preset.notificationAccess(), preset.portalAccess(),
-      preset.multiPortalUserAccess(), preset.portalPermissionAccess());
+      runtime, price, preset.portalAccess(), preset.collectionCardAccess(),
+      preset.valueCardAccess(), preset.memberCardAccess(), preset.analysisAccess(),
+      preset.balanceAccess(), preset.campaignAccess(), preset.notificationAccess());
   }
 
   private final UUID id;
@@ -51,15 +49,14 @@ public final class Offer {
   private final BundleType bundleType;
   private final BundleRuntime bundleRuntime;
   private final double price;
+  private final boolean portalAccess;
   private final boolean collectionCardAccess;
   private final boolean valueCardAccess;
   private final boolean memberCardAccess;
   private final boolean analysisAccess;
+  private final boolean balanceAccess;
   private final boolean campaignAccess;
   private final boolean notificationAccess;
-  private final boolean portalAccess;
-  private final boolean multiPortalUserAccess;
-  private final boolean portalPermissionAccess;
 
   public void updateStatus(OfferStatus newStatus) {
     offerStatus = newStatus;
@@ -67,9 +64,9 @@ public final class Offer {
 
   public Bundle toBundle() {
     return Bundle.create(partnerId, bundleType, bundleRuntime, price,
-      calculateBundleExpiration(bundleRuntime), collectionCardAccess,
-      valueCardAccess, memberCardAccess, analysisAccess, campaignAccess,
-      notificationAccess, portalAccess, multiPortalUserAccess, portalPermissionAccess);
+      calculateBundleExpiration(bundleRuntime), portalAccess,
+      collectionCardAccess, valueCardAccess, memberCardAccess, analysisAccess,
+      balanceAccess, campaignAccess, notificationAccess);
   }
 
   private long calculateBundleExpiration(BundleRuntime runtime) {
@@ -87,15 +84,14 @@ public final class Offer {
 
   public String serializeContent() {
     var content = new JSONObject();
+    content.put("portal_access", portalAccess);
     content.put("collection_card_access", collectionCardAccess);
     content.put("value_card_access", valueCardAccess);
     content.put("member_card_access", memberCardAccess);
     content.put("analysis_access", analysisAccess);
+    content.put("balance_access", balanceAccess);
     content.put("campaign_access", campaignAccess);
     content.put("notification_access", notificationAccess);
-    content.put("portal_access", portalAccess);
-    content.put("multi_portal_user_access", multiPortalUserAccess);
-    content.put("portal_permission_access", portalPermissionAccess);
     return content.toString();
   }
 }
