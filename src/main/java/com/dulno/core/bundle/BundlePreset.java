@@ -21,15 +21,14 @@ public final class BundlePreset extends Configuration {
   private boolean hasPrice;
   private double monthlyPrice;
   private double yearlyPrice;
+  private boolean portalAccess;
   private boolean collectionCardAccess;
   private boolean valueCardAccess;
   private boolean memberCardAccess;
   private boolean analysisAccess;
+  private boolean balanceAccess;
   private boolean campaignAccess;
   private boolean notificationAccess;
-  private boolean portalAccess;
-  private boolean multiPortalUserAccess;
-  private boolean portalPermissionAccess;
 
   private BundlePreset(String path, BundleType bundleType) {
     super(path);
@@ -43,14 +42,13 @@ public final class BundlePreset extends Configuration {
       monthlyPrice = json.getDouble("monthlyPrice");
       yearlyPrice = json.getDouble("yearlyPrice");
     }
+    portalAccess = json.getBoolean("portalAccess");
     collectionCardAccess = json.getBoolean("collectionCardAccess");
     valueCardAccess = json.getBoolean("valueCardAccess");
     memberCardAccess = json.getBoolean("memberCardAccess");
     analysisAccess = json.getBoolean("analysisAccess");
+    balanceAccess = json.getBoolean("balanceAccess");
     campaignAccess = json.getBoolean("campaignAccess");
     notificationAccess = json.getBoolean("notificationAccess");
-    portalAccess = json.getBoolean("portalAccess");
-    multiPortalUserAccess = json.getBoolean("multiPortalUserAccess");
-    portalPermissionAccess = json.getBoolean("portalPermissionAccess");
   }
 }
