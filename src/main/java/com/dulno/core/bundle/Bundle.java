@@ -24,7 +24,7 @@ public final class Bundle {
       content.getBoolean("value_card_access"),
       content.getBoolean("member_card_access"),
       content.getBoolean("analysis_access"),
-      content.getBoolean("balances_access"),
+      content.getBoolean("balance_access"),
       content.getBoolean("campaign_access"),
       content.getBoolean("notification_access"));
   }
@@ -47,7 +47,7 @@ public final class Bundle {
     return create(partnerId, preset.bundleType(), runtime, price,
       calculateBundleExpiration(runtime), preset.portalAccess(),
       preset.collectionCardAccess(), preset.valueCardAccess(),
-      preset.memberCardAccess(), preset.analysisAccess(), preset.balancesAccess(),
+      preset.memberCardAccess(), preset.analysisAccess(), preset.balanceAccess(),
       preset.campaignAccess(), preset.notificationAccess());
   }
 
@@ -58,7 +58,7 @@ public final class Bundle {
     return create(partnerId, preset.bundleType(), runtime,
       price, runtime.isUnbound() ? expiration : calculateBundleExpiration(runtime),
       preset.portalAccess(), preset.collectionCardAccess(), preset.valueCardAccess(),
-      preset.memberCardAccess(), preset.analysisAccess(), preset.balancesAccess(),
+      preset.memberCardAccess(), preset.analysisAccess(), preset.balanceAccess(),
       preset.campaignAccess(), preset.notificationAccess());
   }
 
@@ -82,7 +82,7 @@ public final class Bundle {
   private final boolean valueCardAccess;
   private final boolean memberCardAccess;
   private final boolean analysisAccess;
-  private final boolean balancesAccess;
+  private final boolean balanceAccess;
   private final boolean campaignAccess;
   private final boolean notificationAccess;
 
@@ -97,7 +97,7 @@ public final class Bundle {
     content.put("value_card_access", valueCardAccess);
     content.put("member_card_access", memberCardAccess);
     content.put("analysis_access", analysisAccess);
-    content.put("balances_access", balancesAccess);
+    content.put("balance_access", balanceAccess);
     content.put("campaign_access", campaignAccess);
     content.put("notification_access", notificationAccess);
     return content.toString();
