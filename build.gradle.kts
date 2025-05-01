@@ -5,7 +5,7 @@ import java.util.zip.GZIPInputStream
 plugins {
   id("java")
   id("maven-publish")
-  id("org.springframework.boot") version "3.4.3"
+  id("org.springframework.boot") version "3.4.5"
   id("io.freefair.lombok") version "8.13.1"
 }
 
@@ -60,7 +60,7 @@ dependencies {
 
   implementation("io.netty:netty-all:4.1.119.Final")
 
-  implementation("org.springframework.boot:spring-boot-starter-web:3.4.3")
+  implementation("org.springframework.boot:spring-boot-starter-web:3.4.5")
 
   implementation("de.mkammerer:argon2-jvm:2.12")
 
