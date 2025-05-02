@@ -47,6 +47,7 @@ public final class Notification {
     content.put("body", body);
     content.putAll(data);
     message.put("data", content);
+    message.put("notification", content);
     var android = Maps.<String, Object>newHashMap();
     android.put("priority", "HIGH");
     message.put("android", android);
