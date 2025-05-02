@@ -5,8 +5,8 @@ import java.util.zip.GZIPInputStream
 plugins {
   id("java")
   id("maven-publish")
-  id("org.springframework.boot") version "3.4.3"
-  id("io.freefair.lombok") version "8.13"
+  id("org.springframework.boot") version "3.4.5"
+  id("io.freefair.lombok") version "8.13.1"
 }
 
 group = "com.dulno"
@@ -40,27 +40,27 @@ repositories {
 }
 
 dependencies {
-  testImplementation(platform("org.junit:junit-bom:5.12.1"))
-  testImplementation("org.junit.jupiter:junit-jupiter:5.12.1")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.1")
+  testImplementation(platform("org.junit:junit-bom:5.12.2"))
+  testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
 
   implementation("com.google.inject:guice:7.0.0")
 
-  implementation("com.google.guava:guava:33.4.0-jre")
+  implementation("com.google.guava:guava:33.4.8-jre")
 
-  implementation("org.projectlombok:lombok:1.18.36")
-  annotationProcessor("org.projectlombok:lombok:1.18.36")
-  testImplementation("org.projectlombok:lombok:1.18.36")
-  testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
+  implementation("org.projectlombok:lombok:1.18.38")
+  annotationProcessor("org.projectlombok:lombok:1.18.38")
+  testImplementation("org.projectlombok:lombok:1.18.38")
+  testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
 
   implementation("com.datastax.oss:java-driver-core:4.17.0")
 
   implementation("org.json:json:20250107")
-  implementation("commons-io:commons-io:2.18.0")
+  implementation("commons-io:commons-io:2.19.0")
 
-  implementation("io.netty:netty-all:4.1.119.Final")
+  implementation("io.netty:netty-all:4.2.0.Final")
 
-  implementation("org.springframework.boot:spring-boot-starter-web:3.4.3")
+  implementation("org.springframework.boot:spring-boot-starter-web:3.4.5")
 
   implementation("de.mkammerer:argon2-jvm:2.12")
 
@@ -68,7 +68,7 @@ dependencies {
 
   implementation("com.sun.mail:javax.mail:1.6.2")
 
-  implementation("com.stripe:stripe-java:28.4.0")
+  implementation("com.stripe:stripe-java:29.1.0")
 
   implementation("dev.samstevens.totp:totp:1.7.1")
 
