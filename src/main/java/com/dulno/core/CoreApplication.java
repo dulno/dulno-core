@@ -13,6 +13,7 @@ import com.dulno.core.intro.Intro;
 import com.dulno.core.log.Log;
 import com.dulno.core.maintenance.MaintenanceSchedule;
 import com.dulno.core.module.ModuleLoader;
+import com.dulno.core.notification.NotificationFactory;
 import com.dulno.core.worker.WorkerConfiguration;
 import com.dulno.core.worker.WorkerDistribution;
 import com.dulno.core.worker.client.WorkerOperatorClient;
@@ -60,6 +61,8 @@ public class CoreApplication {
         injector.getInstance(WorkerOperatorClient.class)
           .sendPacket(new PacketOutgoingDisconnect())));
       eventExecutor.execute(ApplicationPostRunEvent.create());
+      injector.getInstance(NotificationFactory.class)
+        .create("dulno", "Test 123", "Test").send();
     } catch (Exception exception) {
       errorRepository.processError(exception);
     }
