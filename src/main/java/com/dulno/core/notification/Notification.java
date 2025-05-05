@@ -35,9 +35,7 @@ public final class Notification {
       .setHeader("Authorization", "Bearer " + token)
       .build();
     HttpClient.newHttpClient().sendAsync(requestBuilder,
-      HttpResponse.BodyHandlers.ofByteArray())
-      .thenAccept(value -> System.out.println(value.statusCode() + ": " +
-        new String(value.body())));
+      HttpResponse.BodyHandlers.ofByteArray());
   }
 
   private Map<String, Object> createPayload() {
@@ -52,7 +50,6 @@ public final class Notification {
     message.put("android", createAndroidPayload());
     message.put("apns", createIOSPayload());
     payload.put("message", message);
-    System.out.println(payload);
     return payload;
   }
 
