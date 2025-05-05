@@ -35,7 +35,9 @@ public final class Notification {
       .setHeader("Authorization", "Bearer " + token)
       .build();
     HttpClient.newHttpClient().sendAsync(requestBuilder,
-      HttpResponse.BodyHandlers.ofByteArray());
+      HttpResponse.BodyHandlers.ofByteArray())
+      .thenAccept(value -> System.out.println(value.statusCode() + ": " +
+        new String(value.body())));
   }
 
   private Map<String, Object> createPayload() {
@@ -47,11 +49,31 @@ public final class Notification {
     content.put("body", body);
     content.putAll(data);
     message.put("data", content);
-    message.put("notification", content);
+    message.put("android", createAndroidPayload());
+    message.put("apns", createIOSPayload());
+    payload.put("message", message);
+    System.out.println(payload);
+    return payload;
+  }
+
+  private Map<String, Object> createAndroidPayload() {
     var android = Maps.<String, Object>newHashMap();
     android.put("priority", "HIGH");
-    message.put("android", android);
-    payload.put("message", message);
-    return payload;
+    return android;
+  }
+
+  private Map<String, Object> createIOSPayload() {
+    var apns = Maps.<String, Object>newHashMap();
+    var headers = Maps.<String, Object>newHashMap();
+    headers.put("apns-priority", "10");
+    apns.put("headers", headers);
+    var payload = Maps.<String, Object>newHashMap();
+    var aps = Maps.<String, Object>newHashMap();
+    aps.put("badge", 1);
+    payload.put("aps", aps);
+    payload.put("mutable_content", true);
+    payload.put("content_available", true);
+    apns.put("payload", payload);
+    return apns;
   }
 }
