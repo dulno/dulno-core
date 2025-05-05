@@ -66,10 +66,11 @@ public final class Notification {
     apns.put("headers", headers);
     var payload = Maps.<String, Object>newHashMap();
     var aps = Maps.<String, Object>newHashMap();
-    aps.put("badge", 1);
+    var alert = Maps.<String, Object>newHashMap();
+    alert.put("title", title);
+    alert.put("body", body);
+    aps.put("alert", alert);
     payload.put("aps", aps);
-    payload.put("mutable_content", true);
-    payload.put("content_available", true);
     apns.put("payload", payload);
     return apns;
   }
