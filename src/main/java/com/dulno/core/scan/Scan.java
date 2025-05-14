@@ -25,6 +25,7 @@ public final class Scan {
       row.findCell(columns.indexOf("partner")).uuidValue(),
       row.findCell(columns.indexOf("picc")).stringValue(),
       row.findCell(columns.indexOf("cmac")).stringValue(),
+      row.findCell(columns.indexOf("counter")).integerValue(),
       row.findCell(columns.indexOf("time")).longValue());
   }
 
@@ -34,5 +35,6 @@ public final class Scan {
   private final UUID partnerId;
   private final String picc;
   private final String cmac;
+  private final int counter;
   private final long time;
 }
