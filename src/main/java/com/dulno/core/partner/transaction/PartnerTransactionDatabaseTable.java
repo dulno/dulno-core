@@ -20,6 +20,7 @@ public final class PartnerTransactionDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.CLUSTERING_KEY));
     columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("item", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("value", DatabaseDataType.DOUBLE));
     columns.add(DatabaseColumn.create("time", DatabaseDataType.BIGINT));
     var table = new PartnerTransactionDatabaseTable(connection, keyspace,
@@ -32,21 +33,24 @@ public final class PartnerTransactionDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
-    super(connection, keyspace, name, columns);
+    super(connection, keyspace, name, columns,
+      PartnerTransactionDatabaseTableTransformation.create());
   }
 
   public CompletableFuture<Void> insertPartnerTransaction(
     PartnerTransaction transaction
   ) {
     return insertPartnerTransaction(transaction.partnerId(),
-      transaction.transactionId(), transaction.cardId(), transaction.value(),
-      transaction.time());
+      transaction.transactionId(), transaction.cardId(), transaction.itemId(),
+      transaction.value(), transaction.time());
   }
 
   public CompletableFuture<Void> insertPartnerTransaction(
-    UUID partnerId, UUID transactionId, UUID cardId, double value, long time
+    UUID partnerId, UUID transactionId, UUID cardId, UUID itemId, double value,
+    long time
   ) {
-    return insert(DatabaseRow.of(partnerId, transactionId, cardId, value, time));
+    return insert(DatabaseRow.of(partnerId, transactionId, cardId, itemId,
+      value, time));
   }
 
   public CompletableFuture<Void> deletePartnerTransaction(
