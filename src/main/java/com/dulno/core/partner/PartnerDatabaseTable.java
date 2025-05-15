@@ -18,6 +18,7 @@ public final class PartnerDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("name", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("description", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("visibility", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("accession", DatabaseDataType.BIGINT));
     var table = new PartnerDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
@@ -33,18 +34,18 @@ public final class PartnerDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertPartner(Partner partner) {
     return insertPartner(partner.id(), partner.name(), partner.description(),
-      partner.accession());
+      partner.visibility().toString(), partner.accession());
   }
 
   public CompletableFuture<Void> insertPartner(
-    UUID id, String name, String description, long accession
+    UUID id, String name, String description, String visibility, long accession
   ) {
-    return insert(DatabaseRow.of(id, name, description, accession));
+    return insert(DatabaseRow.of(id, name, description, visibility, accession));
   }
 
   public CompletableFuture<Void> updatePartner(Partner partner) {
     return update(partner.id(), DatabaseRow.of(partner.id(), partner.name(),
-      partner.description(), partner.accession()));
+      partner.description(), partner.visibility().toString(), partner.accession()));
   }
 
   public CompletableFuture<UUID> generateAvailablePartnerId() {
