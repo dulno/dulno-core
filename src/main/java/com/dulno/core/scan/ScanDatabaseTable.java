@@ -24,6 +24,7 @@ public final class ScanDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("stamp", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("card", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("counter", DatabaseDataType.INT));
     columns.add(DatabaseColumn.create("time", DatabaseDataType.BIGINT));
     var table = new ScanDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
@@ -37,10 +38,11 @@ public final class ScanDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
-    super(connection, keyspace, name, columns);
+    super(connection, keyspace, name, columns,
+      ScanDatabaseTableTransformation.create());
   }
 
-  private void initializeViews() {
+  public void initializeViews() {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("picc", DatabaseDataType.TEXT,
       DatabaseColumn.Type.PARTITION_KEY));
@@ -53,15 +55,15 @@ public final class ScanDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertScan(Scan scan) {
     return insertScan(scan.id(), scan.picc(), scan.cmac(), scan.stampId(),
-      scan.cardId(), scan.partnerId(), scan.time());
+      scan.cardId(), scan.partnerId(), scan.counter(), scan.time());
   }
 
   public CompletableFuture<Void> insertScan(
     UUID id, String picc, String cmac, UUID stampId, UUID cardId,
-    UUID partnerId, long time
+    UUID partnerId, int counter, long time
   ) {
     return insert(DatabaseRow.of(id, picc, cmac, stampId, cardId, partnerId,
-      time));
+      counter, time));
   }
 
   public CompletableFuture<UUID> generateAvailableScanId() {

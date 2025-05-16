@@ -13,12 +13,15 @@ import java.util.UUID;
 public final class Partner {
   public static Partner of(DatabaseRow row) {
     return create(row.findCell(0).uuidValue(), row.findCell(1).stringValue(),
-      row.findCell(2).stringValue(), row.findCell(3).longValue());
+      row.findCell(2).stringValue(),
+      PartnerVisibility.valueOf(row.findCell(3).stringValue()),
+      row.findCell(4).longValue());
   }
 
   private final UUID id;
   private String name;
   private String description;
+  private final PartnerVisibility visibility;
   private final long accession;
 
   public void changeName(String newName) {

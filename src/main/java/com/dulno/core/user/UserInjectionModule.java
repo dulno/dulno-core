@@ -8,6 +8,7 @@ import com.dulno.core.user.partner.UserPartnerDatabaseTable;
 import com.dulno.core.user.scan.UserScanDatabaseTable;
 import com.dulno.core.user.statistic.UserAppOpenDatabaseTable;
 import com.dulno.core.user.statistic.UserJoinDatabaseTable;
+import com.dulno.core.user.statistic.UserStatisticConfiguration;
 import com.dulno.core.user.verification.UserVerificationDatabaseTable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -78,5 +79,11 @@ public final class UserInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return UserAppOpenDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  UserStatisticConfiguration provideUserStatisticConfiguration() throws Exception {
+    return UserStatisticConfiguration.createAndLoad();
   }
 }

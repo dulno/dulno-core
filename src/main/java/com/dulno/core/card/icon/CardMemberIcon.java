@@ -12,7 +12,8 @@ public enum CardMemberIcon {
   CROWN("crown", "card.member.icon.crown"),
   STAR("star", "card.member.icon.star"),
   HEART("heart", "card.member.icon.heart"),
-  USER("circle-user", "card.member.icon.user");
+  USER("circle-user", "card.member.icon.user"),
+  NONE("none", "card.member.icon.none");
 
   private final String identifier;
   private final String locale;

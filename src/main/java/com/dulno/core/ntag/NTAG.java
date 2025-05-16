@@ -9,6 +9,7 @@ import com.dulno.core.ntag.lrp.LRPCipher;
 import com.dulno.core.ntag.lrp.LRPMultiCipher;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.stream.IntStream;
 
+@Accessors(fluent = true)
 @RequiredArgsConstructor(staticName = "create")
 public final class NTAG {
   public static NTAG of(

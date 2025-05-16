@@ -157,7 +157,7 @@ public interface TransformableDatabaseTable extends AbstractDatabaseTable,
   ) {
     return origin.countFix()
       .thenCompose(originCount -> destination.countFix()
-        .thenApply(destinationCount -> originCount == destinationCount));
+        .thenApply(originCount::equals));
   }
 
   /**

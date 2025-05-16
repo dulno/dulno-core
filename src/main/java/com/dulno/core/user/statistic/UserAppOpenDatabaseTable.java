@@ -17,6 +17,7 @@ public final class UserAppOpenDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("date", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("version", DatabaseDataType.TEXT));
     var table = new UserAppOpenDatabaseTable(connection, keyspace, TABLE_NAME,
       columns);
     table.createIfNotExists();
@@ -27,18 +28,19 @@ public final class UserAppOpenDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
-    super(connection, keyspace, name, columns);
+    super(connection, keyspace, name, columns,
+      UserAppOpenDatabaseTableTransformation.create());
   }
 
-  public CompletableFuture<Void> insertUserAppOpen(long date) {
+  public CompletableFuture<Void> insertUserAppOpen(long date, String version) {
     return generateAvailableUserAppOpenId()
-      .thenCompose(appOpenId -> insert(DatabaseRow.of(appOpenId, date)));
+      .thenCompose(appOpenId -> insert(DatabaseRow.of(appOpenId, date, version)));
   }
 
   public CompletableFuture<Void> insertUserAppOpen(
-    UUID appOpenId, long date
+    UUID appOpenId, long date, String version
   ) {
-    return insert(DatabaseRow.of(appOpenId, date));
+    return insert(DatabaseRow.of(appOpenId, date, version));
   }
 
   public CompletableFuture<UUID> generateAvailableUserAppOpenId() {
@@ -58,9 +60,8 @@ public final class UserAppOpenDatabaseTable extends DatabaseTable {
     return delete(appOpenId);
   }
 
-  public CompletableFuture<List<Long>> findAllUserAppOpens() {
-    return selectAllRows()
-      .thenApply(rows -> rows.stream().map(row -> row.findCell(0).longValue())
-        .toList());
+  public CompletableFuture<List<UserAppOpen>> findAllUserAppOpens() {
+    return selectAllRows().thenApply(rows ->
+      rows.stream().map(UserAppOpen::of).toList());
   }
 }

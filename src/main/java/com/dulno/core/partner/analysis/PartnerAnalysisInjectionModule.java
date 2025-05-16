@@ -3,10 +3,12 @@ package com.dulno.core.partner.analysis;
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
 import com.dulno.core.partner.analysis.card.PartnerActiveCardDatabaseTable;
+import com.dulno.core.partner.analysis.card.PartnerCardGroupDatabaseTable;
 import com.dulno.core.partner.analysis.card.PartnerCardUsageDatabaseTable;
 import com.dulno.core.partner.analysis.card.PartnerNewCardDatabaseTable;
 import com.dulno.core.partner.analysis.stamp.PartnerOpenStampDatabaseTable;
 import com.dulno.core.partner.analysis.stamp.PartnerScanDatabaseTable;
+import com.dulno.core.partner.analysis.user.PartnerActiveUserDatabaseTable;
 import com.dulno.core.partner.analysis.user.PartnerNewUserDatabaseTable;
 import com.dulno.core.partner.analysis.user.PartnerUserLanguageDatabaseTable;
 import com.google.inject.AbstractModule;
@@ -70,5 +72,21 @@ public final class PartnerAnalysisInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return PartnerOpenStampDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerCardGroupDatabaseTable providePartnerCardGroupDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerCardGroupDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerActiveUserDatabaseTable providePartnerActiveUserDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerActiveUserDatabaseTable.create(connection, keyspace);
   }
 }
