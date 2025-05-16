@@ -55,6 +55,11 @@ public final class UserItemDatabaseTable extends DatabaseTable {
     return itemView.exists(DatabaseCondition.of("item", itemId));
   }
 
+  public CompletableFuture<UUID> findItemUser(UUID itemId) {
+    return itemView.selectRow(DatabaseCondition.of("item", itemId))
+      .thenApply(row -> row.findCell(1).uuidValue());
+  }
+
   public CompletableFuture<List<UUID>> findUserItems(UUID userId) {
     return selectRows(DatabaseCondition.of("user", userId))
       .thenApply(rows -> rows.stream().map(row -> row.findCell(1).uuidValue())

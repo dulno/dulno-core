@@ -18,6 +18,7 @@
   "card.member.icon.star": "Star",
   "card.member.icon.heart": "Heart",
   "card.member.icon.user": "User",
+  "card.member.icon.none": "None",
 
   "partner.link.type.website": "Website",
   "partner.link.type.instagram": "Instagram",
