@@ -69,4 +69,10 @@ public final class PartnerNewCardDatabaseTable extends DatabaseTable {
       .thenApply(rows -> rows.stream().map(row -> row.findCell(0).longValue())
         .toList());
   }
+
+  public CompletableFuture<List<Long>> findAllNewCards() {
+    return selectAllRowsColumns(Lists.newArrayList(findColumnByName("date")))
+      .thenApply(rows -> rows.stream().map(row -> row.findCell(0).longValue())
+        .toList());
+  }
 }

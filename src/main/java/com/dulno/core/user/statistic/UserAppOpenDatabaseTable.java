@@ -60,7 +60,7 @@ public final class UserAppOpenDatabaseTable extends DatabaseTable {
     return delete(appOpenId);
   }
 
-  public CompletableFuture<List<UserAppOpen>> findAllUserAppOpens() {
+  public CompletableFuture<List<UserAppOpen>> findAllUserAppOpenings() {
     return selectAllRows().thenApply(rows ->
       rows.stream().map(UserAppOpen::of).toList());
   }
