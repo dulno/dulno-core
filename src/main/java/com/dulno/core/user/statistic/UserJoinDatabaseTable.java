@@ -59,7 +59,7 @@ public final class UserJoinDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<List<Long>> findAllUserJoins() {
-    return selectAllRows()
+    return selectAllRowsColumns(Lists.newArrayList(findColumnByName("date")))
       .thenApply(rows -> rows.stream().map(row -> row.findCell(0).longValue())
         .toList());
   }

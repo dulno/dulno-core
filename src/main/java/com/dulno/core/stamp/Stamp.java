@@ -37,7 +37,7 @@ public final class Stamp {
   private String uid;
   private String masterKey;
   private String name;
-  private final StampType type;
+  private StampType type;
   private StampState state;
   private UUID assignedCard;
   private StampAssignmentRole assignmentRole;
@@ -53,6 +53,10 @@ public final class Stamp {
 
   public void changeName(String newName) {
     name = newName;
+  }
+
+  public void changeType(StampType newType) {
+    type = newType;
   }
 
   public void changeState(StampState newState) {

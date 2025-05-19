@@ -17,13 +17,34 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
    * @return List of all possible rows
    */
   default CompletableFuture<List<DatabaseRow>> selectAllRows() {
+    return selectAllRows(columnNameCompilation());
+  }
+
+  /**
+   * Finds all available rows inside the database table
+   * @param columns The columns which should be retrieved
+   * @return List of all possible rows
+   */
+  default CompletableFuture<List<DatabaseRow>> selectAllRowsColumns(
+    List<DatabaseColumn> columns
+  ) {
+
+    return selectAllRows(selectColumnNameCompilation(columns));
+  }
+
+  /**
+   * Finds all available rows inside the database table
+   * @param columnNames The name of the columns that should be selected
+   * @return List of all possible rows
+   */
+  default CompletableFuture<List<DatabaseRow>> selectAllRows(String columnNames) {
     CompletableFuture<List<DatabaseRow>> result;
     if (transformationState().isInactive() ||
       transformationState().isFillTemporary() || transformationState().isUseNew()
     ) {
-      result = selectAllRowsFix();
+      result = selectAllRowsFix(columnNames);
     } else {
-      result = temporaryTable().selectAllRowsFix();
+      result = temporaryTable().selectAllRowsFix(columnNames);
     }
     if (transformation() != null && (transformationState().isFillTemporary() ||
       transformationState().isUseTemporary() || transformationState().isFillNew())
@@ -37,16 +58,18 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   /**
    * Finds all available rows inside the database table ignoring
    * transformation processes
+   * @param columnNames The name of the columns that should be selected
    * @return List of all possible rows
    */
-  default CompletableFuture<List<DatabaseRow>> selectAllRowsFix() {
+  default CompletableFuture<List<DatabaseRow>> selectAllRowsFix(String columnNames) {
     var query = new StringBuilder("SELECT ");
-    query.append(columnNameCompilation());
+    query.append(columnNames);
     query.append(" FROM ");
     query.append(fullName());
     query.append(";");
+    var columnCount = columnNames.length() - columnNames.replace(",", "").length() + 1;
     return connection().execute(query).thenApply(result ->
-      DatabaseRow.multiple(result.currentPage(), columns().size()));
+      DatabaseRow.multiple(result.currentPage(), columnCount));
   }
 
   /**
@@ -66,10 +89,8 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   default CompletableFuture<DatabaseRow> selectRow(
     DatabaseCondition condition
   ) {
-    var futureResponse = new CompletableFuture<DatabaseRow>();
-    selectRows(condition).thenAccept(rows -> futureResponse.complete(
-      rows.isEmpty() ? DatabaseRow.of() : rows.get(0)));
-    return futureResponse;
+    return selectRows(condition)
+      .thenApply(rows -> rows.isEmpty() ? DatabaseRow.of() : rows.get(0));
   }
 
   /**
@@ -94,17 +115,8 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   default CompletableFuture<DatabaseRow> selectRowColumns(
     DatabaseCondition condition, List<DatabaseColumn> columns
   ) {
-    var compilation = new StringBuilder();
-    for (var i = 0; i < columns.size(); i++) {
-      compilation.append(columns.get(i).name());
-      if (i < columns.size() - 1) {
-        compilation.append(", ");
-      }
-    }
-    var futureResponse = new CompletableFuture<DatabaseRow>();
-    selectRows(condition, compilation.toString()).thenAccept(rows ->
-      futureResponse.complete(rows.isEmpty() ? DatabaseRow.of() : rows.get(0)));
-    return futureResponse;
+    return selectRows(condition, selectColumnNameCompilation(columns))
+      .thenApply(rows -> rows.isEmpty() ? DatabaseRow.of() : rows.get(0));
   }
 
   /**
@@ -129,17 +141,7 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   default CompletableFuture<List<DatabaseRow>> selectRowsColumns(
     DatabaseCondition condition, List<DatabaseColumn> columns
   ) {
-    var compilation = new StringBuilder();
-    for (var i = 0; i < columns.size(); i++) {
-      compilation.append(columns.get(i).name());
-      if (i < columns.size() - 1) {
-        compilation.append(", ");
-      }
-    }
-    var futureResponse = new CompletableFuture<List<DatabaseRow>>();
-    selectRows(condition, compilation.toString())
-      .thenAccept(futureResponse::complete);
-    return futureResponse;
+    return selectRows(condition, selectColumnNameCompilation(columns));
   }
 
   /**
@@ -159,10 +161,7 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   default CompletableFuture<Optional<DatabaseRow>> selectRowSecure(
     DatabaseCondition condition
   ) {
-    var futureResponse = new CompletableFuture<Optional<DatabaseRow>>();
-    selectRows(condition).thenAccept(rows ->
-      futureResponse.complete(rows.stream().findFirst()));
-    return futureResponse;
+    return selectRows(condition).thenApply(rows -> rows.stream().findFirst());
   }
 
   /**
@@ -230,6 +229,7 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
   /**
    * Is used to find a multiple rows ignoring transformation processes
    * @param condition The condition with which the rows can be found
+   * @param columnNames The name of the columns that should be selected
    * @param limit The limit of entries that should be returned
    * @return A future that contains the database rows
    */
@@ -254,5 +254,16 @@ public interface SelectableDatabaseTable extends AbstractDatabaseTable,
     var columnCount = columnNames.length() - columnNames.replace(",", "").length() + 1;
     return connection().execute(query, condition.values()).thenApply(result ->
       DatabaseRow.multiple(result.currentPage(), columnCount));
+  }
+
+  private String selectColumnNameCompilation(List<DatabaseColumn> columns) {
+    var compilation = new StringBuilder();
+    for (var i = 0; i < columns.size(); i++) {
+      compilation.append(columns.get(i).name());
+      if (i < columns.size() - 1) {
+        compilation.append(", ");
+      }
+    }
+    return compilation.toString();
   }
 }

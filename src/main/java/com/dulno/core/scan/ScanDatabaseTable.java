@@ -96,4 +96,10 @@ public final class ScanDatabaseTable extends DatabaseTable {
     return piccCmacView.selectRow(DatabaseCondition.of("picc", picc, "cmac", cmac))
       .thenApply(row -> Scan.of(row, piccCmacView));
   }
+
+  public CompletableFuture<List<Long>> findAllScans() {
+    return selectAllRowsColumns(Lists.newArrayList(findColumnByName("time")))
+      .thenApply(rows -> rows.stream().map(row -> row.findCell(0).longValue())
+        .toList());
+  }
 }
