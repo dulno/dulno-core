@@ -21,7 +21,7 @@ public final class Partner {
   private final UUID id;
   private String name;
   private String description;
-  private final PartnerVisibility visibility;
+  private PartnerVisibility visibility;
   private final long accession;
 
   public void changeName(String newName) {
@@ -30,5 +30,9 @@ public final class Partner {
 
   public void changeDescription(String newDescription) {
     description = newDescription;
+  }
+
+  public void changeVisibility(PartnerVisibility newVisibility) {
+    visibility = newVisibility;
   }
 }
