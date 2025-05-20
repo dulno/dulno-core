@@ -89,4 +89,9 @@ public final class CampaignDatabaseTable extends DatabaseTable {
       .thenApply(rows -> rows.stream().map(row -> Campaign.of(row, partnerView))
         .toList());
   }
+
+  public CompletableFuture<List<Campaign>> findAllCampaigns() {
+    return selectAllRows().thenApply(rows ->
+      rows.stream().map(row -> Campaign.of(row, this)).toList());
+  }
 }
