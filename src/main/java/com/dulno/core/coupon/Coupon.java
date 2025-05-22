@@ -23,7 +23,9 @@ public final class Coupon {
       row.findCell(columns.indexOf("partner")).uuidValue(),
       row.findCell(columns.indexOf("background_color")).stringValue(),
       row.findCell(columns.indexOf("foreground_color")).stringValue(),
+      row.findCell(columns.indexOf("reward")).stringValue(),
       row.findCell(columns.indexOf("description")).stringValue(),
+      row.findCell(columns.indexOf("expiration")).longValue(),
       row.findCell(columns.indexOf("creation")).longValue());
   }
 
@@ -31,7 +33,9 @@ public final class Coupon {
   private final UUID partnerId;
   private String backgroundColor;
   private String foregroundColor;
+  private String reward;
   private String description;
+  private long expiration;
   private final long creation;
 
   public void changeBackgroundColor(String newBackgroundColor) {
@@ -42,7 +46,15 @@ public final class Coupon {
     foregroundColor = newForegroundColor;
   }
 
+  public void changeReward(String newReward) {
+    reward = newReward;
+  }
+
   public void changeDescription(String newDescription) {
     description = newDescription;
+  }
+
+  public void changeExpiration(long newExpiration) {
+    expiration = newExpiration;
   }
 }

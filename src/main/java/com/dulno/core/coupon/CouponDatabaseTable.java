@@ -20,7 +20,9 @@ public final class CouponDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("partner", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("background_color", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("foreground_color", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("reward", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("description", DatabaseDataType.TEXT));
+    columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT));
     columns.add(DatabaseColumn.create("creation", DatabaseDataType.BIGINT));
     var table = new CouponDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
@@ -44,21 +46,22 @@ public final class CouponDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertCoupon(Coupon coupon) {
     return insertCoupon(coupon.id(), coupon.partnerId(), coupon.backgroundColor(),
-      coupon.foregroundColor(), coupon.description(), coupon.creation());
+      coupon.foregroundColor(), coupon.reward(),
+      coupon.description(), coupon.expiration(), coupon.creation());
   }
 
   public CompletableFuture<Void> insertCoupon(
     UUID id, UUID partner, String backgroundColor, String foregroundColor,
-    String description, long creation
+    String reward, String description, long expiration, long creation
   ) {
     return insert(DatabaseRow.of(id, partner, backgroundColor, foregroundColor,
-      description, creation));
+      reward, description, expiration, creation));
   }
 
   public CompletableFuture<Void> updateCoupon(Coupon coupon) {
     return update(coupon.id(), DatabaseRow.of(coupon.id(), coupon.partnerId(),
-      coupon.backgroundColor(), coupon.foregroundColor(), coupon.description(),
-      coupon.creation()));
+      coupon.backgroundColor(), coupon.foregroundColor(), coupon.reward(),
+      coupon.description(), coupon.expiration(), coupon.creation()));
   }
 
   public CompletableFuture<UUID> generateAvailableCouponId() {
@@ -84,6 +87,7 @@ public final class CouponDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<List<Coupon>> findCouponsOfPartner(UUID partnerId) {
     return partnerView.selectRows(DatabaseCondition.of("partner", partnerId))
-      .thenApply(rows -> rows.stream().map(row -> Coupon.of(row, partnerView)).toList());
+      .thenApply(rows -> rows.stream()
+        .map(row -> Coupon.of(row, partnerView)).toList());
   }
 }

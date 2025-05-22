@@ -68,6 +68,7 @@ public final class CouponLogoDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<CouponLogo> findCouponLogo(UUID couponId) {
-    return selectRow(DatabaseCondition.of("coupon", couponId)).thenApply(CouponLogo::of);
+    return selectRow(DatabaseCondition.of("coupon", couponId))
+      .thenApply(CouponLogo::of);
   }
 }
