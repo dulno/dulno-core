@@ -17,7 +17,6 @@ import com.dulno.core.log.Log;
 import com.dulno.core.mail.MailInjectionModule;
 import com.dulno.core.maintenance.MaintenanceInjectionModule;
 import com.dulno.core.member.MemberInjectionModule;
-import com.dulno.core.member.session.SessionInjectionModule;
 import com.dulno.core.module.ModuleInjectionModule;
 import com.dulno.core.module.ModuleLoader;
 import com.dulno.core.notification.NotificationInjectionModule;
@@ -53,7 +52,6 @@ public class CoreInjectionModule extends AbstractModule {
     install(DatabaseInjectionModule.create());
     install(PartnerInjectionModule.create());
     install(MemberInjectionModule.create());
-    install(SessionInjectionModule.create());
     install(MailInjectionModule.create());
     install(BundleInjectionModule.create());
     install(AccessoryInjectionModule.create());

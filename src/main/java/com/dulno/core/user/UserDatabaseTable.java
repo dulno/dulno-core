@@ -17,7 +17,6 @@ public final class UserDatabaseTable extends DatabaseTable {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
-    columns.add(DatabaseColumn.create("authentication_key", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("email", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("language", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("compliant", DatabaseDataType.BOOLEAN));
@@ -44,22 +43,21 @@ public final class UserDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> insertUser(User user) {
-    return insertUser(user.id(), user.authenticationKey(), user.email(),
-      user.language(), user.compliant(), user.newsletter(), user.accession());
+    return insertUser(user.id(), user.email(), user.language(), user.compliant(),
+      user.newsletter(), user.accession());
   }
 
   public CompletableFuture<Void> insertUser(
-    UUID id, String authenticationKey, String email, String language,
-    boolean compliant, boolean newsletter, long accession
+    UUID id, String email, String language, boolean compliant,
+    boolean newsletter, long accession
   ) {
-    return insert(DatabaseRow.of(id, authenticationKey, email.toLowerCase(),
-      language, compliant, newsletter, accession));
+    return insert(DatabaseRow.of(id, email.toLowerCase(), language, compliant,
+      newsletter, accession));
   }
 
   public CompletableFuture<Void> updateUser(User user) {
-    return update(user.id(), DatabaseRow.of(user.id(), user.authenticationKey(),
-      user.email().toLowerCase(), user.language(), user.compliant(),
-      user.newsletter(), user.accession()));
+    return update(user.id(), DatabaseRow.of(user.id(), user.email().toLowerCase(),
+      user.language(), user.compliant(), user.newsletter(), user.accession()));
   }
 
   public CompletableFuture<UUID> generateAvailableUserId() {

@@ -6,6 +6,7 @@ import com.dulno.core.user.device.UserDeviceDatabaseTable;
 import com.dulno.core.user.item.UserItemDatabaseTable;
 import com.dulno.core.user.partner.UserPartnerDatabaseTable;
 import com.dulno.core.user.scan.UserScanDatabaseTable;
+import com.dulno.core.user.session.UserSessionDatabaseTable;
 import com.dulno.core.user.statistic.UserAppOpenDatabaseTable;
 import com.dulno.core.user.statistic.UserJoinDatabaseTable;
 import com.dulno.core.user.statistic.UserStatisticConfiguration;
@@ -23,6 +24,14 @@ public final class UserInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return UserDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  UserSessionDatabaseTable provideSessionDatabaseTable(
+    DatabaseConnection databaseConnection, DatabaseKeyspace databaseKeyspace
+  ) {
+    return UserSessionDatabaseTable.create(databaseConnection, databaseKeyspace);
   }
 
   @Provides
