@@ -26,6 +26,7 @@ import com.dulno.core.question.QuestionInjectionModule;
 import com.dulno.core.recaptcha.RecaptchaInjectionModule;
 import com.dulno.core.redeemable.RedeemableInjectionModule;
 import com.dulno.core.sale.SaleInjectionModule;
+import com.dulno.core.session.SessionInjectionModule;
 import com.dulno.core.stamp.StampInjectionModule;
 import com.dulno.core.stripe.StripeInjectionModule;
 import com.dulno.core.ticket.TicketInjectionModule;
@@ -52,6 +53,7 @@ public class CoreInjectionModule extends AbstractModule {
     install(DatabaseInjectionModule.create());
     install(PartnerInjectionModule.create());
     install(MemberInjectionModule.create());
+    install(SessionInjectionModule.create());
     install(MailInjectionModule.create());
     install(BundleInjectionModule.create());
     install(AccessoryInjectionModule.create());
