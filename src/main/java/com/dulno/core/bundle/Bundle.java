@@ -25,6 +25,7 @@ public final class Bundle {
       content.getBoolean("member_card_access"),
       content.getBoolean("analysis_access"),
       content.getBoolean("balance_access"),
+      content.getBoolean("coupon_access"),
       content.getBoolean("campaign_access"),
       content.getBoolean("notification_access"));
   }
@@ -48,7 +49,7 @@ public final class Bundle {
       calculateBundleExpiration(runtime), preset.portalAccess(),
       preset.collectionCardAccess(), preset.valueCardAccess(),
       preset.memberCardAccess(), preset.analysisAccess(), preset.balanceAccess(),
-      preset.campaignAccess(), preset.notificationAccess());
+      preset.couponAccess(), preset.campaignAccess(), preset.notificationAccess());
   }
 
   public static Bundle of(
@@ -59,7 +60,7 @@ public final class Bundle {
       price, runtime.isUnbound() ? expiration : calculateBundleExpiration(runtime),
       preset.portalAccess(), preset.collectionCardAccess(), preset.valueCardAccess(),
       preset.memberCardAccess(), preset.analysisAccess(), preset.balanceAccess(),
-      preset.campaignAccess(), preset.notificationAccess());
+      preset.couponAccess(), preset.campaignAccess(), preset.notificationAccess());
   }
 
   private static long calculateBundleExpiration(BundleRuntime runtime) {
@@ -83,6 +84,7 @@ public final class Bundle {
   private final boolean memberCardAccess;
   private final boolean analysisAccess;
   private final boolean balanceAccess;
+  private final boolean couponAccess;
   private final boolean campaignAccess;
   private final boolean notificationAccess;
 
@@ -98,6 +100,7 @@ public final class Bundle {
     content.put("member_card_access", memberCardAccess);
     content.put("analysis_access", analysisAccess);
     content.put("balance_access", balanceAccess);
+    content.put("coupon_access", couponAccess);
     content.put("campaign_access", campaignAccess);
     content.put("notification_access", notificationAccess);
     return content.toString();
