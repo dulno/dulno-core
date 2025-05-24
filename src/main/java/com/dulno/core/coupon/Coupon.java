@@ -26,6 +26,7 @@ public final class Coupon {
       row.findCell(columns.indexOf("reward")).stringValue(),
       row.findCell(columns.indexOf("description")).stringValue(),
       row.findCell(columns.indexOf("expiration")).longValue(),
+      row.findCell(columns.indexOf("limitation")).integerValue(),
       row.findCell(columns.indexOf("creation")).longValue());
   }
 
@@ -36,6 +37,7 @@ public final class Coupon {
   private String reward;
   private String description;
   private long expiration;
+  private int limitation;
   private final long creation;
 
   public void changeBackgroundColor(String newBackgroundColor) {
@@ -56,5 +58,9 @@ public final class Coupon {
 
   public void changeExpiration(long newExpiration) {
     expiration = newExpiration;
+  }
+
+  public void changeLimitation(int newLimitation) {
+    limitation = newLimitation;
   }
 }

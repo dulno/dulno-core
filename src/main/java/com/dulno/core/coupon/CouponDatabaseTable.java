@@ -23,6 +23,7 @@ public final class CouponDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("reward", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("description", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("expiration", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("limitation", DatabaseDataType.INT));
     columns.add(DatabaseColumn.create("creation", DatabaseDataType.BIGINT));
     var table = new CouponDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
@@ -46,22 +47,24 @@ public final class CouponDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertCoupon(Coupon coupon) {
     return insertCoupon(coupon.id(), coupon.partnerId(), coupon.backgroundColor(),
-      coupon.foregroundColor(), coupon.reward(),
-      coupon.description(), coupon.expiration(), coupon.creation());
+      coupon.foregroundColor(), coupon.reward(), coupon.description(),
+      coupon.expiration(), coupon.limitation(), coupon.creation());
   }
 
   public CompletableFuture<Void> insertCoupon(
     UUID id, UUID partner, String backgroundColor, String foregroundColor,
-    String reward, String description, long expiration, long creation
+    String reward, String description, long expiration, int limitation,
+    long creation
   ) {
     return insert(DatabaseRow.of(id, partner, backgroundColor, foregroundColor,
-      reward, description, expiration, creation));
+      reward, description, expiration, limitation, creation));
   }
 
   public CompletableFuture<Void> updateCoupon(Coupon coupon) {
     return update(coupon.id(), DatabaseRow.of(coupon.id(), coupon.partnerId(),
       coupon.backgroundColor(), coupon.foregroundColor(), coupon.reward(),
-      coupon.description(), coupon.expiration(), coupon.creation()));
+      coupon.description(), coupon.expiration(), coupon.limitation(),
+      coupon.creation()));
   }
 
   public CompletableFuture<UUID> generateAvailableCouponId() {
