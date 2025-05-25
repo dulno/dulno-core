@@ -25,7 +25,8 @@ public final class Campaign {
       row.findCell(columns.indexOf("description")).stringValue(),
       CampaignType.valueOf(row.findCell(columns.indexOf("type")).stringValue()),
       row.findCell(columns.indexOf("start")).longValue(),
-      row.findCell(columns.indexOf("end")).longValue());
+      row.findCell(columns.indexOf("end")).longValue(),
+      row.findCell(columns.indexOf("coupon")).uuidValue());
   }
 
   private final UUID id;
@@ -35,6 +36,7 @@ public final class Campaign {
   private CampaignType type;
   private long start;
   private long end;
+  private UUID couponId;
 
   public void changeTitle(String newTitle) {
     title = newTitle;
@@ -54,5 +56,9 @@ public final class Campaign {
 
   public void changeEnd(long newEnd) {
     end = newEnd;
+  }
+
+  public void changeCoupon(UUID newCoupon) {
+    couponId = newCoupon;
   }
 }
