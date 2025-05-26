@@ -3,6 +3,7 @@ package com.dulno.core.member;
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
 import com.dulno.core.member.mfa.MultiFactorAuthDatabaseTable;
+import com.dulno.core.member.session.MemberSessionDatabaseTable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -16,6 +17,14 @@ public final class MemberInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return MemberDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  MemberSessionDatabaseTable provideSessionDatabaseTable(
+    DatabaseConnection databaseConnection, DatabaseKeyspace databaseKeyspace
+  ) {
+    return MemberSessionDatabaseTable.create(databaseConnection, databaseKeyspace);
   }
 
   @Provides

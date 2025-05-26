@@ -23,6 +23,7 @@ public final class CampaignDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("type", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("start", DatabaseDataType.BIGINT));
     columns.add(DatabaseColumn.create("end", DatabaseDataType.BIGINT));
+    columns.add(DatabaseColumn.create("coupon", DatabaseDataType.UUID));
     var table = new CampaignDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     table.initializeViews();
@@ -46,21 +47,22 @@ public final class CampaignDatabaseTable extends DatabaseTable {
   public CompletableFuture<Void> insertCampaign(Campaign campaign) {
     return insertCampaign(campaign.id(), campaign.partnerId(),
       campaign.title(), campaign.description(), campaign.type().toString(),
-      campaign.start(), campaign.end());
+      campaign.start(), campaign.end(), campaign.couponId());
   }
 
   public CompletableFuture<Void> insertCampaign(
     UUID id, UUID partnerId, String title, String description, String type,
-    long start, long end
+    long start, long end, UUID couponId
   ) {
     return insert(DatabaseRow.of(id, partnerId, title, description, type,
-      start, end));
+      start, end, couponId));
   }
 
   public CompletableFuture<Void> updateCampaign(Campaign campaign) {
     return update(campaign.id(), DatabaseRow.of(campaign.id(),
       campaign.partnerId(), campaign.title(), campaign.description(),
-      campaign.type().toString(), campaign.start(), campaign.end()));
+      campaign.type().toString(), campaign.start(), campaign.end(),
+      campaign.couponId()));
   }
 
   public CompletableFuture<UUID> generateAvailableCampaignId() {
@@ -88,5 +90,10 @@ public final class CampaignDatabaseTable extends DatabaseTable {
     return partnerView.selectRows(DatabaseCondition.of("partner", partnerId))
       .thenApply(rows -> rows.stream().map(row -> Campaign.of(row, partnerView))
         .toList());
+  }
+
+  public CompletableFuture<List<Campaign>> findAllCampaigns() {
+    return selectAllRows().thenApply(rows ->
+      rows.stream().map(row -> Campaign.of(row, this)).toList());
   }
 }

@@ -27,6 +27,7 @@ public final class BundlePreset extends Configuration {
   private boolean memberCardAccess;
   private boolean analysisAccess;
   private boolean balanceAccess;
+  private boolean couponAccess;
   private boolean campaignAccess;
   private boolean notificationAccess;
 
@@ -48,6 +49,7 @@ public final class BundlePreset extends Configuration {
     memberCardAccess = json.getBoolean("memberCardAccess");
     analysisAccess = json.getBoolean("analysisAccess");
     balanceAccess = json.getBoolean("balanceAccess");
+    couponAccess = json.getBoolean("couponAccess");
     campaignAccess = json.getBoolean("campaignAccess");
     notificationAccess = json.getBoolean("notificationAccess");
   }

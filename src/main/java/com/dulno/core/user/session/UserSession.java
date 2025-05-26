@@ -1,8 +1,9 @@
-package com.dulno.core.member.session;
+package com.dulno.core.user.session;
 
 import com.dulno.core.database.DatabaseColumn;
 import com.dulno.core.database.DatabaseRow;
 import com.dulno.core.database.DatabaseTable;
+import com.dulno.core.session.SessionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -13,14 +14,14 @@ import java.util.UUID;
 @Getter
 @Accessors(fluent = true)
 @AllArgsConstructor(staticName = "create")
-public final class Session {
-  public static Session of(DatabaseRow row, DatabaseTable table) {
+public final class UserSession {
+  public static UserSession of(DatabaseRow row, DatabaseTable table) {
     return of(row, table.columns().stream().map(DatabaseColumn::name).toList());
   }
 
-  public static Session of(DatabaseRow row, List<String> columns) {
+  public static UserSession of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
-      row.findCell(columns.indexOf("member")).uuidValue(),
+      row.findCell(columns.indexOf("user")).uuidValue(),
       SessionStatus.valueOf(row.findCell(columns.indexOf("status")).stringValue()),
       row.findCell(columns.indexOf("device_platform")).stringValue(),
       row.findCell(columns.indexOf("ip_address")).stringValue(),
@@ -32,7 +33,7 @@ public final class Session {
   }
 
   private final UUID id;
-  private final UUID memberId;
+  private final UUID userId;
   private SessionStatus status;
   private final String devicePlatform;
   private final String ipAddress;

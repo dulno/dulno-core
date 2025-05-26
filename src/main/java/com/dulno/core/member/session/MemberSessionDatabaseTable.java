@@ -2,6 +2,7 @@ package com.dulno.core.member.session;
 
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseCondition;
+import com.dulno.core.session.SessionStatus;
 import com.google.common.collect.Lists;
 
 import java.util.Comparator;
@@ -9,10 +10,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public final class SessionDatabaseTable extends DatabaseTable {
+public final class MemberSessionDatabaseTable extends DatabaseTable {
+  //TODO: RENAME TABLE TO member_session
   private static final String TABLE_NAME = "session";
 
-  public static SessionDatabaseTable create(
+  public static MemberSessionDatabaseTable create(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
@@ -28,7 +30,7 @@ public final class SessionDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("open_time", DatabaseDataType.BIGINT));
     columns.add(DatabaseColumn.create("refresh_token", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("last_refresh", DatabaseDataType.BIGINT));
-    var table = new SessionDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    var table = new MemberSessionDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
     table.createIndexIfNotExists("member");
     table.createIndexIfNotExists("status");
@@ -38,7 +40,7 @@ public final class SessionDatabaseTable extends DatabaseTable {
 
   private DatabaseTable memberStatusView;
 
-  private SessionDatabaseTable(
+  private MemberSessionDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
@@ -56,7 +58,7 @@ public final class SessionDatabaseTable extends DatabaseTable {
     memberStatusView = createMaterializedViewIfNotExists("member_status_view", columns);
   }
 
-  public CompletableFuture<Void> insertSession(Session session) {
+  public CompletableFuture<Void> insertSession(MemberSession session) {
     return insertSession(session.id(), session.memberId(), session.status(),
       session.devicePlatform(), session.ipAddress(), session.country(),
       session.city(), session.openTime(), session.lastRefreshToken(),
@@ -83,7 +85,7 @@ public final class SessionDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Void> updateSessionRefreshToken(
-    Session session, String refreshToken
+    MemberSession session, String refreshToken
   ) {
     session.updateRefreshToken(refreshToken);
     return updateSession(session);
@@ -96,12 +98,12 @@ public final class SessionDatabaseTable extends DatabaseTable {
     return futureResponse;
   }
 
-  public CompletableFuture<Void> closeSession(Session session) {
+  public CompletableFuture<Void> closeSession(MemberSession session) {
     session.close();
     return updateSession(session);
   }
 
-  public CompletableFuture<Void> updateSession(Session session) {
+  public CompletableFuture<Void> updateSession(MemberSession session) {
     return update(DatabaseCondition.of("id", session.id(), "member", session.memberId()),
       DatabaseRow.of(session.id(), session.memberId(), session.status().toString(),
         session.devicePlatform(), session.ipAddress(), session.country(),
@@ -126,29 +128,29 @@ public final class SessionDatabaseTable extends DatabaseTable {
     return exists(DatabaseCondition.of("id", id));
   }
 
-  public CompletableFuture<Session> findSession(UUID id) {
+  public CompletableFuture<MemberSession> findSession(UUID id) {
     return selectRow(DatabaseCondition.of("id", id))
-      .thenApply(row -> Session.of(row, this));
+      .thenApply(row -> MemberSession.of(row, this));
   }
 
-  public CompletableFuture<List<Session>> findSessionsOfMember(UUID memberId) {
+  public CompletableFuture<List<MemberSession>> findSessionsOfMember(UUID memberId) {
     return selectRows(DatabaseCondition.of("member", memberId))
-      .thenApply(rows -> rows.stream().map(row -> Session.of(row, this)).toList());
+      .thenApply(rows -> rows.stream().map(row -> MemberSession.of(row, this)).toList());
   }
 
-  public CompletableFuture<List<Session>> findSessionsOfMemberByStatus(
+  public CompletableFuture<List<MemberSession>> findSessionsOfMemberByStatus(
     UUID memberId, SessionStatus status
   ) {
     var condition = DatabaseCondition.of("member", memberId, "status", status.toString());
     return memberStatusView.selectRows(condition)
-      .thenApply(rows -> rows.stream().map(row -> Session.of(row, memberStatusView))
-        .sorted(Comparator.comparingLong(Session::openTime).reversed()).toList());
+      .thenApply(rows -> rows.stream().map(row -> MemberSession.of(row, memberStatusView))
+        .sorted(Comparator.comparingLong(MemberSession::openTime).reversed()).toList());
   }
 
-  public CompletableFuture<List<Session>> findAllSessionsByStatus(
+  public CompletableFuture<List<MemberSession>> findAllSessionsByStatus(
     SessionStatus status
   ) {
     return selectRows(DatabaseCondition.of("status", status.toString()))
-      .thenApply(rows -> rows.stream().map(row -> Session.of(row, this)).toList());
+      .thenApply(rows -> rows.stream().map(row -> MemberSession.of(row, this)).toList());
   }
 }
