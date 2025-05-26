@@ -5,7 +5,9 @@ import com.dulno.core.database.DatabaseKeyspace;
 import com.dulno.core.user.device.UserDeviceDatabaseTable;
 import com.dulno.core.user.item.UserItemDatabaseTable;
 import com.dulno.core.user.partner.UserPartnerDatabaseTable;
+import com.dulno.core.user.redeemable.UserRedeemableDatabaseTable;
 import com.dulno.core.user.scan.UserScanDatabaseTable;
+import com.dulno.core.user.session.UserSessionDatabaseTable;
 import com.dulno.core.user.statistic.UserAppOpenDatabaseTable;
 import com.dulno.core.user.statistic.UserJoinDatabaseTable;
 import com.dulno.core.user.statistic.UserStatisticConfiguration;
@@ -27,6 +29,14 @@ public final class UserInjectionModule extends AbstractModule {
 
   @Provides
   @Singleton
+  UserSessionDatabaseTable provideSessionDatabaseTable(
+    DatabaseConnection databaseConnection, DatabaseKeyspace databaseKeyspace
+  ) {
+    return UserSessionDatabaseTable.create(databaseConnection, databaseKeyspace);
+  }
+
+  @Provides
+  @Singleton
   UserDeviceDatabaseTable provideUserDeviceDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
@@ -39,6 +49,14 @@ public final class UserInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return UserItemDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  UserRedeemableDatabaseTable provideUserRedeemableDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return UserRedeemableDatabaseTable.create(connection, keyspace);
   }
 
   @Provides

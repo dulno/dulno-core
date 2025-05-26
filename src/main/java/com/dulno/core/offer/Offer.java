@@ -28,6 +28,7 @@ public final class Offer {
       content.getBoolean("member_card_access"),
       content.getBoolean("analysis_access"),
       content.getBoolean("balance_access"),
+      content.getBoolean("coupon_access"),
       content.getBoolean("campaign_access"),
       content.getBoolean("notification_access"));
   }
@@ -39,7 +40,8 @@ public final class Offer {
     return create(id, partnerId, priceId, offerStatus, preset.bundleType(),
       runtime, price, preset.portalAccess(), preset.collectionCardAccess(),
       preset.valueCardAccess(), preset.memberCardAccess(), preset.analysisAccess(),
-      preset.balanceAccess(), preset.campaignAccess(), preset.notificationAccess());
+      preset.balanceAccess(), preset.couponAccess(), preset.campaignAccess(),
+      preset.notificationAccess());
   }
 
   private final UUID id;
@@ -55,6 +57,7 @@ public final class Offer {
   private final boolean memberCardAccess;
   private final boolean analysisAccess;
   private final boolean balanceAccess;
+  private final boolean couponAccess;
   private final boolean campaignAccess;
   private final boolean notificationAccess;
 
@@ -66,7 +69,7 @@ public final class Offer {
     return Bundle.create(partnerId, bundleType, bundleRuntime, price,
       calculateBundleExpiration(bundleRuntime), portalAccess,
       collectionCardAccess, valueCardAccess, memberCardAccess, analysisAccess,
-      balanceAccess, campaignAccess, notificationAccess);
+      balanceAccess, couponAccess, campaignAccess, notificationAccess);
   }
 
   private long calculateBundleExpiration(BundleRuntime runtime) {
@@ -90,6 +93,7 @@ public final class Offer {
     content.put("member_card_access", memberCardAccess);
     content.put("analysis_access", analysisAccess);
     content.put("balance_access", balanceAccess);
+    content.put("coupon_access", couponAccess);
     content.put("campaign_access", campaignAccess);
     content.put("notification_access", notificationAccess);
     return content.toString();
