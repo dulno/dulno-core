@@ -18,7 +18,7 @@ public class UserDatabaseTableTransformation implements DatabaseTransformation {
     return CompletableFuture.completedFuture(DatabaseRow.of(
       oldRow.findCell(0).uuidValue(), oldRow.findCell(2).stringValue(),
       oldRow.findCell(3).stringValue(), oldRow.findCell(4).booleanValue(),
-      oldRow.findCell(5).booleanValue()));
+      oldRow.findCell(5).booleanValue(), oldRow.findCell(6).longValue()));
   }
 
   @Override
