@@ -21,6 +21,7 @@ public final class BundlePreset extends Configuration {
   private boolean hasPrice;
   private double monthlyPrice;
   private double yearlyPrice;
+  private int locationLimit;
   private boolean portalAccess;
   private boolean collectionCardAccess;
   private boolean valueCardAccess;
@@ -43,6 +44,7 @@ public final class BundlePreset extends Configuration {
       monthlyPrice = json.getDouble("monthlyPrice");
       yearlyPrice = json.getDouble("yearlyPrice");
     }
+    locationLimit = json.getInt("locationLimit");
     portalAccess = json.getBoolean("portalAccess");
     collectionCardAccess = json.getBoolean("collectionCardAccess");
     valueCardAccess = json.getBoolean("valueCardAccess");
