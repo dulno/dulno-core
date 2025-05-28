@@ -97,6 +97,7 @@ public final class Offer {
 
   public String serializeContent() {
     var content = new JSONObject();
+    content.put("location_limit", locationLimit);
     content.put("portal_access", portalAccess);
     content.put("collection_card_access", collectionCardAccess);
     content.put("value_card_access", valueCardAccess);
