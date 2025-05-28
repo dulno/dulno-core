@@ -11,8 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public final class MemberSessionDatabaseTable extends DatabaseTable {
-  //TODO: RENAME TABLE TO member_session
-  private static final String TABLE_NAME = "session";
+  private static final String TABLE_NAME = "member_session";
 
   public static MemberSessionDatabaseTable create(
     DatabaseConnection connection, DatabaseKeyspace keyspace
