@@ -7,9 +7,9 @@ import com.dulno.core.partner.link.PartnerLinkDatabaseTable;
 import com.dulno.core.partner.location.PartnerLocationDatabaseTable;
 import com.dulno.core.partner.logo.PartnerLogoDatabaseTable;
 import com.dulno.core.partner.member.PartnerMemberDatabaseTable;
+import com.dulno.core.partner.report.PartnerReportDatabaseTable;
 import com.dulno.core.partner.transaction.PartnerTransactionDatabaseTable;
 import com.google.inject.AbstractModule;
-import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -73,5 +73,13 @@ public final class PartnerInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return PartnerTransactionDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  PartnerReportDatabaseTable providePartnerReportDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return PartnerReportDatabaseTable.create(connection, keyspace);
   }
 }
