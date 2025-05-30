@@ -38,11 +38,10 @@ public final class ScanDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
-    super(connection, keyspace, name, columns,
-      ScanDatabaseTableTransformation.create());
+    super(connection, keyspace, name, columns);
   }
 
-  public void initializeViews() {
+  private void initializeViews() {
     var columns = Lists.<DatabaseColumn>newArrayList();
     columns.add(DatabaseColumn.create("picc", DatabaseDataType.TEXT,
       DatabaseColumn.Type.PARTITION_KEY));

@@ -34,11 +34,10 @@ public final class UserDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
-    super(connection, keyspace, name, columns,
-      UserDatabaseTableTransformation.create());
+    super(connection, keyspace, name, columns);
   }
 
-  public void initializeViews() {
+  private void initializeViews() {
     emailView = createMaterializedViewIfNotExists("email_view", "email",
       DatabaseColumn.Type.PARTITION_KEY);
   }
