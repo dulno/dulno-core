@@ -2,7 +2,7 @@ package com.dulno.core.member;
 
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
-import com.dulno.core.member.mfa.MultiFactorAuthDatabaseTable;
+import com.dulno.core.member.mfa.MemberMultiFactorAuthDatabaseTable;
 import com.dulno.core.member.session.MemberSessionDatabaseTable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -53,9 +53,9 @@ public final class MemberInjectionModule extends AbstractModule {
 
   @Provides
   @Singleton
-  MultiFactorAuthDatabaseTable provideMultiFactorAuthDatabaseTable(
+  MemberMultiFactorAuthDatabaseTable provideMemberMultiFactorAuthDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    return MultiFactorAuthDatabaseTable.create(connection, keyspace);
+    return MemberMultiFactorAuthDatabaseTable.create(connection, keyspace);
   }
 }

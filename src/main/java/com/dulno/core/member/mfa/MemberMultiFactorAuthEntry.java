@@ -11,8 +11,8 @@ import java.util.UUID;
 @Getter
 @Accessors(fluent = true)
 @RequiredArgsConstructor(staticName = "create")
-public final class MultiFactorAuthEntry {
-  public static MultiFactorAuthEntry of(DatabaseRow row) {
+public final class MemberMultiFactorAuthEntry {
+  public static MemberMultiFactorAuthEntry of(DatabaseRow row) {
     return create(row.findCell(0).uuidValue(), row.findCell(1).stringValue(),
       row.findCell(2).listValue(), row.findCell(3).booleanValue());
   }
