@@ -22,6 +22,7 @@ public final class Offer {
       BundleType.valueOf(row.findCell(4).stringValue()),
       BundleRuntime.valueOf(row.findCell(5).stringValue()),
       row.findCell(6).doubleValue(),
+      content.getInt("location_limit"),
       content.getBoolean("portal_access"),
       content.getBoolean("collection_card_access"),
       content.getBoolean("value_card_access"),
@@ -37,11 +38,19 @@ public final class Offer {
     UUID id, UUID partnerId, String priceId, OfferStatus offerStatus,
     BundlePreset preset, BundleRuntime runtime, double price
   ) {
+    return of(id, partnerId, priceId, offerStatus, preset, runtime, price,
+      preset.locationLimit());
+  }
+
+  public static Offer of(
+    UUID id, UUID partnerId, String priceId, OfferStatus offerStatus,
+    BundlePreset preset, BundleRuntime runtime, double price, int locationLimit
+  ) {
     return create(id, partnerId, priceId, offerStatus, preset.bundleType(),
-      runtime, price, preset.portalAccess(), preset.collectionCardAccess(),
-      preset.valueCardAccess(), preset.memberCardAccess(), preset.analysisAccess(),
-      preset.balanceAccess(), preset.couponAccess(), preset.campaignAccess(),
-      preset.notificationAccess());
+      runtime, price, locationLimit, preset.portalAccess(),
+      preset.collectionCardAccess(), preset.valueCardAccess(),
+      preset.memberCardAccess(), preset.analysisAccess(), preset.balanceAccess(),
+      preset.couponAccess(), preset.campaignAccess(), preset.notificationAccess());
   }
 
   private final UUID id;
@@ -51,6 +60,7 @@ public final class Offer {
   private final BundleType bundleType;
   private final BundleRuntime bundleRuntime;
   private final double price;
+  private final int locationLimit;
   private final boolean portalAccess;
   private final boolean collectionCardAccess;
   private final boolean valueCardAccess;
@@ -67,7 +77,7 @@ public final class Offer {
 
   public Bundle toBundle() {
     return Bundle.create(partnerId, bundleType, bundleRuntime, price,
-      calculateBundleExpiration(bundleRuntime), portalAccess,
+      calculateBundleExpiration(bundleRuntime), locationLimit, portalAccess,
       collectionCardAccess, valueCardAccess, memberCardAccess, analysisAccess,
       balanceAccess, couponAccess, campaignAccess, notificationAccess);
   }
@@ -87,6 +97,7 @@ public final class Offer {
 
   public String serializeContent() {
     var content = new JSONObject();
+    content.put("location_limit", locationLimit);
     content.put("portal_access", portalAccess);
     content.put("collection_card_access", collectionCardAccess);
     content.put("value_card_access", valueCardAccess);

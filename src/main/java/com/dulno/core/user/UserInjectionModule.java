@@ -2,6 +2,7 @@ package com.dulno.core.user;
 
 import com.dulno.core.database.DatabaseConnection;
 import com.dulno.core.database.DatabaseKeyspace;
+import com.dulno.core.user.change.UserEmailChangeDatabaseTable;
 import com.dulno.core.user.device.UserDeviceDatabaseTable;
 import com.dulno.core.user.item.UserItemDatabaseTable;
 import com.dulno.core.user.partner.UserPartnerDatabaseTable;
@@ -81,6 +82,14 @@ public final class UserInjectionModule extends AbstractModule {
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     return UserVerificationDatabaseTable.create(connection, keyspace);
+  }
+
+  @Provides
+  @Singleton
+  UserEmailChangeDatabaseTable provideUserEmailChangeDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return UserEmailChangeDatabaseTable.create(connection, keyspace);
   }
 
   @Provides

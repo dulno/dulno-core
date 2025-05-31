@@ -33,8 +33,7 @@ public final class PartnerTransactionDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
-    super(connection, keyspace, name, columns,
-      PartnerTransactionDatabaseTableTransformation.create());
+    super(connection, keyspace, name, columns);
   }
 
   public CompletableFuture<Void> insertPartnerTransaction(

@@ -3,8 +3,6 @@ package com.dulno.core.sale;
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseComparison;
 import com.dulno.core.database.condition.DatabaseCondition;
-import com.dulno.core.question.Question;
-import com.dulno.core.ticket.Ticket;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -156,7 +154,7 @@ public final class SaleDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<List<Sale>> findOpenSales() {
-    return selectRows(DatabaseCondition.of("status", Question.Status.OPEN.toString()))
+    return selectRows(DatabaseCondition.of("status", Sale.Status.OPEN.toString()))
       .thenApply(rows -> rows.stream().map(row -> Sale.of(row, this))
         .collect(Collectors.toList()));
   }
@@ -164,6 +162,6 @@ public final class SaleDatabaseTable extends DatabaseTable {
   public CompletableFuture<Long> countPendingSales() {
     return statusExpirationView.count(DatabaseCondition.of(
       DatabaseComparison.create("expiration", -1L),
-      DatabaseComparison.create("status", Ticket.Status.OPEN.toString())));
+      DatabaseComparison.create("status", Sale.Status.OPEN.toString())));
   }
 }

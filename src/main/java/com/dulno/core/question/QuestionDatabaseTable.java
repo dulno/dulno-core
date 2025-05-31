@@ -3,7 +3,6 @@ package com.dulno.core.question;
 import com.dulno.core.database.*;
 import com.dulno.core.database.condition.DatabaseComparison;
 import com.dulno.core.database.condition.DatabaseCondition;
-import com.dulno.core.ticket.Ticket;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -152,6 +151,6 @@ public final class QuestionDatabaseTable extends DatabaseTable {
   public CompletableFuture<Long> countPendingQuestions() {
     return statusExpirationView.count(DatabaseCondition.of(
       DatabaseComparison.create("expiration", -1L),
-      DatabaseComparison.create("status", Ticket.Status.OPEN.toString())));
+      DatabaseComparison.create("status", Question.Status.OPEN.toString())));
   }
 }
