@@ -10,12 +10,12 @@ import java.util.UUID;
 
 @Singleton
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__({@Inject}))
-public final class MultiFactorAuthFactory {
-  private final MultiFactorAuthDatabaseTable multiFactorAuthDatabaseTable;
+public final class MemberMultiFactorAuthFactory {
+  private final MemberMultiFactorAuthDatabaseTable memberMultiFactorAuthDatabaseTable;
   private final MemberDatabaseTable memberDatabaseTable;
 
-  public MultiFactorAuth createAuth(UUID memberId) {
-    return MultiFactorAuth.create(multiFactorAuthDatabaseTable, memberDatabaseTable,
-      memberId);
+  public MemberMultiFactorAuth createAuth(UUID memberId) {
+    return MemberMultiFactorAuth.create(memberMultiFactorAuthDatabaseTable,
+      memberDatabaseTable, memberId);
   }
 }

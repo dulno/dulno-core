@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public final class MultiFactorAuthDatabaseTable extends DatabaseTable {
-  private static final String TABLE_NAME = "multi_factor_auth";
+public final class MemberMultiFactorAuthDatabaseTable extends DatabaseTable {
+  private static final String TABLE_NAME = "member_multi_factor_auth";
 
-  public static MultiFactorAuthDatabaseTable create(
+  public static MemberMultiFactorAuthDatabaseTable create(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
     var columns = Lists.<DatabaseColumn>newArrayList();
@@ -19,13 +19,13 @@ public final class MultiFactorAuthDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("secret", DatabaseDataType.TEXT));
     columns.add(DatabaseListColumn.create("recovery_codes", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("confirmed", DatabaseDataType.BOOLEAN));
-    var table = new MultiFactorAuthDatabaseTable(connection, keyspace,
+    var table = new MemberMultiFactorAuthDatabaseTable(connection, keyspace,
       TABLE_NAME, columns);
     table.createIfNotExists();
     return table;
   }
 
-  private MultiFactorAuthDatabaseTable(
+  private MemberMultiFactorAuthDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
@@ -53,7 +53,7 @@ public final class MultiFactorAuthDatabaseTable extends DatabaseTable {
     return delete(memberId);
   }
 
-  public CompletableFuture<MultiFactorAuthEntry> findAuth(UUID memberId) {
-    return selectRow(memberId).thenApply(MultiFactorAuthEntry::of);
+  public CompletableFuture<MemberMultiFactorAuthEntry> findAuth(UUID memberId) {
+    return selectRow(memberId).thenApply(MemberMultiFactorAuthEntry::of);
   }
 }
