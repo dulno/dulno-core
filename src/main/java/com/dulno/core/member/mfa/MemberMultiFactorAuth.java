@@ -18,13 +18,13 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor(staticName = "create")
-public final class MultiFactorAuth {
-  private final MultiFactorAuthDatabaseTable multiFactorAuthDatabaseTable;
+public final class MemberMultiFactorAuth {
+  private final MemberMultiFactorAuthDatabaseTable memberMultiFactorAuthDatabaseTable;
   private final MemberDatabaseTable memberDatabaseTable;
   private final UUID memberId;
 
   public CompletableFuture<Void> setup() {
-    return multiFactorAuthDatabaseTable.insertAuth(memberId, generateSecret(),
+    return memberMultiFactorAuthDatabaseTable.insertAuth(memberId, generateSecret(),
       generateRecoveryCodes());
   }
 
@@ -40,7 +40,7 @@ public final class MultiFactorAuth {
 
   public CompletableFuture<byte[]> generateQRCode() {
     return memberDatabaseTable.findMember(memberId)
-      .thenCompose(member -> multiFactorAuthDatabaseTable.findAuth(memberId)
+      .thenCompose(member -> memberMultiFactorAuthDatabaseTable.findAuth(memberId)
         .thenApplyAsync(auth -> buildQRCode(member, auth.secret())));
   }
 
@@ -62,7 +62,7 @@ public final class MultiFactorAuth {
   }
 
   public CompletableFuture<Boolean> verifyCode(String code) {
-    return multiFactorAuthDatabaseTable.authExists(memberId)
+    return memberMultiFactorAuthDatabaseTable.authExists(memberId)
       .thenCompose(exists -> verifyCode(code, exists));
   }
 
@@ -78,12 +78,12 @@ public final class MultiFactorAuth {
     var timeProvider = new SystemTimeProvider();
     var codeGenerator = new DefaultCodeGenerator(HashingAlgorithm.SHA256);
     var verifier = new DefaultCodeVerifier(codeGenerator, timeProvider);
-    return multiFactorAuthDatabaseTable.findAuth(memberId)
+    return memberMultiFactorAuthDatabaseTable.findAuth(memberId)
       .thenApplyAsync(auth -> verifier.isValidCode(auth.secret(), code));
   }
 
   public CompletableFuture<Boolean> verifyRecoveryCode(String recoveryCode) {
-    return multiFactorAuthDatabaseTable.findAuth(memberId)
+    return memberMultiFactorAuthDatabaseTable.findAuth(memberId)
       .thenApply(auth -> auth.recoveryCodes().contains(recoveryCode));
   }
 }
