@@ -40,9 +40,9 @@ repositories {
 }
 
 dependencies {
-  testImplementation(platform("org.junit:junit-bom:5.12.2"))
-  testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
+  testImplementation(platform("org.junit:junit-bom:5.13.0"))
+  testImplementation("org.junit.jupiter:junit-jupiter:5.13.0")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.0")
 
   implementation("com.google.inject:guice:7.0.0")
 
@@ -72,13 +72,13 @@ dependencies {
 
   implementation("dev.samstevens.totp:totp:1.7.1")
 
-  implementation("com.maxmind.geoip2:geoip2:4.3.0") {
+  implementation("com.maxmind.geoip2:geoip2:4.3.1") {
     exclude(group = "commons-logging", module = "commons-logging")
   }
 
   implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1")
 
-  implementation("com.google.auth:google-auth-library-oauth2-http:1.35.0")
+  implementation("com.google.auth:google-auth-library-oauth2-http:1.36.0")
 }
 
 tasks.test {

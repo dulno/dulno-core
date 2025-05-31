@@ -28,8 +28,7 @@ public final class UserAppOpenDatabaseTable extends DatabaseTable {
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
-    super(connection, keyspace, name, columns,
-      UserAppOpenDatabaseTableTransformation.create());
+    super(connection, keyspace, name, columns);
   }
 
   public CompletableFuture<Void> insertUserAppOpen(long date, String version) {
