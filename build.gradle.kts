@@ -58,7 +58,7 @@ dependencies {
   implementation("org.json:json:20250517")
   implementation("commons-io:commons-io:2.19.0")
 
-  implementation("io.netty:netty-all:4.2.1.Final")
+  implementation("io.netty:netty-all:4.2.2.Final")
 
   implementation("org.springframework.boot:spring-boot-starter-web:3.5.0")
 
@@ -78,7 +78,7 @@ dependencies {
 
   implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1")
 
-  implementation("com.google.auth:google-auth-library-oauth2-http:1.36.0")
+  implementation("com.google.auth:google-auth-library-oauth2-http:1.37.0")
 }
 
 tasks.test {
