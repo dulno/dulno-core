@@ -1,6 +1,7 @@
 package com.dulno.core;
 
 import com.dulno.core.accessory.AccessoryInjectionModule;
+import com.dulno.core.apple.AppleInjectionModule;
 import com.dulno.core.bundle.BundleInjectionModule;
 import com.dulno.core.campaign.CampaignInjectionModule;
 import com.dulno.core.card.CardInjectionModule;
@@ -64,6 +65,7 @@ public class CoreInjectionModule extends AbstractModule {
     install(RedeemableInjectionModule.create());
     install(ScanInjectionModule.create());
     install(UserInjectionModule.create());
+    install(AppleInjectionModule.create());
     install(NotificationInjectionModule.create());
     install(CampaignInjectionModule.create());
     install(TicketInjectionModule.create());
