@@ -13,3 +13,24 @@ variables:
 include:
   - project: 'dulno/dulno-template'
     file: '/core/core-template.yml'
+
+build_jar:
+  stage: build
+  image: gradle:8.14.2-jdk21
+  script:
+    - gradle bootJar
+    - gradle publish
+  artifacts:
+    paths:
+      - build/libs/
+    expire_in: 1 day
+
+build_geo:
+  stage: build
+  image: gradle:8.14.2-jdk21
+  script:
+    - gradle downloadGeoLite2Database
+  artifacts:
+    paths:
+      - geo/
+    expire_in: 1 day

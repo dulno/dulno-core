@@ -1,5 +1,5 @@
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
-import java.net.URL
+import java.net.URI
 import java.util.zip.GZIPInputStream
 
 plugins {
@@ -94,26 +94,35 @@ tasks.register("downloadGeoLite2Database") {
   val databaseUrl = "https://download.maxmind.com/app/geoip_download?" +
     "edition_id=GeoLite2-City&license_key=$licenseKey&suffix=tar.gz"
   val resourcesDir = File("geo")
-  val downloadFile = File(buildDir, "GeoLite2-City.tar.gz")
+  val downloadFile = layout.buildDirectory.file("GeoLite2-City.tar.gz").get().asFile
   doLast {
     resourcesDir.mkdirs()
     if (downloadFile.exists()) {
       downloadFile.delete()
     }
-    URL(databaseUrl).openStream().use { input ->
-      downloadFile.outputStream().use { output ->
-        input.copyTo(output)
+    println("Downloading GeoLite2 database")
+    try {
+      URI(databaseUrl).toURL().openStream().use { input ->
+        downloadFile.outputStream().use { output ->
+          input.copyTo(output)
+        }
       }
+      println("Download complete: ${downloadFile.absolutePath}")
+      if (!downloadFile.exists()) {
+        throw GradleException("Download failed: File not found at ${downloadFile.absolutePath}")
+      }
+      extract(downloadFile, resourcesDir)
+      downloadFile.delete()
+    } catch (e: Exception) {
+      throw GradleException("Failed to download or extract GeoLite2 database: ${e.message}", e)
     }
-    extract(downloadFile, resourcesDir)
-    downloadFile.delete()
   }
 }
 
 fun extract(file: File, destination: File) {
   GZIPInputStream(file.inputStream()).use { gis ->
     TarArchiveInputStream(gis).use { tis ->
-      var entry = tis.nextTarEntry
+      var entry = tis.nextEntry
       while (entry != null) {
         if (!entry.isDirectory && entry.name.endsWith(".mmdb")) {
           val outputFile = File(destination, "GeoLite2-City.mmdb")
@@ -121,7 +130,7 @@ fun extract(file: File, destination: File) {
             tis.copyTo(os)
           }
         }
-        entry = tis.nextTarEntry
+        entry = tis.nextEntry
       }
     }
   }
