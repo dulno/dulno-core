@@ -97,25 +97,17 @@ tasks.register("downloadGeoLite2Database") {
   val downloadFile = layout.buildDirectory.file("GeoLite2-City.tar.gz").get().asFile
   doLast {
     resourcesDir.mkdirs()
+    downloadFile.parentFile.mkdirs()
     if (downloadFile.exists()) {
       downloadFile.delete()
     }
-    println("Downloading GeoLite2 database")
-    try {
-      URI(databaseUrl).toURL().openStream().use { input ->
-        downloadFile.outputStream().use { output ->
-          input.copyTo(output)
-        }
+    URI(databaseUrl).toURL().openStream().use { input ->
+      downloadFile.outputStream().use { output ->
+        input.copyTo(output)
       }
-      println("Download complete: ${downloadFile.absolutePath}")
-      if (!downloadFile.exists()) {
-        throw GradleException("Download failed: File not found at ${downloadFile.absolutePath}")
-      }
-      extract(downloadFile, resourcesDir)
-      downloadFile.delete()
-    } catch (e: Exception) {
-      throw GradleException("Failed to download or extract GeoLite2 database: ${e.message}", e)
     }
+    extract(downloadFile, resourcesDir)
+    downloadFile.delete()
   }
 }
 
