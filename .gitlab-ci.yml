@@ -19,7 +19,6 @@ build_jar:
   image: gradle:8.14.2-jdk21
   script:
     - gradle bootJar
-    - gradle publish
   artifacts:
     paths:
       - build/libs/
@@ -34,3 +33,10 @@ build_geo:
     paths:
       - geo/
     expire_in: 1 day
+
+publish_gradle:
+  stage: publish
+  image: gradle:8.14.2-jdk21
+  dependencies: []
+  script:
+    - gradle publish
