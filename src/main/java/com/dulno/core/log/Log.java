@@ -10,47 +10,31 @@ import java.util.logging.*;
 
 @Accessors(fluent = true)
 public final class Log extends Logger {
-  public static Log create(String name, String path) throws Exception {
+  public static Log create(String name) throws Exception {
     var consoleHandler = new ConsoleHandler();
     consoleHandler.setFormatter(LogFormat.create(LogFormat.FormatType.CONSOLE));
     consoleHandler.setLevel(Level.ALL);
-    var fileHandler = new FileHandler(buildLogFilePath(path));
-    fileHandler.setFormatter(LogFormat.create(LogFormat.FormatType.FILE));
-    var log = new Log(name, null, consoleHandler, fileHandler);
+    var log = new Log(name, null, consoleHandler);
     log.setLevel(Level.ALL);
     log.addHandler(consoleHandler);
-    log.addHandler(fileHandler);
     Runtime.getRuntime().addShutdownHook(new Thread(log::close));
     return log;
-  }
-
-  private static String buildLogFilePath(String basePath) {
-    var logPath = System.getProperty("user.dir") + basePath +
-      new SimpleDateFormat("yyyy-MM-dd-HHmmss").format(new Date()) + ".log";
-    var logFile = new File(logPath);
-    if (!logFile.getParentFile().exists()) {
-      logFile.getParentFile().mkdirs();
-    }
-    return logPath;
   }
 
   @Getter
   private final String name;
   private final Log parentLog;
   private final ConsoleHandler consoleHandler;
-  private final FileHandler fileHandler;
   @Getter
   private int currentLogLine = 0;
 
   private Log(
-    String name, Log parentLog, ConsoleHandler consoleHandler,
-    FileHandler fileHandler
+    String name, Log parentLog, ConsoleHandler consoleHandler
   ) {
     super(name, null);
     this.name = name;
     this.parentLog = parentLog;
     this.consoleHandler = consoleHandler;
-    this.fileHandler = fileHandler;
   }
 
   @Override
@@ -70,10 +54,6 @@ public final class Log extends Logger {
     } else {
       increaseCurrentLogLine();
     }
-  }
-
-  public void fileLog(Level level, String message) {
-    restrictedLog(fileHandler, new LogRecord(level, message));
   }
 
   private void restrictedLog(Handler handler, LogRecord record) {
@@ -100,10 +80,9 @@ public final class Log extends Logger {
   }
 
   public Log subLog(String name) {
-    var log = new Log(name, this, consoleHandler, fileHandler);
+    var log = new Log(name, this, consoleHandler);
     log.setLevel(Level.ALL);
     log.addHandler(consoleHandler);
-    log.addHandler(fileHandler);
     Runtime.getRuntime().addShutdownHook(new Thread(log::close));
     return log;
   }

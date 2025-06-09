@@ -49,7 +49,6 @@ public final class CommandTask {
     var arguments = new String[length];
     System.arraycopy(input,1, arguments,0, length);
     try {
-      log.fileLog(Level.INFO, "Entered command '" + line + "'");
       if (!command.execute(arguments)) {
         printOutSyntax(command);
       }

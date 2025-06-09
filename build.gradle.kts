@@ -1,5 +1,5 @@
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
-import java.net.URL
+import java.net.URI
 import java.util.zip.GZIPInputStream
 
 plugins {
@@ -40,9 +40,9 @@ repositories {
 }
 
 dependencies {
-  testImplementation(platform("org.junit:junit-bom:5.13.0"))
-  testImplementation("org.junit.jupiter:junit-jupiter:5.13.0")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.0")
+  testImplementation(platform("org.junit:junit-bom:5.13.1"))
+  testImplementation("org.junit.jupiter:junit-jupiter:5.13.1")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.1")
 
   implementation("com.google.inject:guice:7.0.0")
 
@@ -94,13 +94,14 @@ tasks.register("downloadGeoLite2Database") {
   val databaseUrl = "https://download.maxmind.com/app/geoip_download?" +
     "edition_id=GeoLite2-City&license_key=$licenseKey&suffix=tar.gz"
   val resourcesDir = File("geo")
-  val downloadFile = File(buildDir, "GeoLite2-City.tar.gz")
+  val downloadFile = layout.buildDirectory.file("GeoLite2-City.tar.gz").get().asFile
   doLast {
     resourcesDir.mkdirs()
+    downloadFile.parentFile.mkdirs()
     if (downloadFile.exists()) {
       downloadFile.delete()
     }
-    URL(databaseUrl).openStream().use { input ->
+    URI(databaseUrl).toURL().openStream().use { input ->
       downloadFile.outputStream().use { output ->
         input.copyTo(output)
       }
@@ -113,7 +114,7 @@ tasks.register("downloadGeoLite2Database") {
 fun extract(file: File, destination: File) {
   GZIPInputStream(file.inputStream()).use { gis ->
     TarArchiveInputStream(gis).use { tis ->
-      var entry = tis.nextTarEntry
+      var entry = tis.nextEntry
       while (entry != null) {
         if (!entry.isDirectory && entry.name.endsWith(".mmdb")) {
           val outputFile = File(destination, "GeoLite2-City.mmdb")
@@ -121,7 +122,7 @@ fun extract(file: File, destination: File) {
             tis.copyTo(os)
           }
         }
-        entry = tis.nextTarEntry
+        entry = tis.nextEntry
       }
     }
   }
