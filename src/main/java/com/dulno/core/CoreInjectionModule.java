@@ -87,7 +87,7 @@ public class CoreInjectionModule extends AbstractModule {
   @Provides
   @Singleton
   Log provideCoreLog() throws Exception {
-    return Log.create("Core", "/logs/");
+    return Log.create("Core");
   }
 
   @Provides
