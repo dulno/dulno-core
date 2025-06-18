@@ -6,7 +6,7 @@ plugins {
   id("java")
   id("maven-publish")
   id("org.springframework.boot") version "3.5.0"
-  id("io.freefair.lombok") version "8.13.1"
+  id("io.freefair.lombok") version "8.14"
 }
 
 group = "com.dulno"
@@ -59,6 +59,8 @@ dependencies {
   implementation("commons-io:commons-io:2.19.0")
 
   implementation("io.netty:netty-all:4.2.2.Final")
+
+  implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.8")
 
   implementation("org.springframework.boot:spring-boot-starter-web:3.5.0")
 
