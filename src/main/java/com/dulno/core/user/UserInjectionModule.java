@@ -12,6 +12,7 @@ import com.dulno.core.user.session.UserSessionDatabaseTable;
 import com.dulno.core.user.statistic.UserAppOpenDatabaseTable;
 import com.dulno.core.user.statistic.UserJoinDatabaseTable;
 import com.dulno.core.user.statistic.UserStatisticConfiguration;
+import com.dulno.core.user.transmission.UserTransmissionDatabaseTable;
 import com.dulno.core.user.verification.UserVerificationDatabaseTable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -112,5 +113,13 @@ public final class UserInjectionModule extends AbstractModule {
   @Singleton
   UserStatisticConfiguration provideUserStatisticConfiguration() throws Exception {
     return UserStatisticConfiguration.createAndLoad();
+  }
+
+  @Provides
+  @Singleton
+  UserTransmissionDatabaseTable provideUserTransmissionDatabaseTable(
+    DatabaseConnection connection, DatabaseKeyspace keyspace
+  ) {
+    return UserTransmissionDatabaseTable.create(connection, keyspace);
   }
 }
