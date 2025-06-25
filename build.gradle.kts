@@ -40,9 +40,9 @@ repositories {
 }
 
 dependencies {
-  testImplementation(platform("org.junit:junit-bom:5.13.1"))
-  testImplementation("org.junit.jupiter:junit-jupiter:5.13.1")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.1")
+  testImplementation(platform("org.junit:junit-bom:5.13.2"))
+  testImplementation("org.junit.jupiter:junit-jupiter:5.13.2")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.2")
 
   implementation("com.google.inject:guice:7.0.0")
 
@@ -80,7 +80,7 @@ dependencies {
 
   implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1")
 
-  implementation("com.google.auth:google-auth-library-oauth2-http:1.37.0")
+  implementation("com.google.auth:google-auth-library-oauth2-http:1.37.1")
 }
 
 tasks.test {
