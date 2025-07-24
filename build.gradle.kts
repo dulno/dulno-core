@@ -40,9 +40,9 @@ repositories {
 }
 
 dependencies {
-  testImplementation(platform("org.junit:junit-bom:5.13.3"))
-  testImplementation("org.junit.jupiter:junit-jupiter:5.13.3")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.3")
+  testImplementation(platform("org.junit:junit-bom:5.13.4"))
+  testImplementation("org.junit.jupiter:junit-jupiter:5.13.4")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.4")
 
   implementation("com.google.inject:guice:7.0.0")
 
@@ -56,9 +56,9 @@ dependencies {
   implementation("com.datastax.oss:java-driver-core:4.17.0")
 
   implementation("org.json:json:20250517")
-  implementation("commons-io:commons-io:2.19.0")
+  implementation("commons-io:commons-io:2.20.0")
 
-  implementation("io.netty:netty-all:4.2.2.Final")
+  implementation("io.netty:netty-all:4.2.3.Final")
 
   implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.9")
 
