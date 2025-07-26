@@ -5,7 +5,7 @@ import java.util.zip.GZIPInputStream
 plugins {
   id("java")
   id("maven-publish")
-  id("org.springframework.boot") version "3.5.3"
+  id("org.springframework.boot") version "3.5.4"
   id("io.freefair.lombok") version "8.14"
 }
 
@@ -62,7 +62,7 @@ dependencies {
 
   implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.9")
 
-  implementation("org.springframework.boot:spring-boot-starter-web:3.5.3")
+  implementation("org.springframework.boot:spring-boot-starter-web:3.5.4")
 
   implementation("de.mkammerer:argon2-jvm:2.12")
 
