@@ -66,7 +66,7 @@ dependencies {
 
   implementation("de.mkammerer:argon2-jvm:2.12")
 
-  implementation("io.jsonwebtoken:jjwt:0.12.7")
+  implementation("io.jsonwebtoken:jjwt:0.13.0")
 
   implementation("com.sun.mail:javax.mail:1.6.2")
 
