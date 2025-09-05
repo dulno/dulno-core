@@ -48,19 +48,19 @@ dependencies {
 
   implementation("com.google.guava:guava:33.4.8-jre")
 
-  implementation("org.projectlombok:lombok:1.18.38")
-  annotationProcessor("org.projectlombok:lombok:1.18.38")
-  testImplementation("org.projectlombok:lombok:1.18.38")
-  testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+  implementation("org.projectlombok:lombok:1.18.40")
+  annotationProcessor("org.projectlombok:lombok:1.18.40")
+  testImplementation("org.projectlombok:lombok:1.18.40")
+  testAnnotationProcessor("org.projectlombok:lombok:1.18.40")
 
   implementation("com.datastax.oss:java-driver-core:4.17.0")
 
   implementation("org.json:json:20250517")
   implementation("commons-io:commons-io:2.20.0")
 
-  implementation("io.netty:netty-all:4.2.4.Final")
+  implementation("io.netty:netty-all:4.2.5.Final")
 
-  implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.10")
+  implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.11")
 
   implementation("org.springframework.boot:spring-boot-starter-web:3.5.5")
 
@@ -74,13 +74,13 @@ dependencies {
 
   implementation("dev.samstevens.totp:totp:1.7.1")
 
-  implementation("com.maxmind.geoip2:geoip2:4.3.1") {
+  implementation("com.maxmind.geoip2:geoip2:4.4.0") {
     exclude(group = "commons-logging", module = "commons-logging")
   }
 
   implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1")
 
-  implementation("com.google.auth:google-auth-library-oauth2-http:1.38.0")
+  implementation("com.google.auth:google-auth-library-oauth2-http:1.39.0")
 }
 
 tasks.test {
