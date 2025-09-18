@@ -46,19 +46,19 @@ dependencies {
 
   implementation("com.google.inject:guice:7.0.0")
 
-  implementation("com.google.guava:guava:33.4.8-jre")
+  implementation("com.google.guava:guava:33.5.0-jre")
 
-  implementation("org.projectlombok:lombok:1.18.40")
-  annotationProcessor("org.projectlombok:lombok:1.18.40")
-  testImplementation("org.projectlombok:lombok:1.18.40")
-  testAnnotationProcessor("org.projectlombok:lombok:1.18.40")
+  implementation("org.projectlombok:lombok:1.18.42")
+  annotationProcessor("org.projectlombok:lombok:1.18.42")
+  testImplementation("org.projectlombok:lombok:1.18.42")
+  testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
 
   implementation("com.datastax.oss:java-driver-core:4.17.0")
 
   implementation("org.json:json:20250517")
   implementation("commons-io:commons-io:2.20.0")
 
-  implementation("io.netty:netty-all:4.2.5.Final")
+  implementation("io.netty:netty-all:4.2.6.Final")
 
   implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.11")
 
@@ -80,7 +80,7 @@ dependencies {
 
   implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1")
 
-  implementation("com.google.auth:google-auth-library-oauth2-http:1.39.0")
+  implementation("com.google.auth:google-auth-library-oauth2-http:1.39.1")
 }
 
 tasks.test {
