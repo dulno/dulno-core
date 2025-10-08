@@ -60,7 +60,7 @@ dependencies {
 
   implementation("io.netty:netty-all:4.2.6.Final")
 
-  implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.11")
+  implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.12")
 
   implementation("org.springframework.boot:spring-boot-starter-web:3.5.6")
   implementation("org.springframework:spring-core:6.2.11")
