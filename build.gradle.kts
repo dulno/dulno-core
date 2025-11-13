@@ -63,7 +63,7 @@ dependencies {
   implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.13")
 
   implementation("org.springframework.boot:spring-boot-starter-web:3.5.7")
-  implementation("org.springframework:spring-core:6.2.12")
+  implementation("org.springframework:spring-core:6.2.13")
 
   implementation("de.mkammerer:argon2-jvm:2.12")
 
