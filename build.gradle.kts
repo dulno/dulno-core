@@ -45,7 +45,7 @@ dependencies {
   implementation("org.json:json:20250517")
   implementation("commons-io:commons-io:2.21.0")
 
-  implementation("io.netty:netty-all:4.2.17.Final")
+  implementation("io.netty:netty-all:4.2.18.Final")
 
   implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.24")
 
