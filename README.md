@@ -1,5 +1,8 @@
 <div align="center">
-  <img src="https://dulno.com/static/img/logo-light.webp" alt="logo" width="128"  height="auto" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/logo-light.webp">
+    <img src=".github/logo-dark.webp" alt="Dulno logo" width="128">
+  </picture>
 
   <h1><b>Dulno - Core</b><br><br></h1>
 
@@ -15,7 +18,47 @@ Core of the backend of Dulno. Each module relies on the core. It bundles central
 
 ## Architecture
 
-[![](https://mermaid.ink/img/pako:eNqVmU1v4zYQhv-KoVMCJIE9Q8mJDjlkF2gLpEXh7Kl2DlqZa6u1pVSWiqRB_vvalOSI4gxF7skUn5cfM_OSWuU9SIu1DOIgKdNtVsm0qkt5_V1WySqfHP8dZPlflspJKf-t5aG6yPJKlrmsLpeL5snzKm_ITVnUL5NtcTgCFyeZLC-Xv6rmsz7WrkjWD8kuydMjme6Ken25fDw-m3QPnydZ3o7UKPszpLtaTdEKvzRNTdLHm5XMfjk1lk-qMZkpuh1IX1uLnzegKfpjkbLf8k0pD4dubW3TVf3HJstfO61quCq_JlXyPTnIi3X743LZPXId4ktRys9tn1o-StCV4K5EXYmE0kwnaOmEsXTCMJ399QG7PmDS6agm0umotKXTcYg_y-L1rZtcNdx0I2UworSUwYjSUgbAlgFqZYBjZYDDMujPguz6kCkDRzVRBo5KWxk4DjGSzhGlJZ0jSks6UUtne6_ED5Pr6_vJt7h_N3TM33WeVlmRn388yh_VbHhHkBQ4UehECScqdKKiUWqRbbYOm1QYuGHohgk3LHTDIvNi1tIYL46ZnzwOEj_EoMM0rckhxYHJCYpDkwspTphcRHEhxXWF3l5xnw46NlTnZ1970OhIO8_g4teYVjcYTR09GqeexI8nahH3XwMISh9LHQ4EpS9OHQRd0vv5HQRBGwn0qYAIAuhrBioIoK-luQ81gIwSGFECIkpgRAmIKIERJSCiBFqUdPd3s_LeaOzfcbqaIJEkgSAFSSJBhiQpCDIiyZAk9QrBfhRRDzMSFYJ6vpCqECQLAI0CQKIA0CgAJAoAjQJAogCQLIDzj9lTz5jGC46Bgx-Ofrjww_trBz8c_baKfltFv63quHbuqUio4rjvFbaWNH0CraurFzJ7ug5sOuR1WtfwlhJP3KmvUnZ2IZlQfl_GgSTc4mHc8lrOjPU1l_19j5-ZPNllizvycTd0gtdpS7fFfdT64Gd98LM--Fkf_KwPftYHP-uDn_XBz_pgtz5YrQ98qYPN-sBbH2zWB976YLM-8SpjtT7w1geb9cfiAbb1obE-1vrAWx9s1gfe-rQOeZ3WZYvHqPXRz_roZ330sz76WR_9rI9-1kc_66Of9dFufbRaH_lSR5v1kbc-2qyPvPXRZn3iJdZqfeStjzbrj8WDu_XRsD5arY-89dFmfeStj7ZbH3nro-3Wd3nhz1J5-lzgaAdnGr1o4UWHXnS3S_XfPfdtOuLohws_PGRxj1fAfpqJmm17GGuwt2kn-3aSPcRUlRCFzqiQVaFFJViVGKrue7KQlfV7miOG-fxFChbMpyLbeTk4x7RapYOuuoY6HHklOeuYbBHzgU2HvA5tOsHrhKGjckYIQzMw1Lc4Gl-QH2-Cq2Avy32SrYM4eD_pV0G1lXu5CuLjz3VS_rMKVvnHkUvqqnh6y9MgrspaXgVlUW-2Qfwj2R2OrfplnVTya5ZsymTfIS9J_ldR7M-QXGdVUf7e_HFc_Y1cMUH8HrwGMUzxBlDcTe-m4TyazeEqeAtiFOHN7UzcirvbEMNZGH1cBf-rQac3UYTRFKL5_O4W52EYfvwESivj4g?type=png)](https://mermaid.live/edit#pako:eNqVmU1v4zYQhv-KoVMCJIE9Q8mJDjlkF2gLpEXh7Kl2DlqZa6u1pVSWiqRB_vvalOSI4gxF7skUn5cfM_OSWuU9SIu1DOIgKdNtVsm0qkt5_V1WySqfHP8dZPlflspJKf-t5aG6yPJKlrmsLpeL5snzKm_ITVnUL5NtcTgCFyeZLC-Xv6rmsz7WrkjWD8kuydMjme6Ken25fDw-m3QPnydZ3o7UKPszpLtaTdEKvzRNTdLHm5XMfjk1lk-qMZkpuh1IX1uLnzegKfpjkbLf8k0pD4dubW3TVf3HJstfO61quCq_JlXyPTnIi3X743LZPXId4ktRys9tn1o-StCV4K5EXYmE0kwnaOmEsXTCMJ399QG7PmDS6agm0umotKXTcYg_y-L1rZtcNdx0I2UworSUwYjSUgbAlgFqZYBjZYDDMujPguz6kCkDRzVRBo5KWxk4DjGSzhGlJZ0jSks6UUtne6_ED5Pr6_vJt7h_N3TM33WeVlmRn388yh_VbHhHkBQ4UehECScqdKKiUWqRbbYOm1QYuGHohgk3LHTDIvNi1tIYL46ZnzwOEj_EoMM0rckhxYHJCYpDkwspTphcRHEhxXWF3l5xnw46NlTnZ1970OhIO8_g4teYVjcYTR09GqeexI8nahH3XwMISh9LHQ4EpS9OHQRd0vv5HQRBGwn0qYAIAuhrBioIoK-luQ81gIwSGFECIkpgRAmIKIERJSCiBFqUdPd3s_LeaOzfcbqaIJEkgSAFSSJBhiQpCDIiyZAk9QrBfhRRDzMSFYJ6vpCqECQLAI0CQKIA0CgAJAoAjQJAogCQLIDzj9lTz5jGC46Bgx-Ofrjww_trBz8c_baKfltFv63quHbuqUio4rjvFbaWNH0CraurFzJ7ug5sOuR1WtfwlhJP3KmvUnZ2IZlQfl_GgSTc4mHc8lrOjPU1l_19j5-ZPNllizvycTd0gtdpS7fFfdT64Gd98LM--Fkf_KwPftYHP-uDn_XBz_pgtz5YrQ98qYPN-sBbH2zWB976YLM-8SpjtT7w1geb9cfiAbb1obE-1vrAWx9s1gfe-rQOeZ3WZYvHqPXRz_roZ330sz76WR_9rI9-1kc_66Of9dFufbRaH_lSR5v1kbc-2qyPvPXRZn3iJdZqfeStjzbrj8WDu_XRsD5arY-89dFmfeStj7ZbH3nro-3Wd3nhz1J5-lzgaAdnGr1o4UWHXnS3S_XfPfdtOuLohws_PGRxj1fAfpqJmm17GGuwt2kn-3aSPcRUlRCFzqiQVaFFJViVGKrue7KQlfV7miOG-fxFChbMpyLbeTk4x7RapYOuuoY6HHklOeuYbBHzgU2HvA5tOsHrhKGjckYIQzMw1Lc4Gl-QH2-Cq2Avy32SrYM4eD_pV0G1lXu5CuLjz3VS_rMKVvnHkUvqqnh6y9MgrspaXgVlUW-2Qfwj2R2OrfplnVTya5ZsymTfIS9J_ldR7M-QXGdVUf7e_HFc_Y1cMUH8HrwGMUzxBlDcTe-m4TyazeEqeAtiFOHN7UzcirvbEMNZGH1cBf-rQac3UYTRFKL5_O4W52EYfvwESivj4g)
+Each server in the cluster runs an ingress and an Nginx instance that balance requests across several core replicas. All core instances share a Cassandra database cluster and register with the [operator](https://github.com/dulno/dulno-operator), which distributes work between the nodes.
+
+```mermaid
+flowchart TB
+    request(["Request"]) --> loadBalancer["Load Balancer"]
+
+    subgraph cluster["Cluster"]
+        direction LR
+        subgraph server1["Server 1"]
+            ingress1["Ingress"] --> nginx1["Nginx"]
+            nginx1 --> core11["Core"]
+            nginx1 --> core12["Core"]
+            nginx1 --> core13["Core"]
+        end
+        subgraph server2["Server 2"]
+            ingress2["Ingress"] --> nginx2["Nginx"]
+            nginx2 --> core21["Core"]
+            nginx2 --> core22["Core"]
+            nginx2 --> core23["Core"]
+        end
+        subgraph server3["Server 3"]
+            ingress3["Ingress"] --> nginx3["Nginx"]
+            nginx3 --> core31["Core"]
+            nginx3 --> core32["Core"]
+            nginx3 --> core33["Core"]
+        end
+    end
+
+    loadBalancer --> ingress1 & ingress2 & ingress3
+
+    subgraph shared["Shared services"]
+        direction LR
+        database[("Cassandra cluster<br>one node per server")]
+        operator["Operator"]
+    end
+
+    cluster -- "data" --> database
+    cluster <-- "distribution" --> operator
+```
+
+At startup, the core loads all module JARs (for example [access](https://github.com/dulno/dulno-access)) from the `/modules` directory.
 
 ## Integration
 This module can be integrated into a submodule.
