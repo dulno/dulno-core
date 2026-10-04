@@ -12,7 +12,6 @@ Core of the backend of Dulno. Each module relies on the core. It bundles central
 |      | Pipeline status                                                      |
 |------|----------------------------------------------------------------------|
 | main | ![](https://github.com/dulno/dulno-core/actions/workflows/ci.yml/badge.svg?branch=main) |
-| dev  | ![](https://github.com/dulno/dulno-core/actions/workflows/ci.yml/badge.svg?branch=dev)  |
 
 ## Architecture
 
