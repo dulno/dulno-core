@@ -11,8 +11,8 @@ Core of the backend of Dulno. Each module relies on the core. It bundles central
 
 |      | Pipeline status                                                      |
 |------|----------------------------------------------------------------------|
-| main | ![](https://git.dulno.com/dulno/dulno-core/badges/main/pipeline.svg) |
-| dev  | ![](https://git.dulno.com/dulno/dulno-core/badges/dev/pipeline.svg)  |
+| main | ![](https://github.com/dulno/dulno-core/actions/workflows/ci.yml/badge.svg?branch=main) |
+| dev  | ![](https://github.com/dulno/dulno-core/actions/workflows/ci.yml/badge.svg?branch=dev)  |
 
 ## Architecture
 
@@ -21,21 +21,16 @@ Core of the backend of Dulno. Each module relies on the core. It bundles central
 ## Integration
 This module can be integrated into a submodule.
 
-To do this, the repository must first be included in *build.gradle.kts*. This looks as follows:
+To do this, publish the core to your local Maven repository first:
+```bash
+./gradlew publishToMavenLocal
+```
+
+Then add `mavenLocal()` to the repositories in *build.gradle.kts*:
 ```kotlin
 repositories {
   mavenCentral()
-  maven {
-    url = uri("https://git.dulno.com/api/v4/projects/51/packages/maven")
-    credentials(HttpHeaderCredentials::class) {
-      name = "Private-Token"
-      value = System.getenv("DULNO_GITLAB_PRIVATE_TOKEN") ?:
-        findProperty("dulnoGitlabPrivateToken") as String?
-    }
-    authentication {
-      create("header", HttpHeaderAuthentication::class)
-    }
-  }
+  mavenLocal()
 }
 ```
 
@@ -45,3 +40,7 @@ dependencies {
   compileOnly("com.dulno:core:1.0.0-SNAPSHOT")
 }
 ```
+
+## License
+
+© Dulno. Licensed under [CC BY-NC-SA 4.0](LICENSE): free for non-commercial use with attribution to Dulno, modifications must be shared under the same license. Third-party code (e.g. under `static/dependency/`) keeps its own license.
