@@ -24,8 +24,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Collections;
 
-@SpringBootApplication(scanBasePackages = {"com.dulno"},
-  exclude = {org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration.class})
+// Gson auto-configuration lives in spring-boot-gson since Boot 4, which is not on the classpath
+@SpringBootApplication(scanBasePackages = {"com.dulno"})
 public class CoreApplication {
   /**
    * The starting point where the application is executed
