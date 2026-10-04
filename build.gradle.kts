@@ -6,7 +6,7 @@ plugins {
   id("java")
   id("maven-publish")
   id("org.springframework.boot") version "3.5.7"
-  id("io.freefair.lombok") version "9.0.0"
+  id("io.freefair.lombok") version "9.1.0"
 }
 
 group = "com.dulno"
@@ -43,14 +43,14 @@ dependencies {
   implementation("com.datastax.oss:java-driver-core:4.17.0")
 
   implementation("org.json:json:20250517")
-  implementation("commons-io:commons-io:2.20.0")
+  implementation("commons-io:commons-io:2.21.0")
 
   implementation("io.netty:netty-all:4.2.7.Final")
 
-  implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.13")
+  implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.14")
 
   implementation("org.springframework.boot:spring-boot-starter-web:3.5.7")
-  implementation("org.springframework:spring-core:6.2.12")
+  implementation("org.springframework:spring-core:7.0.0")
 
   implementation("de.mkammerer:argon2-jvm:2.12")
 
