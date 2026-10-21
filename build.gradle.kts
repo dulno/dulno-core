@@ -43,7 +43,7 @@ dependencies {
   implementation("com.datastax.oss:java-driver-core:4.17.0")
 
   implementation("org.json:json:20260814")
-  implementation("commons-io:commons-io:2.21.0")
+  implementation("commons-io:commons-io:2.22.0")
 
   implementation("io.netty:netty-all:4.2.18.Final")
 
