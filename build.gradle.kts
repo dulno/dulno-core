@@ -66,7 +66,7 @@ dependencies {
     exclude(group = "commons-logging", module = "commons-logging")
   }
 
-  implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1")
+  implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20261011.1")
 
   implementation("com.google.auth:google-auth-library-oauth2-http:1.40.0")
 }
