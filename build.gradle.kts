@@ -68,7 +68,7 @@ dependencies {
 
   implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20261103.2")
 
-  implementation("com.google.auth:google-auth-library-oauth2-http:1.55.0")
+  implementation("com.google.auth:google-auth-library-oauth2-http:1.57.0")
 }
 
 tasks.test {
